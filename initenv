@@ -1,0 +1,4 @@
+#!/bin/bash
+uv venv --allow-existing
+. .venv/bin/activate
+uv pip install lightkurve
