@@ -1,0 +1,24 @@
+tess2022112184951-s0051-0000001000004364-0223-a_fast
+tessyyyydddhhmmss-ssctr-tid             -scid-cr    _lc.fits.gz 
+
+>>> pprint.pprint(d)
+{'access_estsize': (1330560),
+ 'access_format': 'application/fits',
+ 'objID': (805124581),
+ 'target_name':                                                                                                '1000004364',
+ 'obs_id':                                                                       'tess2022112184951-s0051-0000001000004364-0223-a_fast',
+ 'access_url': 'https://mast.stsci.edu/portal/Download/file?uri=mast:TESS/product/tess2022112184951-s0051-0000001000004364-0223-a_fast-lc.fits',
+ 'obs_publisher_did':                               'ivo://archive.stsci.edu/TESS?tess2022112184951-s0051-0000001000004364-0223-a_fast',
+ 's_dec': (5.775521217927),
+ 's_ra': (218.78912298453),
+ 's_region': 'CIRCLE 218.78912298 5.77552122 0.00138889',
+ 't_exptime': (20.0),
+ 't_max': (59717.03947335648),
+ 't_min': (59692.45189386574)
+}
+
+
+>>> d['access_url'].partition(d['obs_id'])
+('https://mast.stsci.edu/portal/Download/file?uri=mast:TESS/product/', 'tess2022112184951-s0051-0000001000004364-0223-a_fast', '-lc.fits')
+
+same targetid in same sector (sequence number) are 20, 120 of same target (same obs_id except last '-' sep field)

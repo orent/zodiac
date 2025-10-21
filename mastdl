@@ -1,0 +1,5 @@
+#!/bin/sh
+case $1 in 
+  mast:*) curl -o "$(basename "$1")" "https://mast.stsci.edu/api/v0.1/Download/file?uri=$1" ;;
+  *) echo "Usage: mastdl <masturl>" ;;
+esac
