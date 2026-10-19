@@ -101,9 +101,13 @@ onward), resampled to the VIRGO 1-min grid. Notes:
   ground before averaging.
 - FFIs are out: their time resolution is too coarse for the delay window.
 
-Data window: VIRGO/SPM is reported to continue to the present. That needs
-confirming once the data hosts are reachable; this sandbox currently blocks
-them. If it holds, every 20-s sector (S27 → now) overlaps VIRGO.
+Data window (checked at projects.pmodwrc.ch/virgo):
+- **SPM red-channel 1-min** data runs 1996-01-23 → 2021-05-15. That
+  overlaps the 20-s light curves only for **S27–S38**.
+- **PMO6 TSI 1-min** data runs 1996-02 → 2026-05. It covers every 20-s
+  sector, but as total irradiance rather than the red channel.
+
+Step A uses S27 so that both references are available.
 
 ## 3. Granulation vs. p-modes
 
