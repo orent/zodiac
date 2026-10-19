@@ -3,7 +3,7 @@
 # TESS_CADENCE=120 TESS_PRODUCT_SUFFIX=_2min), one at a time, committing
 # each sector's compact product to the data branch and deleting the stamps.
 # Resumable: a sector whose compact files already exist for every camera
-# is skipped.
+# is skipped (with REQUIRE_CCD=1, only if per-CCD files exist too).
 #
 # usage: run_sectors.sh targets.csv workdir databranch_checkout sector...
 set -u
@@ -18,6 +18,8 @@ for S in "$@"; do
     SD=$(printf "%s/s%04d%s" "$DATA" "$S" "$SUFFIX")
     done_all=1
     for C in $CAMS; do [ -f "$SD/cam$C.npz" ] || done_all=0; done
+    # REQUIRE_CCD=1: also redo sectors made before the per-CCD split.
+    if [ "${REQUIRE_CCD:-0}" = 1 ]; then ls "$SD"/cam*_ccd*.npz > /dev/null 2>&1 || done_all=0; fi
     if [ $done_all = 1 ] && [ -f "$SD/ephem.npz" ]; then
         echo "sector $S: already done"; continue
     fi
