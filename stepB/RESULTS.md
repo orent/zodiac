@@ -273,3 +273,85 @@ non-negative log-binned kernel at dt = +10 s (per unit floor, per bin; bootstrap
   cam 4 total area 0.47 [0.43, 0.67]  (expected ~1.15 x ZL fraction)
 
 ```
+
+## Full 20-s stack: joint fit, sectors 27–38, all four cameras
+
+(VIRGO red; raw output below; interpretation in the next section.)
+
+```
+camera 1: 1521 windows from 12 sector products (27,28,29,30,31,32,33,34,35,36,37,38)
+camera 2: 1528 windows from 12 sector products (27,28,29,30,31,32,33,34,35,36,37,38)
+camera 3: 1528 windows from 12 sector products (27,28,29,30,31,32,33,34,35,36,37,38)
+camera 4: 1533 windows from 12 sector products (27,28,29,30,31,32,33,34,35,36,37,38)
+
+shared timing offset dt = -10 s  (profile 68%: -10 .. +0 s; bootstrap 68%: -10 .. +0 s)
+
+per camera at the shared dt (A, E per unit quiet floor; expected A ~1.15 x ZL fraction):
+  cam  lat  alpha best [boot 68%] [dchi2=1]   A [boot 68%]         E [boot 68%]        A/null_sigma   A at alpha=1.4
+  1     18  1.0 [0.6, 1.6] [0.8, 1.2]     0.78 [0.68, 0.84]    +0.35 [+0.26, +0.47]     15.1 (128 nulls)    0.72 (dchi2 2.3)
+  2     42  1.0 [0.4, 1.8] [0.6, 1.4]     0.58 [0.52, 0.65]    +0.40 [+0.29, +0.54]     12.6 (127 nulls)    0.56 (dchi2 0.7)
+  3     66  0.4 [0.4, 1.4] [0.4, 0.8]     0.50 [0.43, 0.55]    +0.69 [+0.55, +0.86]      9.3 (126 nulls)    0.46 (dchi2 2.0)
+  4     90  0.4 [0.4, 1.2] [0.4, 0.8]     0.49 [0.45, 0.52]    +0.47 [+0.38, +0.61]     13.9 (127 nulls)    0.47 (dchi2 1.8)
+
+profile chi^2 vs alpha at the shared dt, relative to best:
+  cam 1: 0.6:1.9 1.0:0.0 1.4:2.3 1.8:7.6 2.2:15.2 2.6:24.3 3.0:34.4 3.6:50.7
+  cam 2: 0.6:0.6 1.0:0.0 1.4:0.7 1.8:2.5 2.2:5.0 2.6:8.1 3.0:11.6 3.6:17.3
+  cam 3: 0.6:0.3 1.0:1.0 1.4:2.0 1.8:3.1 2.2:4.4 2.6:5.8 3.0:7.2 3.6:9.6
+  cam 4: 0.6:0.3 1.0:1.1 1.4:1.8 1.8:2.6 2.2:3.5 2.6:4.3 3.0:5.2 3.6:6.5
+
+non-negative log-binned kernel at dt = -10 s (per unit floor, per bin; bootstrap 68%):
+  bin [s]                    0-60            60-180           180-420           420-900          900-2000         2000-4000   Earthshine E
+  cam 1 fit    0.095 [0.07,0.12]  0.166 [0.14,0.19]  0.210 [0.19,0.23]  0.166 [0.13,0.19]  0.087 [0.04,0.13]  0.102 [0.01,0.15]   0.36 [0.27,0.48]
+  cam 1 model  0.171             0.257             0.300             0.242             0.132             0.038              (alpha 1.34, A 1.15)
+  cam 1 total area 0.83 [0.69, 0.93]  (expected ~1.15 x ZL fraction)
+  cam 2 fit    0.099 [0.05,0.13]  0.172 [0.15,0.21]  0.170 [0.13,0.20]  0.098 [0.06,0.13]  0.000 [0.00,0.00]  0.039 [0.00,0.11]   0.42 [0.29,0.55]
+  cam 2 model  0.237             0.335             0.317             0.176             0.068             0.015              (alpha 1.34, A 1.15)
+  cam 2 total area 0.58 [0.51, 0.70]  (expected ~1.15 x ZL fraction)
+  cam 3 fit    0.071 [0.03,0.11]  0.210 [0.16,0.24]  0.156 [0.12,0.21]  0.025 [0.00,0.07]  0.108 [0.03,0.17]  0.149 [0.04,0.24]   0.75 [0.62,0.98]
+  cam 3 model  0.314             0.397             0.278             0.117             0.035             0.007              (alpha 1.34, A 1.15)
+  cam 3 total area 0.72 [0.55, 0.89]  (expected ~1.15 x ZL fraction)
+  cam 4 fit    0.180 [0.15,0.20]  0.164 [0.13,0.20]  0.104 [0.09,0.14]  0.057 [0.02,0.08]  0.045 [0.01,0.11]  0.016 [0.00,0.10]   0.48 [0.38,0.59]
+  cam 4 model  0.405             0.423             0.224             0.074             0.019             0.004              (alpha 1.34, A 1.15)
+  cam 4 total area 0.57 [0.53, 0.71]  (expected ~1.15 x ZL fraction)
+
+```
+
+### Reading
+
+**Detection, per camera vs ~127 null shifts:** 15.1σ, 12.6σ, 9.3σ, 13.9σ;
+about 25σ combined.
+
+**Timing.** Δt = −10 s, 68% −10 … 0 s (profile and bootstrap agree,
+on a 10-s grid).
+- The VIRGO mid-point stamp convention is confirmed: start or end
+  stamps (±30 s) are excluded.
+- So the absolute time base is good to about 10 s.
+
+**Shape, camera 1 (18°).**
+- α = 1.0, 68% 0.8–1.2.
+- The Kelsall smooth-cloud α = 1.34 is at Δχ² = 2.3 (~1.5σ).
+- Compact responses (α ≥ 1.8) are excluded at Δχ² > 7.
+- Normalised to unit area, the non-negative bins (0–60 … 900–2000 s)
+  are 0.11, 0.20, 0.25, 0.20, 0.10, against model 0.15, 0.22, 0.26,
+  0.21, 0.11. The **first depth profile matches the smooth-cloud shape
+  within errors out to ~2 AU.**
+- The 2000–4000 s bin stays unreliable (low-frequency common mode).
+
+**Cameras 3 and 4 (66°, 90°).**
+- α runs to the grid edge (0.4): the model wants **more extended
+  response at high latitude** than the Kelsall vertical profile allows.
+- Camera 4 bin fractions beyond 420 s: 0.10, 0.08, 0.03, against model
+  0.06, 0.02, 0.003.
+- Either the dust extends higher above the plane than in Kelsall, or the
+  far bins of the high-latitude cameras are contaminated by low-frequency
+  systematics. The next step is a model with a free vertical-scale
+  parameter (instead of misusing α), plus injection–recovery.
+
+**Amplitude per unit floor:** 0.78, 0.58, 0.50, 0.49. That implies
+zodiacal fractions of the floor of about 0.68, 0.50, 0.43, 0.43 (÷1.15),
+falling with latitude. Candidates: the ZL share of the background, and
+viewing-angle coherence. Check against Kelsall-predicted brightness.
+
+**Earthshine E:** 0.35–0.75, lower than S27 alone (sector-to-sector
+scattered-light geometry varies; one shared E per camera is a
+simplification).
