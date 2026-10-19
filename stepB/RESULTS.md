@@ -164,3 +164,14 @@ Remedy for the depth analysis: either drop windows more than ~30 e⁻/s/px
 above the floor, or fit a zero-delay term ∝ (level − floor) jointly with
 the kernel. The `QUALITY` scattered-light flag alone is not enough: the
 flagged cadences were already excluded here.
+
+## Update after the time-base fix (see `TIMEBASE.md`)
+
+- The 1σ onset ranges quoted above (−150..+60 s) used the wrong
+  definition (S/N drop of 1). The corrected interval (S/N² drop of 1),
+  with the emission-time base, is −84..−33 s for the model template.
+- That offset is degenerate with the response shape. It is explained
+  mainly by the compact (zero-delay) Earthshine term.
+- In quiet windows, |H(f)| follows the smooth-cloud model, and the onset
+  is −100 [−182, −32] s, i.e. not compelling.
+- Timing goes into the joint fit as a free Δt.
