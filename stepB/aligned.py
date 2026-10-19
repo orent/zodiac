@@ -1,8 +1,11 @@
 """Aligned TESS / VIRGO series from the compact data branch, on the common
 emission-time base (see timebase.py, TIMEBASE.md).
 
-The grid is VIRGO's own minute stamps (emission time). TESS 20-s samples
-are overlap-binned onto exactly 60-s boxes centred on them.
+20-s products (sNNNN): the grid is VIRGO's own minute stamps; TESS 20-s
+samples are overlap-binned onto exactly 60-s boxes centred on them.
+2-min products (sNNNN_2min): the grid is the TESS 120-s cadence; VIRGO
+1-min samples are overlap-binned onto the 120-s TESS boxes.
+Either way both series end up with the same box response.
 """
 
 import os
@@ -21,8 +24,8 @@ def highpass(x, size=180):
     return y
 
 
-def load(datadir, sector, cam, ref='red', stamp=tb.VIRGO_STAMP):
-    sdir = os.path.join(datadir, f's{int(sector):04d}')
+def load(datadir, sector, cam, ref='red', stamp=tb.VIRGO_STAMP, product=''):
+    sdir = os.path.join(datadir, f's{int(sector):04d}{product}')
     eph = tb.Ephem(os.path.join(sdir, 'ephem.npz'))
     c = np.load(os.path.join(sdir, f'cam{cam}.npz'))
     t_tess = tb.tess_emission(c['t_sc'], eph)
@@ -48,6 +51,10 @@ def load(datadir, sector, cam, ref='red', stamp=tb.VIRGO_STAMP):
     else:
         raise ValueError(ref)
 
+    cadence = float(c['cadence']) if 'cadence' in c.files else 20.0
+    if cadence > 60:
+        return _load_tess_grid(c, t_tess, tv, xv, sel, conv, cadence)
+
     # The ephemeris only covers the sector, so emission-time conversion is
     # done for the sector window; null-shift VIRGO segments are used by
     # index offset (whole days of 1440 minutes) and keep their own data.
@@ -58,4 +65,28 @@ def load(datadir, sector, cam, ref='red', stamp=tb.VIRGO_STAMP):
     lo, hi = max(sel[0] - off, 0), sel[-1] + 1 + off
     x_all = highpass(xv[lo:hi])
     return dict(t=t_grid, x=x_all[sel[0] - lo:sel[0] - lo + len(sel)], x_all=x_all,
-                off=sel[0] - lo, y=highpass(y), level=lev, n=len(sel))
+                off=sel[0] - lo, y=highpass(y), level=lev, n=len(sel), cadence=60.0,
+                per_day=1440)
+
+
+def _load_tess_grid(c, t_tess, tv, xv, sel, conv, cadence):
+    """2-min products: everything on the TESS cadence grid."""
+    hp = int(round(3 * 3600 / cadence))
+    per_day = int(round(86400 / cadence))
+    margin = NULL_MARGIN_DAYS * per_day
+    n = len(t_tess)
+    # Regular grid extended by the null margin. TESS emission times stay
+    # within ~1 s of it over a sector, which only matters for the real
+    # (unshifted) segment, so that one is binned on the exact times.
+    t0 = t_tess[0]
+    t_g = t0 + (np.arange(-margin, n + margin)) * cadence
+    span = (t_g[0] - 86400, t_g[-1] + 86400)
+    # VIRGO in native units around the whole extended range.
+    tvs = conv(tv)                          # light time clamps outside the ephemeris
+    keep = (tvs > span[0]) & (tvs < span[1])
+    x_all = highpass(tb.bin_to_minutes(t_g, tvs[keep], xv[keep], sample=60.0, width=cadence), hp)
+    x = highpass(tb.bin_to_minutes(t_tess, tvs[keep], xv[keep], sample=60.0, width=cadence), hp)
+    y = highpass(c['frac'].astype(float), hp)
+    lev = c['level'].astype(float)
+    return dict(t=t_tess, x=x, x_all=x_all, off=margin, y=y, level=lev, n=n,
+                cadence=cadence, per_day=per_day)
