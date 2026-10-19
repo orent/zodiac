@@ -17,8 +17,9 @@ The code lives on the analysis branch
 ## Layout
 
     s0027/
-      cam1.npz           camera-combined background series, camera 1
-      cam2.npz           same, camera 2
+      cam1.npz ... cam4.npz      camera-combined background series
+      camK_ccdN.npz              same, per CCD (16 lines of sight; from S32 on,
+                                 S27-31 re-reduced later)
       stamps.csv         per-stamp metadata and noise
       noise_spectra.npz  step-A camera PSDs (total / half-sum / half-diff)
       ephem.npz          JPL Horizons heliocentric range of TESS (-95) and SOHO (-21)
@@ -34,10 +35,11 @@ sectors.
 | array | dtype | meaning |
 |---|---|---|
 | `cadenceno` | int32 | TESS cadence number. Every target in the sector shares it. |
-| `t_sc` | float64 | Spacecraft time, TDB, JD − 2457000. This is `TIME − TIMECORR`, i.e. the per-target barycentric correction undone. It comes from a linear fit of cadence number vs `TIME − TIMECORR` over 50 stamps; scatter across targets is 0.63 s. **Not yet** corrected for light time to the Sun. |
+| `t_sc0`, `t_sc_step` | float64 scalars | Spacecraft time, TDB, JD − 2457000, is linear in cadence number: t_sc = t_sc0 + (cadenceno − cadenceno[0]) · t_sc_step. Older files stored the full `t_sc` array; it was converted, reconstruction error < 10⁻⁷ s. This is `TIME − TIMECORR`, i.e. the per-target barycentric correction undone. It comes from a linear fit of cadence number vs `TIME − TIMECORR` over 50 stamps; scatter across targets is 0.63 s. **Not yet** corrected for light time to the Sun. |
 | `frac` | float32 | Camera-combined fractional background fluctuation (see below). NaN = no valid data. |
 | `level` | float32 | Median over the camera's stamps of the absolute background, in e⁻/s per pixel. It uses the same quality mask but no spike clipping. |
 | `n_stamps` | int16 | Number of stamps with a valid `level` at this cadence. |
+| `cadence` | float32 | 20 (fast) or 120 (2-min) s; absent in the oldest files = 20. |
 
 How `frac` is built:
 1. For each stamp, b = `SAP_BKG / NPIX_AP` (e⁻/s/px).
@@ -77,7 +79,7 @@ One row per 20-s stamp on cameras 1 and 2. Units are in brackets.
 
 ## `sNNNN/noise_spectra.npz`
 
-Step-A Welch PSDs (6-h windows, ppm²/µHz) of each camera combination.
+Step-A Welch PSDs (6-h windows, ppm²/µHz) of each camera combination (cameras 1–4).
 
 | array | meaning |
 |---|---|
@@ -133,9 +135,13 @@ Timing caveats:
 
 ## Sectors
 
+Products: `sNNNN` = 20-s light curves, all stamps; `sNNNN_2min` = 2-min light
+curves, up to 1000 random targets (Tmag ≥ 6) per camera per sector.
+
 | sector | dates | cameras | stamps (kept) | TESS source | SPOC |
 |---|---|---|---|---|---|
-| 27 | 2020-07-04 → 07-30 | 1, 2 | 197/200, 199/200 | MAST 20-s `*_fast-lc.fits` | 5.0.9, data release 38 |
+| 27–38 | 2020-07 → 2021-06 | 1–4 | see each `stamps.csv` | MAST 20-s `*_fast-lc.fits` | 5.0.x |
+| 1–26 (`_2min`) | 2018-07 → 2020-07 | 1–4 | ≤1000 per camera | MAST 2-min `*_lc.fits` | various |
 
 ## Regenerating or adding a sector
 
