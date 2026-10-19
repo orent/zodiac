@@ -123,3 +123,44 @@ through the same filter so the two can be compared directly.
 - Acausal side: 10% of points fall outside the null 95% band, against
   about 5% expected. The excursions are a few isolated wiggles of
   null-like amplitude, with no structure.
+
+## Earthshine split test (`earthshine.py`)
+
+Method:
+- Work in absolute units (e⁻/s/px), so a constant zodiacal level gives a
+  constant response.
+- Split the 6-h windows into thirds by background level above the sector
+  floor (5th percentile). That excess is the scattered-light proxy.
+- Fit the model kernel (amplitude A) plus a zero-delay term (amplitude E)
+  to each third.
+- Errors from null shifts.
+
+| cam | level range | excess | A (ZL kernel) | E (zero delay) | E / excess |
+|---|---|---|---|---|---|
+| 1 | 138–158 | 8 | 144 ± 45 | −4 ± 22 | |
+| 1 | 158–231 | 53 | 186 ± 59 | +31 ± 25 | 0.6 ± 0.5 |
+| 1 | 231–325 | 134 | 276 ± 178 | **+146 ± 52** | 1.09 ± 0.39 |
+| 2 | 93–109 | 7 | 97 ± 42 | +7 ± 22 | |
+| 2 | 109–147 | 34 | 206 ± 48 | −10 ± 22 | |
+| 2 | 147–240 | 89 | 213 ± 77 | **+93 ± 33** | 1.04 ± 0.37 |
+
+- **A zero-delay solar-modulated component appears only in the brightest
+  third.** Both cameras show it, at about 3.9σ combined.
+- **It scales about 1:1 with the excess level** (E/excess ≈ 1.0 in both
+  cameras). In other words, the scattered-light excess is fully modulated
+  sunlight arriving with no extra delay. That is the Earthshine/moonshine
+  signature.
+- The −240..0 s lag bin also rises in the bright third. That is the
+  zero-delay term smeared by the band limit, not acausal dust.
+- **In the quiet third**, E is consistent with 0. A matches the
+  zodiacal-only expectation if the background floor is essentially all
+  zodiacal light: 138 × ~1.15 ≈ 160 expected vs 144 ± 45 measured
+  (camera 1); 94 × 1.15 ≈ 108 vs 97 ± 42 (camera 2).
+- So the earlier fractional amplitude excess (×1.32) is mostly
+  Earthshine. The assumed 80% zodiacal fraction was also too low in quiet
+  windows.
+
+Remedy for the depth analysis: either drop windows more than ~30 e⁻/s/px
+above the floor, or fit a zero-delay term ∝ (level − floor) jointly with
+the kernel. The `QUALITY` scattered-light flag alone is not enough: the
+flagged cadences were already excluded here.
