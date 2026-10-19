@@ -48,6 +48,20 @@ BLOCK = 4                      # windows per bootstrap block (50% overlap)
 NULL_SHIFTS = list(range(-400, -29, 3)) + list(range(30, 400, 3))
 
 
+def noise_weights(Y):
+    """Inverse noise power per (window, frequency) that does not depend on
+    the particular window's reference signal: the chunk-average spectrum
+    (smoothed over frequency) times one scale factor per window (median
+    ratio over frequency, which tracks the window's background level).
+    Per-window |Y|^2 weights correlate with |X|^2 through the echo and bias
+    A low by ~30% and the shape toward compact (injection.py)."""
+    P = np.abs(Y) ** 2
+    S = uniform_filter1d(P.mean(0), 9)
+    s = np.median(P / S, axis=1)
+    s /= np.median(s)
+    return 1 / (s[:, None] * S[None, :])
+
+
 def parse_sectors(spec):
     out = []
     for item in spec.split(','):
@@ -142,7 +156,7 @@ class Terms:
             m = (f >= F_LO) & (f <= F_HI)
             fm = f[m]
             Xm, Ym = X[:, m], Y[:, m]
-            W = 1 / uniform_filter1d(np.abs(Ym) ** 2, 9, axis=1)
+            W = noise_weights(Ym)
             XX = W * np.abs(Xm) ** 2
             YX = W * Ym * Xm.conj()
             acc['eps'].append(eps)
@@ -202,7 +216,7 @@ def bin_rows(chunks, dt):
         m = (ch.f >= F_LO) & (ch.f <= F_HI)
         fm = ch.f[m]
         X, Y = ch.X[:, m], ch.Y[:, m]
-        sw = 1 / np.sqrt(uniform_filter1d(np.abs(Y) ** 2, 9, axis=1))
+        sw = np.sqrt(noise_weights(Y))
         ph = np.exp(-2j * np.pi * fm * dt)
         cols = []
         for a, b in zip(BIN_EDGES[:-1], BIN_EDGES[1:]):
