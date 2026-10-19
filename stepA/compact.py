@@ -27,7 +27,9 @@ def sector(sec, reduced, noise_npz, outdir):
     os.makedirs(out, exist_ok=True)
     clock = cadence_clock(reduced)
     d = np.load(noise_npz)
-    rows = ast.literal_eval(re.sub(r'np\.\w+\(([^)]*)\)', r'\1', str(d['rows'])))
+    # Bands above Nyquist (2-min data) are nan, which literal_eval cannot parse.
+    rows = ast.literal_eval(re.sub(r'\bnan\b', 'None',
+                                   re.sub(r'np\.\w+\(([^)]*)\)', r'\1', str(d['rows']))))
     files = [p for p in sorted(glob.glob(f'{reduced}/*.npz')) if not p.endswith('.part.npz')]
     c0 = min(np.load(p)['cadenceno'].min() for p in files)
 
@@ -74,7 +76,7 @@ def sector(sec, reduced, noise_npz, outdir):
         w.writerow(keys + bands)
         for r in rows:
             w.writerow([r.get(k, '') if not isinstance(r.get(k), float) else f'{r[k]:.6g}' for k in keys] +
-                       [f'{x:.6g}' for x in r['bands']])
+                       ['' if x is None else f'{x:.6g}' for x in r['bands']])
     np.savez_compressed(os.path.join(out, 'noise_spectra.npz'),
                         **{k: d[k] for k in d.files if k != 'rows' and not k.endswith('_series')})
 
