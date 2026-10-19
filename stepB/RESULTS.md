@@ -103,3 +103,23 @@ are combined.
 - VIRGO's timestamp convention (start, mid or end of the minute) is a
   ±30 s systematic on the onset. It still has to be pinned down before
   claiming better than ~1 minute.
+
+## Visual response curve (`curve.py`, `response_s27.png`)
+
+The curve is the inverse transform of H = S_yx/S_xx over 0.1–8.3 mHz, with
+cameras 1 and 2 summed. A Wiener-like weight rolls it off above about
+3 mHz, where the solar probe signal is weak. The model kernel is passed
+through the same filter so the two can be compared directly.
+
+| Quantity | Value |
+|---|---|
+| Measured peak at τ = 0 | 0.168 per minute |
+| Null 1σ at τ = 0 | 0.036, so the peak is ~4.7σ in a single point |
+| Decay | over ~5 min, matching the filtered model (fitted amplitude ×1.32) |
+
+- The rise starts about 0.5–1 min earlier than the filtered model. That is
+  the same −60 s seen in the onset scan, and it lies within the VIRGO
+  timestamp-convention uncertainty.
+- Acausal side: 10% of points fall outside the null 95% band, against
+  about 5% expected. The excursions are a few isolated wiggles of
+  null-like amplitude, with no structure.
