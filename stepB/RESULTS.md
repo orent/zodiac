@@ -54,3 +54,52 @@ latitude.
 - Repeat with VIRGO TSI, an independent instrument.
 - Split-half stamp test.
 - A lag-domain (deconvolved) view.
+
+## Causality / onset validation
+
+Time base: TESS spacecraft clock (`TIME − TIMECORR`) and VIRGO's own
+timestamps, which removes the 499 s Sun-to-1 AU travel time common to both.
+The response must start at τ = 0 and be zero at negative lags.
+
+**Free delay bins (`lagfit.py`).** Combined over both cameras, 0.1–8.3 mHz:
+
+| lag bin [s] | weight | model |
+|---|---|---|
+| −2400..−1200 | −0.13 ± 0.27 | 0 |
+| −1200..−600 | −0.11 ± 0.20 | 0 |
+| −600..−240 | +0.13 ± 0.15 | 0 |
+| −240..0 | +0.13 ± 0.11 | 0 |
+| **0..240** | **+0.67 ± 0.11 (6.0σ)** | 0.37 |
+| 240..600 | +0.26 ± 0.14 | 0.23 |
+| 600..1200 | +0.39 ± 0.21 | 0.13 |
+| 1200..2400 | −0.36 ± 0.28 | 0.06 |
+
+- The negative-lag bins are all within 1.2σ of zero. Their sum is
+  +0.001 ± 0.62.
+- Both cameras agree in the 0–240 s bin: 0.65 ± 0.15 and 0.68 ± 0.17.
+- 60-s bins are not resolvable with one sector. Their errors are ±0.4–0.6
+  and adjacent bins trade off against each other.
+
+**Onset scan (`onset.py`).** The model kernel shape (step plus decay) is
+shifted to a trial onset τ₀ and only its amplitude is fitted. Both cameras
+are combined.
+
+| Quantity | Value |
+|---|---|
+| Peak | τ₀ = −60 s, S/N 9.0 |
+| 1σ range | −150 .. +60 s |
+| Camera 1 alone | best −60 s, 5.6σ |
+| Camera 2 alone | best −60 s, 7.0σ |
+
+- The onset is consistent with zero, at about ±100 s resolution.
+- The S/N falls to zero by τ₀ ≈ −600 s and +480 s. Beyond that, the
+  negative sidelobes come from the autocorrelation of the high-passed
+  solar signal.
+- The fitted amplitude is 1.35, against about 0.9 expected (80% zodiacal
+  light × ~1.15 for TESS band vs 862 nm). So the response is stronger
+  and/or more compact than the model. Possible causes: Earthshine at
+  zero lag, a higher zodiacal fraction, or near-Earth dust such as the
+  resonant ring. This needs follow-up.
+- VIRGO's timestamp convention (start, mid or end of the minute) is a
+  ±30 s systematic on the onset. It still has to be pinned down before
+  claiming better than ~1 minute.
