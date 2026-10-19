@@ -10,11 +10,14 @@ mode. Their difference is the floor that more stamps cannot beat.
 usage: noise.py reduced_dir [out.npz]
 """
 
-import ast, glob, sys
+import ast, glob, os, sys
 import numpy as np
 from scipy.ndimage import median_filter, uniform_filter1d
 
-CADENCE = 20.0
+# Cadence of the input light curves [s]: 20 (fast) or 120 (2-min). 2-min
+# data has onboard cosmic-ray mitigation (8 of 10 frames kept per 20 s).
+CADENCE = float(os.environ.get('TESS_CADENCE', 20))
+EXPOSED = 0.99 if CADENCE <= 20 else 0.8
 # QUALITY bits rejected: attitude tweak, safe mode, coarse point, earth point,
 # Argabrightening, desaturation, aperture cosmic, manual exclude, impulsive
 # outlier, collateral cosmic, straylight, scattered light, insufficient targets.
@@ -47,7 +50,7 @@ def fractional(h, d):
     spike[idx[np.abs(resid) > 5 * mad]] = True
     spike |= np.roll(spike, 1) | np.roll(spike, -1)
     good &= ~spike
-    texp = CADENCE * 0.99
+    texp = CADENCE * EXPOSED
     var_px = level * texp + (CADENCE / 2) * READ_NOISE**2
     sigma = np.sqrt(var_px / h['NPIX_BKG']) / (level * texp)
     x[~good] = np.nan

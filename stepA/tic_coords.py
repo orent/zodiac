@@ -1,5 +1,6 @@
-"""Look up TIC coordinates and Tmag for every 20-s target in the MAST
-bulk-download scripts, then assign TESS camera/CCD with tess-point."""
+"""Look up TIC coordinates and Tmag for every target in MAST bulk-download
+scripts (20-s *_fast-lc or 2-min *_lc), then assign TESS camera/CCD with
+tess-point."""
 
 import json, re, sys, urllib.parse, urllib.request
 import numpy as np
@@ -22,7 +23,7 @@ def main(out, *scripts):
     rows = []
     for path in scripts:
         for line in open(path):
-            m = re.search(r'(tess\d+-s(\d{4})-(\d{16})-\d{4}-\w_fast-lc\.fits) (\S+)', line)
+            m = re.search(r'(tess\d+-s(\d{4})-(\d{16})-\d{4}-\w_(?:fast-)?lc\.fits) (\S+)', line)
             if m:
                 rows.append((int(m[2]), int(m[3]), m[1], m[4]))
     tics = sorted({r[1] for r in rows})
@@ -30,13 +31,25 @@ def main(out, *scripts):
     for i in range(0, len(tics), 500):
         coords.update(tic_query(tics[i:i + 500]))
         print(f'{len(coords)}/{len(tics)}', file=sys.stderr)
+    by_sector = {}
+    for row in rows:
+        by_sector.setdefault(row[0], []).append(row)
     with open(out, 'w') as f:
         f.write('sector,tic,ra,dec,tmag,camera,ccd,file,url\n')
-        for sector, tic, fn, url in rows:
-            ra, dec, tmag = coords[tic]
+        for sector, srows in sorted(by_sector.items()):
+            tic = np.array([r[1] for r in srows])
+            ra = np.array([coords[t][0] for t in tic])
+            dec = np.array([coords[t][1] for t in tic])
             res = stars2px(tic, ra, dec, trySector=sector)
-            cam, ccd = (res[4][0], res[5][0]) if res[3][0] == sector else (0, 0)
-            f.write(f'{sector},{tic},{ra},{dec},{tmag},{cam},{ccd},{fn},{url}\n')
+            # One output row per (target, sector, camera) hit; keep the hit
+            # for this sector (a target is on at most one camera per sector).
+            cam = {}
+            for i, sec, c, ccd in zip(res[0], res[3], res[4], res[5]):
+                if sec == sector:
+                    cam[int(i)] = (int(c), int(ccd))
+            for (_, t, fn, url), r_, d_ in zip(srows, ra, dec):
+                c, ccd = cam.get(int(t), (0, 0))
+                f.write(f'{sector},{t},{r_},{d_},{coords[t][2]},{c},{ccd},{fn},{url}\n')
 
 
 if __name__ == '__main__':

@@ -12,7 +12,7 @@ Conventions (see TIMEBASE.md):
 - Light time: t_emit = t_obs - r_helio(t_obs) / c, with r from JPL Horizons
   (TESS = -95, SOHO = -21, centre = Sun body centre).
 
-usage: timebase.py ephem datadir sector   (fetch and store Horizons ranges)
+usage: timebase.py ephem datadir sector [suffix]   (fetch and store Horizons ranges)
 """
 
 import json, os, sys, urllib.parse, urllib.request
@@ -47,7 +47,7 @@ def horizons_range(body, start, stop, step='10m'):
     return np.array(jd), np.array(r)
 
 
-def fetch_ephem(datadir, sector, t_sc):
+def fetch_ephem(datadir, sector, t_sc, suffix=''):
     """Store TESS and SOHO heliocentric ranges covering a sector."""
     jd0 = 2457000 + np.nanmin(t_sc) - 1
     jd1 = 2457000 + np.nanmax(t_sc) + 1
@@ -57,7 +57,7 @@ def fetch_ephem(datadir, sector, t_sc):
     for name, body in (('tess', '-95'), ('soho', '-21')):
         jd, r = horizons_range(body, start, stop)
         out[f'{name}_jd_tdb'], out[f'{name}_r_au'] = jd, r
-    path = os.path.join(datadir, f's{int(sector):04d}', 'ephem.npz')
+    path = os.path.join(datadir, f's{int(sector):04d}{suffix}', 'ephem.npz')
     np.savez_compressed(path, **out)
     return path
 
@@ -126,5 +126,6 @@ def bin_to_minutes(t_min, t_s, x, sample=20.0, width=60.0, min_cover=2 / 3):
 if __name__ == '__main__':
     if sys.argv[1] == 'ephem':
         datadir, sector = sys.argv[2:4]
-        t_sc = np.load(os.path.join(datadir, f's{int(sector):04d}', 'cam1.npz'))['t_sc']
-        print(fetch_ephem(datadir, sector, t_sc))
+        suffix = sys.argv[4] if len(sys.argv) > 4 else ''
+        t_sc = np.load(os.path.join(datadir, f's{int(sector):04d}{suffix}', 'cam1.npz'))['t_sc']
+        print(fetch_ephem(datadir, sector, t_sc, suffix))

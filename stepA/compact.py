@@ -22,7 +22,8 @@ TESS_ERA_START_JD = 2458300.5     # 2018-07-01
 
 def sector(sec, reduced, noise_npz, outdir):
     sec = int(sec)
-    out = os.path.join(outdir, f's{sec:04d}')
+    # Product directory: sNNNN for 20-s data, sNNNN<suffix> otherwise (e.g. _2min).
+    out = os.path.join(outdir, f's{sec:04d}' + os.environ.get('TESS_PRODUCT_SUFFIX', ''))
     os.makedirs(out, exist_ok=True)
     clock = cadence_clock(reduced)
     d = np.load(noise_npz)
@@ -54,7 +55,8 @@ def sector(sec, reduced, noise_npz, outdir):
             t_sc=clock(cad),                        # spacecraft TDB, JD - 2457000
             frac=frac.astype(np.float32),
             level=level.astype(np.float32),
-            n_stamps=nst.astype(np.int16))
+            n_stamps=nst.astype(np.int16),
+            cadence=np.float32(nz.CADENCE))
         print(f'cam {cam}: {ncad} cadences, {stacks.shape[0]} stamps')
 
     keys = ['tic', 'cam', 'tmag', 'nbkg', 'level', 'pred', 'leak']
