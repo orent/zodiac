@@ -231,3 +231,45 @@ Next:
 - stack sectors 28–38;
 - for the tail: 12–24 h windows and a gentler high-pass, plus
   common-mode regression (`ROADMAP.md`).
+
+## Interim: joint fit, sectors 27–30, all four cameras
+
+(20-s data, VIRGO red; raw output below.)
+
+```
+camera 1: 502 windows from 4 sector products (27,28,29,30)
+camera 2: 502 windows from 4 sector products (27,28,29,30)
+camera 3: 500 windows from 4 sector products (27,28,29,30)
+camera 4: 504 windows from 4 sector products (27,28,29,30)
+
+shared timing offset dt = +10 s  (profile 68%: +0 .. +10 s; bootstrap 68%: -10 .. +30 s)
+
+per camera at the shared dt (A, E per unit quiet floor; expected A ~1.15 x ZL fraction):
+  cam  lat  alpha best [boot 68%] [dchi2=1]   A [boot 68%]         E [boot 68%]        A/null_sigma   A at alpha=1.4
+  1     18  1.0 [0.4, 1.6] [0.6, 1.4]     0.79 [0.66, 0.92]    +0.59 [+0.46, +0.72]      9.0 (183 nulls)    0.72 (dchi2 0.8)
+  2     42  1.6 [0.8, 2.6] [0.8, 2.4]     0.67 [0.59, 0.78]    +0.60 [+0.46, +0.74]      8.1 (182 nulls)    0.69 (dchi2 0.0)
+  3     66  2.2 [0.4, 4.0] [0.8, 4.0]     0.65 [0.56, 0.77]    +0.76 [+0.62, +0.91]      7.0 (182 nulls)    0.68 (dchi2 0.2)
+  4     90  1.6 [0.4, 4.0] [0.4, 4.0]     0.44 [0.38, 0.52]    +0.80 [+0.69, +0.91]      6.8 (181 nulls)    0.45 (dchi2 0.0)
+
+profile chi^2 vs alpha at the shared dt, relative to best:
+  cam 1: 0.6:0.5 1.0:0.0 1.4:0.8 1.8:2.5 2.2:4.8 2.6:7.6 3.0:10.7 3.6:15.7
+  cam 2: 0.6:1.6 1.0:0.5 1.4:0.0 1.8:0.1 2.2:0.6 2.6:1.4 3.0:2.5 3.6:4.5
+  cam 3: 0.6:1.1 1.0:0.6 1.4:0.2 1.8:0.1 2.2:0.0 2.6:0.1 3.0:0.2 3.6:0.6
+  cam 4: 0.6:0.1 1.0:0.0 1.4:0.0 1.8:0.0 2.2:0.0 2.6:0.1 3.0:0.2 3.6:0.4
+
+non-negative log-binned kernel at dt = +10 s (per unit floor, per bin; bootstrap 68%):
+  bin [s]                    0-60            60-180           180-420           420-900          900-2000         2000-4000   Earthshine E
+  cam 1 fit    0.130 [0.07,0.18]  0.126 [0.09,0.18]  0.231 [0.19,0.29]  0.184 [0.14,0.25]  0.032 [0.00,0.12]  0.188 [0.14,0.31]   0.59 [0.43,0.76]
+  cam 1 model  0.171             0.257             0.300             0.242             0.132             0.038              (alpha 1.34, A 1.15)
+  cam 1 total area 0.89 [0.80, 1.13]  (expected ~1.15 x ZL fraction)
+  cam 2 fit    0.111 [0.07,0.17]  0.239 [0.17,0.30]  0.183 [0.12,0.24]  0.117 [0.06,0.18]  0.000 [0.00,0.00]  0.062 [0.00,0.17]   0.65 [0.56,0.78]
+  cam 2 model  0.237             0.335             0.317             0.176             0.068             0.015              (alpha 1.34, A 1.15)
+  cam 2 total area 0.71 [0.60, 0.90]  (expected ~1.15 x ZL fraction)
+  cam 3 fit    0.199 [0.10,0.30]  0.233 [0.16,0.32]  0.197 [0.11,0.25]  0.000 [0.00,0.04]  0.140 [0.04,0.29]  0.000 [0.00,0.14]   0.77 [0.64,0.93]
+  cam 3 model  0.314             0.397             0.278             0.117             0.035             0.007              (alpha 1.34, A 1.15)
+  cam 3 total area 0.77 [0.65, 1.05]  (expected ~1.15 x ZL fraction)
+  cam 4 fit    0.138 [0.09,0.21]  0.209 [0.15,0.26]  0.045 [0.00,0.11]  0.075 [0.02,0.13]  0.000 [0.00,0.00]  0.000 [0.00,0.13]   0.83 [0.72,0.96]
+  cam 4 model  0.405             0.423             0.224             0.074             0.019             0.004              (alpha 1.34, A 1.15)
+  cam 4 total area 0.47 [0.43, 0.67]  (expected ~1.15 x ZL fraction)
+
+```
