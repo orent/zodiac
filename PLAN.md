@@ -90,18 +90,20 @@ Proposed scope:
   - Keep the two ecliptic hemispheres separate. They are different lines of
     sight, and the north/south comparison is itself a result.
 
-Data window: the SOHO catalogue lists VIRGO/SPM level-2 1-min data
-through 2021-05. I could not confirm later releases from this sandbox.
-That limits the overlap to about **sectors 1–37** (2018-07 → 2021-05)
-unless newer SPM data exists. Fallbacks are SDO/HMI Sun-as-a-star continuum
-intensity or the VIRGO radiometers. **Verify this before downloading
-anything.**
+Data source: **20-s "fast" light curves** (`*_fast-lc.fits`, sector 27
+onward), resampled to the VIRGO 1-min grid. Notes:
+- There are far fewer 20-s targets than 2-min targets, roughly a few hundred
+  per camera per sector (check against MAST). At ~30 background pixels each,
+  one camera-sector gives ~2 × 10⁵ pixel-days. That is about the
+  parametric-profile requirement, so plan to stack several sectors from the
+  start.
+- 20-s data has no onboard cosmic-ray mitigation, so clip cosmic rays on the
+  ground before averaging.
+- FFIs are out: their time resolution is too coarse for the delay window.
 
-FFI aside: one CCD gives about 2 × 10⁶ usable pixels, which would be
-photon-limited in minutes. During the VIRGO overlap, though, FFIs are 1800 s
-(S1–26) or 600 s (S27–). At 600 s, the Nyquist frequency is 0.83 mHz. That
-still contains about 70% of the detection SNR², so the FFIs could
-cross-check the stamps. They cannot resolve the profile.
+Data window: VIRGO/SPM is reported to continue to the present. That needs
+confirming once the data hosts are reachable; this sandbox currently blocks
+them. If it holds, every 20-s sector (S27 → now) overlaps VIRGO.
 
 ## 3. Granulation vs. p-modes
 
@@ -181,10 +183,16 @@ Steps:
 4. **Normalisation.** Divide each stamp's background by its segment median
    to get the fractional variation. Combine stamps on the same camera with
    inverse-variance weights.
-5. **Resampling. Do not interpolate TESS up to 60 s**; it adds no
-   information. Instead, box-average VIRGO onto each TESS cadence window
-   (120 s), so both series share the same integration response. For 20-s
-   targets, bin TESS down to 60 s instead.
+5. **Resampling to the VIRGO 1-min grid.**
+   - After the time-base correction, the 20-s cadences no longer line up
+     with VIRGO's minute boundaries.
+   - So for each VIRGO minute, average the TESS 20-s samples weighted by
+     their exposure overlap with that minute. Each TESS sample is a 20-s box.
+   - This is decimation with a matched box response, not point
+     interpolation. Point interpolation would leave TESS with a narrower
+     integration window than VIRGO and add a small phase error that grows
+     with frequency.
+   - Drop any minute that has less than ~2/3 coverage after quality masking.
    - Use the VIRGO red channel (862 nm), which is closest to the TESS band
      (600–1000 nm).
 6. **Band limiting.** Use Welch segments of ~4–6 h, with linear detrend and
