@@ -384,3 +384,89 @@ Per sector (cameras combined):
   again, for the poorly modelled high-latitude cameras.
 - The combined Δt ≈ −6 s stands, but its ±5 s is probably
   underestimated. Realistic errors come from injection–recovery below.
+
+## Injection–recovery v1 (`injection.py`, per-window |Y|² weights)
+
+Sectors 27–38, 4 cameras; ~10 usable trials per case; A_inj = 0.7, Δt_inj = 0.
+Raw output:
+
+```
+injection-recovery on 27-38, cameras (1, 2, 3, 4), 16 null shifts per case, A_inj = 0.7, dt_inj = 0
+
+== model (alpha 1.34, bump 0.0): 10 trials
+  dt: median +5.0 s, scatter (16-84%) +0 .. +15 s
+  cam 1: alpha 2.2 [1.5,2.6] (true 1.34); A 0.47 [0.41,0.50] (true 0.7); E -0.04 (true 0)
+     bins true 0.104 0.156 0.183 0.148 0.081 0.023
+     bins rec  0.068 0.127 0.140 0.089 0.039 0.041
+     bins 68%  0.027 0.026 0.028 0.025 0.026 0.052
+  cam 2: alpha 1.8 [1.5,2.5] (true 1.34); A 0.50 [0.46,0.55] (true 0.7); E +0.05 (true 0)
+     bins true 0.144 0.204 0.193 0.107 0.041 0.009
+     bins rec  0.088 0.190 0.145 0.049 0.025 0.038
+     bins 68%  0.025 0.033 0.033 0.034 0.035 0.090
+  cam 3: alpha 2.7 [1.6,4.0] (true 1.34); A 0.49 [0.46,0.54] (true 0.7); E -0.01 (true 0)
+     bins true 0.191 0.242 0.170 0.071 0.022 0.004
+     bins rec  0.185 0.185 0.125 0.035 0.044 0.079
+     bins 68%  0.042 0.029 0.034 0.030 0.033 0.081
+  cam 4: alpha 3.5 [1.8,4.0] (true 1.34); A 0.50 [0.48,0.51] (true 0.7); E -0.01 (true 0)
+     bins true 0.247 0.258 0.136 0.045 0.012 0.002
+     bins rec  0.207 0.205 0.091 0.005 0.004 0.126
+     bins 68%  0.011 0.013 0.022 0.024 0.037 0.085
+
+== extended (alpha 0.6, bump 0.0): 10 trials
+  dt: median +5.0 s, scatter (16-84%) +0 .. +15 s
+  cam 1: alpha 1.3 [0.7,1.8] (true 0.6); A 0.45 [0.38,0.50] (true 0.7); E -0.04 (true 0)
+     bins true 0.080 0.127 0.165 0.157 0.111 0.046
+     bins rec  0.048 0.103 0.126 0.099 0.060 0.047
+     bins 68%  0.026 0.025 0.029 0.025 0.025 0.055
+  cam 2: alpha 1.0 [0.9,1.7] (true 0.6); A 0.48 [0.44,0.54] (true 0.7); E +0.04 (true 0)
+     bins true 0.122 0.181 0.188 0.123 0.061 0.020
+     bins rec  0.070 0.174 0.143 0.061 0.037 0.034
+     bins 68%  0.024 0.032 0.034 0.034 0.036 0.090
+  cam 3: alpha 1.9 [0.8,3.2] (true 0.6); A 0.48 [0.45,0.54] (true 0.7); E -0.02 (true 0)
+     bins true 0.173 0.227 0.172 0.084 0.033 0.009
+     bins rec  0.167 0.173 0.129 0.046 0.050 0.076
+     bins 68%  0.040 0.030 0.035 0.033 0.037 0.081
+  cam 4: alpha 2.7 [1.2,4.0] (true 0.6); A 0.49 [0.46,0.50] (true 0.7); E -0.01 (true 0)
+     bins true 0.235 0.249 0.139 0.052 0.018 0.005
+     bins rec  0.196 0.194 0.094 0.010 0.006 0.121
+     bins 68%  0.013 0.013 0.022 0.027 0.038 0.084
+
+== bump (alpha 1.34, bump 0.05): 10 trials
+  dt: median +5.0 s, scatter (16-84%) +0 .. +10 s
+  cam 1: alpha 2.0 [1.3,2.6] (true 1.34); A 0.48 [0.41,0.51] (true 0.7); E -0.04 (true 0)
+     bins true 0.104 0.156 0.183 0.148 0.116 0.023
+     bins rec  0.068 0.127 0.141 0.084 0.069 0.036
+     bins 68%  0.026 0.026 0.028 0.025 0.026 0.049
+  cam 2: alpha 1.8 [1.4,2.6] (true 1.34); A 0.49 [0.45,0.55] (true 0.7); E +0.05 (true 0)
+     bins true 0.144 0.204 0.193 0.107 0.076 0.009
+     bins rec  0.084 0.191 0.145 0.044 0.054 0.025
+     bins 68%  0.023 0.032 0.034 0.034 0.034 0.088
+  cam 3: alpha 2.8 [1.8,3.9] (true 1.34); A 0.49 [0.46,0.54] (true 0.7); E -0.01 (true 0)
+     bins true 0.191 0.242 0.170 0.071 0.057 0.004
+     bins rec  0.175 0.185 0.124 0.029 0.072 0.061
+     bins 68%  0.044 0.032 0.036 0.027 0.048 0.078
+  cam 4: alpha 3.7 [2.0,4.0] (true 1.34); A 0.50 [0.48,0.51] (true 0.7); E -0.02 (true 0)
+     bins true 0.247 0.258 0.136 0.045 0.047 0.002
+     bins rec  0.205 0.207 0.088 0.001 0.033 0.116
+     bins 68%  0.019 0.015 0.021 0.021 0.050 0.076
+
+```
+
+**Findings (estimator v1):**
+- **A is biased low by ~30%** in every camera and every shape
+  (0.47–0.50 vs 0.7). Cause: the noise weights are taken from each
+  window's own |Y|², which contains the echo and so correlates with that
+  window's |X|².
+- **α is biased toward compact.** True 1.34 is recovered as 1.8–3.5; true
+  0.6 as 1.0–2.7. The 420–2000 s bins are recovered at ~60%.
+- **The 2000–4000 s bin is spurious:** +0.04 to +0.13 recovered when the
+  truth is ≤ 0.02. The camera 3 far-bin excess in the real data is
+  consistent with this artifact. The camera 4 real 420–2000 s content
+  exceeds any recovered injection, so it is not explained.
+- **Δt:** +5 s bias, 68% scatter 0 … +15 s, so the realistic error on
+  the full-stack timing is ±7 s.
+- **E is unbiased.**
+- A 0.05 bump at 1500 s is ~1σ per camera: not detectable.
+
+**Fix (v2):** noise weights from the chunk-average spectrum × one scale
+factor per window (`noise_weights` in `joint.py`). Re-tested below.
