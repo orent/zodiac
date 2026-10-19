@@ -355,3 +355,32 @@ viewing-angle coherence. Check against Kelsall-predicted brightness.
 **Earthshine E:** 0.35–0.75, lower than S27 alone (sector-to-sector
 scattered-light geometry varies; one shared E per camera is a
 simplification).
+
+## Fine timing (`timing.py`), sectors 27–38
+
+2-s grid; χ² minimised over α, A and E.
+
+| | Δt [s] | Δχ² = 1 interval [s] |
+|---|---|---|
+| camera 1 | +3.6 | −6.5 … +12.6 |
+| camera 2 | −8.4 | −23.5 … +6.3 |
+| camera 3 | +24.0 | +5.5 … +41.6 |
+| camera 4 | −16.2 | −24.0 … −8.8 |
+| **combined** | **−5.9** | **−10.5 … −0.1** |
+
+Per sector (cameras combined):
+- The median is +0.7 s, but the χ² scatter is 57 for 11 degrees of
+  freedom.
+- Sector 34 gives +116 s with the red channel, but only +18 s with TSI.
+- Per sector and per camera, single estimates scatter by ±200 s, and red
+  and TSI disagree for the same sector.
+
+**Reading:**
+- Per-sector and per-camera Δχ² = 1 intervals are too narrow. Timing and
+  shape trade off at ~4σ per sector-camera, and α runs to the grid edges.
+- There is no evidence of a VIRGO red clock jump: TSI does not confirm
+  sector 34.
+- The camera 3/4 split (+24 vs −16 s) is the shape–timing degeneracy
+  again, for the poorly modelled high-latitude cameras.
+- The combined Δt ≈ −6 s stands, but its ±5 s is probably
+  underestimated. Realistic errors come from injection–recovery below.

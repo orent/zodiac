@@ -96,6 +96,9 @@ class Chunk:
         ynorm = a['y'] * a['level'] / self.floor
         self.X, self.Y, L, S = windows(a['x'], ynorm, a['level'], win)
         self.eps = (L - self.floor) / self.floor
+        # Raw series kept for time-domain injection tests (injection.py).
+        self.raw = dict(x_all=a['x_all'], off=a['off'], per_day=a['per_day'], n=a['n'],
+                        y_norm=ynorm, level=a['level'], win=win)
         self.nulls = {}
         for sh in NULL_SHIFTS:
             i = a['off'] + sh * a['per_day']
