@@ -118,6 +118,52 @@ of the background is zodiacal light. One sector is about 23 usable days.
   So 1-min VIRGO does reach the present, but only as total irradiance.
   The red channel stops in 2021.
 
+## VIRGO red channel vs TSI as the reference (one year around S27)
+
+The two series were put on a common minute grid, high-passed with a 3-h
+running median, and compared with Welch over 6-h windows (2651 windows).
+
+| f [mHz] | PSD red | PSD TSI | TSI/red | coherence |
+|---|---|---|---|---|
+| 0.1–0.3 | 0.75 | 1.54 | 2.0 | 0.81 |
+| 0.3–0.6 | 0.65 | 1.19 | 1.9 | 0.88 |
+| 0.6–1.0 | 0.39 | 0.76 | 2.0 | 0.85 |
+| 1–2 | 0.17 | 0.39 | 2.3 | 0.77 |
+| 2–2.7 | 0.09 | 0.22 | 2.5 | 0.71 |
+| 2.7–3.5 | 0.09 | 0.29 | 3.1 | 0.70 |
+| 3.5–4.5 | 0.03 | 0.10 | 3.5 | 0.50 |
+| 4.5–6 | 0.008 | 0.08 | 10 | 0.22 |
+
+PSDs in ppm²/µHz.
+
+- **Solar power:** TSI has about 2× the red channel's power (1.4× the
+  amplitude). That is expected, since solar variability is larger at
+  shorter wavelengths. It doesn't matter for an uncalibrated profile.
+- **Instrument noise:** TSI (PMO6) has a white floor of about
+  0.1 ppm²/µHz, which dominates above ~4.5 mHz. The red channel's floor is
+  about 50× lower.
+- **Coherence** between the two is only 0.8–0.88 below 1 mHz, falling to
+  0.5 at 4 mHz. Part of that is the TSI noise floor; part is genuine
+  differences in the signal between wavelengths.
+- **Timing:** the cross-spectrum phase rises linearly with frequency,
+  corresponding to about 40 s. That matches the difference between the
+  sub-minute offsets in the two files' own timestamps (red :53 s,
+  TSI :13 s). So the timestamps in the two files are consistent with each
+  other. The time base must use each file's timestamps as given, never a
+  rounded minute grid.
+
+The TESS band (600–1000 nm) is close to the red channel (862 nm). Using TSI
+as the reference therefore costs:
+1. SNR² by about the red–TSI coherence: roughly 15–20% more data below
+   2 mHz.
+2. **A shape bias.** The estimate S_yx/S_xx with x = TSI is multiplied by
+   a factor that falls with frequency, and that mimics extra smearing, i.e.
+   apparently deeper dust.
+
+Fix: measure the red→TSI transfer function over the 2018–2021 overlap and
+divide it out when TSI is the only reference. Alternatively, use the red
+channel for S27–S38 and treat later sectors as a cross-check.
+
 ## Next
 
 Quick-look detection on sector 27:
