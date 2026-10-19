@@ -41,11 +41,16 @@ def job(row, outdir):
                 with urllib.request.urlopen(row['url'], timeout=300) as r:
                     tmp.write(r.read())
                 break
-            except OSError as e:
+            except Exception as e:      # OSError, http.client.IncompleteRead, ...
+                tmp.seek(0)
+                tmp.truncate()
                 if attempt == 3:
                     return out, f'failed: {e}'
         tmp.flush()
-        reduce(tmp.name, out)
+        try:
+            reduce(tmp.name, out)
+        except Exception as e:
+            return out, f'failed: {e}'
     return out, 'ok'
 
 

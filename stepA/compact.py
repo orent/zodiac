@@ -28,12 +28,11 @@ def sector(sec, reduced, noise_npz, outdir):
     clock = cadence_clock(reduced)
     d = np.load(noise_npz)
     rows = ast.literal_eval(re.sub(r'np\.\w+\(([^)]*)\)', r'\1', str(d['rows'])))
-    c0 = min(np.load(p)['cadenceno'].min() for p in glob.glob(f'{reduced}/*.npz'))
+    files = [p for p in sorted(glob.glob(f'{reduced}/*.npz')) if not p.endswith('.part.npz')]
+    c0 = min(np.load(p)['cadenceno'].min() for p in files)
 
     stamps = []
-    for p in sorted(glob.glob(f'{reduced}/*.npz')):
-        if p.endswith('.part.npz'):
-            continue
+    for p in files:
         h, s = nz.load(p)
         b = s['sap_bkg'] / h['NPIX_AP']
         good = ((s['quality'] & nz.BADBITS) == 0) & np.isfinite(b)

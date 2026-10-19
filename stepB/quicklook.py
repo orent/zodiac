@@ -26,7 +26,7 @@ def cadence_clock(reduced):
     """Spacecraft time (TDB, JD - 2457000) of each cadence number:
     TIME minus the per-target barycentric correction TIMECORR."""
     cad, tsc = [], []
-    for path in sorted(glob.glob(f'{reduced}/*.npz'))[:50]:
+    for path in [p for p in sorted(glob.glob(f'{reduced}/*.npz')) if not p.endswith('.part.npz')][:50]:
         d = np.load(path)
         ok = np.isfinite(d['time']) & np.isfinite(d['timecorr'])
         cad.append(d['cadenceno'][ok])
