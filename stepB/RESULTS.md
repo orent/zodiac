@@ -582,3 +582,35 @@ larger share. Viewing-angle coherence loss may contribute.
 
 **Earthshine is now consistent across cameras: E ≈ 0.72–0.92**, i.e. the
 scattered-light excess is nearly fully solar-modulated.
+
+## Joint 3-D fit: radial index α and vertical scale v (`vertical.py`)
+
+- Fit: sectors 27–38, all four cameras, shared (α, v), Δt = 0, per-camera
+  A and E.
+- v scales the height of the Kelsall fan profile (v = 1: COBE model;
+  v > 1: dust extends higher above the plane).
+
+| | result |
+|---|---|
+| best | α = 0.6, v = 1.00 |
+| α, 68% (profile and bootstrap agree) | 0.4 … 1.2 |
+| **v, 68%** | **1.00 … 1.25** |
+| v ≤ 0.75 | excluded, Δχ² > 11 |
+| v ≥ 1.75 | excluded, Δχ² > 10 |
+| Kelsall point (α 1.4, v 1.0) | Δχ² = 8.2 |
+| α 1.4 at v = 1.25 | Δχ² = 2.4 |
+
+- **α and v are degenerate along a valley** from (0.6, 1.0) to
+  (1.0–1.4, 1.25). The data accept either the Kelsall radial index with a
+  vertical extent ~25% larger, or the Kelsall vertical profile with a
+  flatter radial falloff.
+- **The vertical extent is measured to ~±15% and is consistent with the
+  COBE/Kelsall model.** There is no evidence for a strongly extended
+  high-latitude cloud. That agrees with injection–recovery v2, which
+  showed the single-camera "extension" was not significant.
+- Per-camera amplitudes at the joint best: 1.18, 0.88, 0.69, 0.57.
+- Caveats:
+  - (α, v) recovery has not yet been injection-tested. Single-camera α
+    was biased and scattered.
+  - The 2-min sectors (including the northern hemisphere) will tighten
+    the valley.
