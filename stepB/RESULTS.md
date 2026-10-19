@@ -175,3 +175,59 @@ flagged cadences were already excluded here.
 - In quiet windows, |H(f)| follows the smooth-cloud model, and the onset
   is −100 [−182, −32] s, i.e. not compelling.
 - Timing goes into the joint fit as a free Δt.
+
+## Joint estimator, sector 27 (`joint.py`)
+
+The model is fitted per window in absolute units, with VIRGO red as the
+reference:
+
+    Y = X · [A · H_α · e^(−2πifΔt) + E · (level − floor)]
+
+- Δt is shared by both cameras.
+- Errors: block bootstrap over windows (300 resamples) and profile
+  likelihood.
+- A is tested against nulls (~200 VIRGO shifts).
+
+| | camera 1 (lat 18°) | camera 2 (lat 42°) |
+|---|---|---|
+| windows | 146 | 144 |
+| **Earthshine E** [per e⁻/s/px of excess] | **0.84 [0.64, 0.97]** | **0.74 [0.57, 0.85]** |
+| ZL amplitude A (best α), significance vs nulls | 78, **4.6σ** | 60, **4.2σ** |
+| α (density index), 68% Δχ² = 1 | 1.8 … 4.0 (best 3.4) | 1.0 … 4.0 (best 3.0) |
+| model α = 1.34–1.4: Δχ², A | Δχ² 1.4, A = 102 | Δχ² 0.5, A = 69 |
+| expected A from quiet floor × 1.15 | ~159 | ~108 |
+| non-negative bins: total area | 144 [110, 185] | 124 [98, 181] |
+
+**Shared Δt = +50 s.** Profile 68%: +20 … +70 s. Bootstrap 68%:
+−10 … +70 s. Consistent with 0 at about 1–2σ, and within the VIRGO
+stamp-convention uncertainty.
+
+Non-negative log-binned kernel (e⁻/s/px per unit solar fraction, 68%
+interval in brackets):
+
+| bin [s] | 0–60 | 60–180 | 180–420 | 420–900 | 900–2000 | 2000–4000 |
+|---|---|---|---|---|---|---|
+| cam 1 | 30 [19, 42] | 23 [9, 38] | 14 [3, 27] | 38 [24, 49] | 0 [0, 0] | 39 [10, 71] |
+| cam 2 | 16 [7, 26] | 27 [18, 39] | 11 [0, 21] | 20 [11, 33] | 6 [0, 26] | 44 [16, 87] |
+
+Reading:
+- **The zodiacal response is detected separately from Earthshine** in
+  each camera, about 6σ combined. Earthshine is fully solar-modulated
+  light at zero delay, with E ≈ 0.75–0.85 per unit of excess level.
+- **The timing offset is consistent with zero** once Earthshine is
+  modelled. The earlier negative onset was template mismatch.
+- **One sector does not constrain the shape.** The χ² over α is shallow,
+  and the smooth-cloud α = 1.34 is within about 1σ.
+- **The total area of the non-negative bins agrees with the
+  quiet-floor zodiacal calibration** (144 vs 159; 124 vs 108).
+  - The parametric fit with a compact α underestimates A, because it
+    cannot put weight in the far bins.
+  - Those far bins (≥ 900 s) map to f < 0.3 mHz, where the 3-h high-pass
+    and the spacecraft common mode act. The 900–2000 / 2000–4000 split
+    is not trustworthy yet: one bin is pinned at 0 and the other takes
+    everything.
+
+Next:
+- stack sectors 28–38;
+- for the tail: 12–24 h windows and a gentler high-pass, plus
+  common-mode regression (`ROADMAP.md`).

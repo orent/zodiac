@@ -7,7 +7,9 @@ and `TIMEBASE.md`.
 ## Near-term order
 
 1. ~~Time base~~: done, see `TIMEBASE.md`.
-2. **Stacking pipeline on the compact data branch.** For each sector and
+2. ~~Stacking pipeline + joint estimator on S27~~: done (`stepB/joint.py` takes a list
+   of sectors and works directly from the compact data). Original plan:
+   **Stacking pipeline on the compact data branch.** For each sector and
    camera, store per-window cross/auto spectra plus each window's mean
    level, then delete the stamp files. Stacking = summing spectra.
    - Analysis scripts move to `stepB/aligned.py`. `onset.py` is done;
