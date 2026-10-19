@@ -138,7 +138,7 @@ def main(reduced, out=None):
         raw = d['sap_flux'] + d['sap_bkg']
         fx, coh, _ = cross(x, raw / np.nanmedian(raw) - 1)
         leak = band_mean(fx, coh, 0.1e-3, 2e-3)
-        rows.append(dict(tic=h['TICID'], cam=h['CAMERA'], tmag=h['TESSMAG'],
+        rows.append(dict(tic=h['TICID'], cam=h['CAMERA'], ccd=h['CCD'], tmag=h['TESSMAG'],
                          nbkg=h['NPIX_BKG'], level=np.nanmedian(d['sap_bkg']) / h['NPIX_AP'],
                          pred=pred, bands=[band_mean(f, p, *b) for b in BANDS], leak=leak))
         full_x = np.full(ncad, np.nan)
@@ -162,7 +162,7 @@ def main(reduced, out=None):
 
     print('\nCamera combination (vetted: Tmag<10 with raw-flux coherence > 0.05; in-band excess > 3x median)')
     rng = np.random.default_rng(1)
-    combos, results = {}, {}
+    combos, results, ccd_combos = {}, {}, {}
     for cam in sorted({v[0] for v in series.values()}):
         vs = [v for v in series.values() if v[0] == cam]
         exc = np.array([v[3]['bands'][1] / v[3]['pred'] for v in vs])
@@ -179,6 +179,11 @@ def main(reduced, out=None):
         _, p_diff, _ = welch((a - b) / 2)
         combos[cam] = comb
         results[cam] = dict(f=f, total=p_all, half_sum=p_sum, half_diff=p_diff, pred=pred)
+        # Per-CCD combinations (same vetting): 4 lines of sight per camera.
+        for ccd in sorted({v[3]['ccd'] for v in keep}):
+            kc = [k for k, v in enumerate(keep) if v[3]['ccd'] == ccd]
+            if len(kc) >= 5:
+                ccd_combos[(cam, ccd)] = combine(xs[kc], ss[kc])[0]
         print(f'  camera {cam}: {len(keep)}/{len(vs)} stamps kept, {nseg} windows, '
               f'predicted white floor {pred:.2f} ppm^2/uHz')
         for lo, hi in BANDS:
@@ -193,7 +198,8 @@ def main(reduced, out=None):
     if out:
         np.savez(out, rows=np.array(repr(rows)),
                  **{f'cam{c}_{k}': v for c, r in results.items() for k, v in r.items()},
-                 **{f'cam{c}_series': v for c, v in combos.items()})
+                 **{f'cam{c}_series': v for c, v in combos.items()},
+                 **{f'cam{c}_ccd{k}_series': v for (c, k), v in ccd_combos.items()})
 
 
 if __name__ == '__main__':

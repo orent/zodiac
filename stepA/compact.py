@@ -30,42 +30,48 @@ def sector(sec, reduced, noise_npz, outdir):
     rows = ast.literal_eval(re.sub(r'np\.\w+\(([^)]*)\)', r'\1', str(d['rows'])))
     c0 = min(np.load(p)['cadenceno'].min() for p in glob.glob(f'{reduced}/*.npz'))
 
-    for cam in sorted({r['cam'] for r in rows}):
-        frac = d[f'cam{cam}_series']
+    stamps = []
+    for p in sorted(glob.glob(f'{reduced}/*.npz')):
+        if p.endswith('.part.npz'):
+            continue
+        h, s = nz.load(p)
+        b = s['sap_bkg'] / h['NPIX_AP']
+        good = ((s['quality'] & nz.BADBITS) == 0) & np.isfinite(b)
+        stamps.append((h['CAMERA'], h['CCD'], s['cadenceno'], np.where(good, b, np.nan)))
+
+    def write(name, frac, members):
         ncad = len(frac)
         cad = c0 + np.arange(ncad)
-        level = np.full(ncad, np.nan)
-        stacks, nst = [], np.zeros(ncad, int)
-        for p in sorted(glob.glob(f'{reduced}/*.npz')):
-            h, s = nz.load(p)
-            if h['CAMERA'] != cam:
-                continue
-            b = s['sap_bkg'] / h['NPIX_AP']
-            good = ((s['quality'] & nz.BADBITS) == 0) & np.isfinite(b)
-            full = np.full(ncad, np.nan)
-            full[s['cadenceno'] - c0] = np.where(good, b, np.nan)
-            stacks.append(full)
-        stacks = np.array(stacks)
+        stack = np.full((len(members), ncad), np.nan)
+        for i, (_, _, cn, b) in enumerate(members):
+            stack[i, cn - c0] = b
         with np.errstate(all='ignore'):
-            level = np.nanmedian(stacks, 0)
-        nst = np.isfinite(stacks).sum(0)
+            level = np.nanmedian(stack, 0)
         np.savez_compressed(
-            os.path.join(out, f'cam{cam}.npz'),
+            os.path.join(out, f'{name}.npz'),
             cadenceno=cad.astype(np.int32),
             t_sc=clock(cad),                        # spacecraft TDB, JD - 2457000
             frac=frac.astype(np.float32),
             level=level.astype(np.float32),
-            n_stamps=nst.astype(np.int16),
+            n_stamps=np.isfinite(stack).sum(0).astype(np.int16),
             cadence=np.float32(nz.CADENCE))
-        print(f'cam {cam}: {ncad} cadences, {stacks.shape[0]} stamps')
+        print(f'{name}: {ncad} cadences, {len(members)} stamps')
 
-    keys = ['tic', 'cam', 'tmag', 'nbkg', 'level', 'pred', 'leak']
+    for cam in sorted({r['cam'] for r in rows}):
+        write(f'cam{cam}', d[f'cam{cam}_series'], [s for s in stamps if s[0] == cam])
+        # Per-CCD lines of sight, when noise.py produced them.
+        for ccd in (1, 2, 3, 4):
+            key = f'cam{cam}_ccd{ccd}_series'
+            if key in d.files:
+                write(f'cam{cam}_ccd{ccd}', d[key], [s for s in stamps if s[0] == cam and s[1] == ccd])
+
+    keys = ['tic', 'cam', 'ccd', 'tmag', 'nbkg', 'level', 'pred', 'leak']
     bands = [f'psd_{lo*1e3:g}_{hi*1e3:g}mHz' for lo, hi in nz.BANDS]
     with open(os.path.join(out, 'stamps.csv'), 'w', newline='') as f:
         w = csv.writer(f)
         w.writerow(keys + bands)
         for r in rows:
-            w.writerow([r[k] if not isinstance(r[k], float) else f'{r[k]:.6g}' for k in keys] +
+            w.writerow([r.get(k, '') if not isinstance(r.get(k), float) else f'{r[k]:.6g}' for k in keys] +
                        [f'{x:.6g}' for x in r['bands']])
     np.savez_compressed(os.path.join(out, 'noise_spectra.npz'),
                         **{k: d[k] for k in d.files if k != 'rows' and not k.endswith('_series')})
