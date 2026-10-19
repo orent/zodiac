@@ -21,6 +21,7 @@ The code lives on the analysis branch
       cam2.npz           same, camera 2
       stamps.csv         per-stamp metadata and noise
       noise_spectra.npz  step-A camera PSDs (total / half-sum / half-diff)
+      ephem.npz          JPL Horizons heliocentric range of TESS (-95) and SOHO (-21)
     virgo/
       spm_red_1min.npz   VIRGO SPM red channel, 1-min, 2018-07-01 -> 2021-05-15
       tsi_pmo6_1min.npz  VIRGO PMO6 TSI, 1-min, 2018-07-01 -> 2026-05-05
@@ -86,6 +87,18 @@ Step-A Welch PSDs (6-h windows, ppm²/µHz) of each camera combination.
 | `camK_half_diff` | PSD of the half-difference, i.e. independent noise only |
 | `camK_pred` | photon-noise floor |
 
+## `sNNNN/ephem.npz`
+
+Heliocentric distances for the light-time correction to emission time at
+the Sun. See `TIMEBASE.md` on the analysis branch.
+
+| array | meaning |
+|---|---|
+| `tess_jd_tdb`, `tess_r_au` | TESS, TDB JD at 10-min steps, range from the Sun body centre [AU] |
+| `soho_jd_tdb`, `soho_r_au` | the same for SOHO |
+
+Produced by `stepB/timebase.py ephem <datadir> <sector>`.
+
 ## `virgo/`
 
 These are unmodified values, only cut in time (and stored as float32).
@@ -112,8 +125,11 @@ Timing caveats:
 - The cross-spectrum phase between them confirms that each file's own
   timestamps are right.
 - **Always use the stored timestamps**, never a rounded minute grid.
-- Whether a stamp marks the start, middle or end of the integration is
-  still to be confirmed. That is a ±30 s systematic.
+- Stamps are taken as the **mid point** of the 1-min sample, per
+  Appourchaux et al. 2018 (A&A 617, A108), Table A.1.
+- The red day count is **UTC**. The TSI file is TAI.
+- Details and the residual uncertainty are in `TIMEBASE.md` on the
+  analysis branch.
 
 ## Sectors
 
@@ -132,6 +148,7 @@ scipy, astropy and tess-point:
     python stepA/noise.py reduced/ noise.npz
     python stepA/compact.py sector <sector> reduced/ noise.npz <data-branch-checkout>
     python stepA/compact.py virgo red.fits tsi.fits <data-branch-checkout>/virgo
+    python stepB/timebase.py ephem <data-branch-checkout> <sector>
 
 Per sector:
 - download about 4.7 GB (about 2 min at the speed seen so far);
