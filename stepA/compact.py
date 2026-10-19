@@ -49,7 +49,10 @@ def sector(sec, reduced, noise_npz, outdir):
         np.savez_compressed(
             os.path.join(out, f'{name}.npz'),
             cadenceno=cad.astype(np.int32),
-            t_sc=clock(cad),                        # spacecraft TDB, JD - 2457000
+            # Spacecraft TDB (JD - 2457000) is linear in cadence number:
+            # t_sc = t_sc0 + (cadenceno - cadenceno[0]) * t_sc_step.
+            t_sc0=np.float64(clock(cad[0])),
+            t_sc_step=np.float64(clock(cad[1]) - clock(cad[0])),
             frac=frac.astype(np.float32),
             level=level.astype(np.float32),
             n_stamps=np.isfinite(stack).sum(0).astype(np.int16),

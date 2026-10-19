@@ -127,5 +127,7 @@ if __name__ == '__main__':
     if sys.argv[1] == 'ephem':
         datadir, sector = sys.argv[2:4]
         suffix = sys.argv[4] if len(sys.argv) > 4 else ''
-        t_sc = np.load(os.path.join(datadir, f's{int(sector):04d}{suffix}', 'cam1.npz'))['t_sc']
+        c = np.load(os.path.join(datadir, f's{int(sector):04d}{suffix}', 'cam1.npz'))
+        t_sc = c['t_sc'] if 't_sc' in c.files else \
+            c['t_sc0'] + (c['cadenceno'] - c['cadenceno'][0]) * c['t_sc_step']
         print(fetch_ephem(datadir, sector, t_sc, suffix))

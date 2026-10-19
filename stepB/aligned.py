@@ -27,7 +27,11 @@ def highpass(x, size=180):
 def load(datadir, sector, cam, ref='red', stamp=tb.VIRGO_STAMP, product=''):
     sdir = os.path.join(datadir, f's{int(sector):04d}{product}')
     eph = tb.Ephem(os.path.join(sdir, 'ephem.npz'))
-    c = np.load(os.path.join(sdir, f'cam{cam}.npz'))
+    unit = cam if isinstance(cam, str) else f'cam{cam}'       # e.g. 'cam1' or 'cam1_ccd2'
+    c = dict(np.load(os.path.join(sdir, f'{unit}.npz')))
+    c['files'] = list(c)
+    if 't_sc' not in c:
+        c['t_sc'] = c['t_sc0'] + (c['cadenceno'] - c['cadenceno'][0]) * c['t_sc_step']
     t_tess = tb.tess_emission(c['t_sc'], eph)
 
     if ref == 'red':
@@ -51,7 +55,7 @@ def load(datadir, sector, cam, ref='red', stamp=tb.VIRGO_STAMP, product=''):
     else:
         raise ValueError(ref)
 
-    cadence = float(c['cadence']) if 'cadence' in c.files else 20.0
+    cadence = float(c['cadence']) if 'cadence' in c else 20.0
     if cadence > 60:
         return _load_tess_grid(c, t_tess, tv, xv, sel, conv, cadence)
 
