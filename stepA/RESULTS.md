@@ -171,3 +171,9 @@ Quick-look detection on sector 27:
 - cross-spectrum and phase of the camera 1 and 2 combinations against
   VIRGO red and TSI;
 - null tests with VIRGO shifted by ±N days.
+
+## Compact data
+
+`compact.py` writes the compact per-sector product (about 3 MB per sector)
+and the TESS-era VIRGO cut (31 MB). These are stored on the orphan branch
+`data`, documented in that branch's `README.md`.
