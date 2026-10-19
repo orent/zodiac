@@ -614,3 +614,47 @@ scattered-light excess is nearly fully solar-modulated.
     was biased and scattered.
   - The 2-min sectors (including the northern hemisphere) will tighten
     the valley.
+
+## Full archive with per-sector geometry (`geometry.py`, Hong phase function)
+
+Data: 20-s sectors 27–38 plus 2-min sectors 1–26, all four cameras
+(152 sector-camera products, ~14,600 windows). Each sector-camera now
+uses its actual sightline: TESS year-2 sectors 14–16 and 24–26 were
+pointed further north.
+
+**Joint fit (all data):**
+- **Detection per camera:** 21.4σ, 21.7σ, 17.3σ, 22.0σ (~150 nulls
+  each); **~41σ combined**.
+- **Δt = −10 s** (profile and bootstrap both −10 on the 10-s grid).
+  Consistent with the ±5–7 s realistic error and +5 s estimator bias
+  from injection–recovery.
+- **Camera 1: α = 1.4** [1.4, 1.6]. Bins per unit floor: 0.115, 0.217,
+  0.245, 0.196, 0.147, against the Kelsall model × 0.8 (0.128, 0.195,
+  0.235, 0.200, 0.118). Shape matches out to ~2 AU; zodiacal fraction of
+  the quiet floor ≈ 0.8.
+- Amplitudes per unit floor: 0.90, 0.85, 0.80, 0.67.
+
+**Shared radial index α and vertical scale v:**
+
+| data | α (68%) | v (68%) | Kelsall (1.4, 1.0) Δχ² |
+|---|---|---|---|
+| **all** | **1.4 [1.4–1.6]**, bootstrap 1.0–1.6 | **1.00**, bootstrap 0.75–1.00 | **0.0** |
+| south (1–13 2-min + 27–38) | 1.6, bootstrap 1.4–2.0 | 1.25, bootstrap 1.25–1.50 | 9.2 |
+| north, standard pointing (17–23) | 1.4, bootstrap 0.6–2.0 | 1.0, bootstrap 0.75–1.25 | 0.0 |
+| north incl. far-north pointings (14–26) | 1.6 | 0.5 (grid edge) | 60 |
+
+Reading:
+1. **The full TESS archive reproduces the COBE/Kelsall smooth cloud:**
+   radial index ≈ 1.4 and the Kelsall vertical profile, measured by
+   light-travel delay rather than brightness modelling.
+2. **The far-north pointings still misfit.** In those sectors cameras 3–4
+   look past the pole at 60–85° from the Sun. The likely cause is
+   viewing-angle coherence: dust on those oblique sightlines sees the Sun
+   from directions far from VIRGO's, so its echo is partly incoherent.
+   That suppresses the far response and mimics a thinner cloud. The
+   model has no coherence factor yet; the scattering phase function is
+   the other candidate.
+3. **Possible north/south difference** (south v ≈ 1.25–1.5, north
+   standard ≈ 0.75–1.25). Only ~1–2σ. It is the kind of signature the
+   ~2° tilt of the cloud's symmetry plane would produce. It needs a tilt
+   model and an injection test before it means anything.
