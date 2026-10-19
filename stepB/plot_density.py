@@ -51,9 +51,11 @@ def main(datadir, out_png, dt='-10'):
         D, y, krow = joint.bin_rows(chunks, dt)
         sol = nnls(D, y)[0][:-1]
         nk = krow.max() + 1
-        bs = np.array([nnls(D * np.sqrt(joint.block_weights(nk, rng)[krow])[:, None],
-                            y * np.sqrt(joint.block_weights(nk, rng)[krow]))[0][:-1]
-                       for _ in range(60)])
+        bs = []
+        for _ in range(60):
+            rw = np.sqrt(joint.block_weights(nk, rng)[krow])   # one draw for D and y
+            bs.append(nnls(D * rw[:, None], y * rw)[0][:-1])
+        bs = np.array(bs)
         u = np.mean([ch.u for ch in chunks], axis=0)
         u /= np.linalg.norm(u)
         tau, w = geometry.kernel(u, 1.34, 1.0)
