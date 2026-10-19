@@ -19,7 +19,7 @@ significance of A from null shifts (VIRGO from unrelated dates).
 Also a non-parametric fit: non-negative log-spaced delay bins plus E,
 at the best dt.
 
-usage: joint.py datadir sector[,sector...] [red|tsi]
+usage: joint.py datadir sector[,sector...] [red|tsi] [cameras, e.g. 1,2,3,4]
 """
 
 import sys
@@ -175,11 +175,11 @@ def fit_bins(f, X, Y, eps, dt):
     return D, y
 
 
-def main(datadir, sectors, ref='red'):
+def main(datadir, sectors, ref='red', cameras='1,2'):
     sectors = [int(s) for s in sectors.split(',')]
     rng = np.random.default_rng(7)
     f = np.fft.rfftfreq(WIN, 60.0)
-    cams = (1, 2)
+    cams = tuple(int(c) for c in cameras.split(','))
     data, terms, grids = {}, {}, {}
     for cam in cams:
         X, Y, eps, floor, nulls = camera_data(datadir, sectors, cam, ref)
