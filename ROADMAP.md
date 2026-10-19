@@ -123,3 +123,84 @@ sight are always roughly anti-sunward, at ecliptic latitudes 18° (cam 1),
 - Compute is not a constraint: ~15 CPU-min so far, and under ~1 h for the
   full 12-sector stack.
 - Disk: 28 GB free. Keep per-sector spectra, not stamp files.
+
+## Other data sources
+
+| Source | Value | Cost and issues |
+|---|---|---|
+| **TESS 2-min, S1–38** (queued for S1–26, ≤1000 random targets per camera per sector) | Northern hemisphere with red SPM (S14–26), so the north/south tilt test with the same reference. Sectors 1–26 on top of 27–38. ~20× more stamps per sector (little gain past ~1000 per camera, because of the common mode). | ~8 GB per sector with the cap. 120-s grid (Nyquist 4.2 mHz). Product `sNNNN_2min`. |
+| **Kepler short cadence** (58.85 s, 2009–2013, red SPM era) | **No Earthshine** (Earth-trailing orbit). Fixed field at ecliptic latitude ~+55–65°, so the solar elongation sweeps through the year, giving depth profiles in many directions (tomography). Kepler drifts through the region of Earth's trailing blob, so the inner bins may change over the mission. | Short-cadence background appears to be interpolated from the 30-min model (to verify), so recompute from pixel files (large). ~512 targets per quarter, high read noise per pixel. Sun seen up to ~30° from VIRGO's view (coherence loss). |
+| **K2 short cadence** (2014–2018) | Ecliptic-plane lines of sight at changing elongation: radial structure within the dust plane. No Earthshine. | Heavy pointing jitter (6-h thruster cycle), few short-cadence targets, same background recomputation. |
+| **PLATO** (L2, launch ~end 2026) | 26 cameras, 25-s cadence for bright targets, long pointings, minimal Earthshine at L2. | Depends on what background products the pipeline keeps. |
+| TESS full-frame images | | Not useful: the common mode, not photons, is the limit; 200-s FFIs only start in the TSI era. |
+| Ground-based survey arrays | | **Not viable.** Airglow (OH, O₂, 557.7 nm) at 1–10% and transparency changes at 0.1–1%, both on minute timescales, are ~3×10⁴ ppm²/µHz: 3–4 orders of magnitude above the TESS floor, and common to the whole field. Not solar-correlated at mHz (no bias), just far too large. |
+| LASCO, STEREO-HI | | Cadence too slow. |
+
+## Hypothetical TESS onboard mode: superpixel full-frame background
+
+The idea: bin each CCD onboard into, e.g., 64×64-pixel superpixels at 20 s
+with a robust statistic (clipped mean or low percentile), giving ~16k
+values per cadence. That is ~1.6 kB/s, ~2 GB per orbit, small next to
+the FFIs.
+
+The gain is **spatial information, not photons**:
+- **Space–time separation of the common mode.** The solar signal goes as
+  ZL brightness × a smooth response; jitter follows star density;
+  scattered light follows Earth/Moon gradients; electronics follow the
+  CCD outputs. Removing the low-frequency common mode (66× photon now)
+  turns the requirements from ~1 sector (detection), ~6 sectors
+  (2-parameter) and ~600 sectors (3-bin non-parametric) into roughly a
+  day each when photon-limited. Realistically, 10–100× better.
+- **Earthshine fitted per superpixel and subtracted, not cut**, which
+  frees the inner bins.
+- **A continuous map**: latitude 6–90°, ±12° in elongation per camera.
+  Plane tilt and warp per sector (seasonal); resonant-ring test
+  plausible; time resolution toward ~1 min (≈0.03 AU) using 3–8 mHz.
+- **Short-lived dust** (comet trails, meteor streams) in single sectors.
+
+New limits:
+- The VIRGO reference: its incoherent part acts as ~0.05 ppm²/µHz of
+  noise, which needs the multi-channel and three-cornered-hat work.
+- No red-channel SPM after 2021.
+- Variable stars in superpixels.
+
+## Local solar reference (no VIRGO), mainly for the superpixel mode
+
+1. **Moonshine.** Sunlight reflected off a constant-albedo surface, at
+   zero delay (seconds), seen in the TESS band (only slight lunar
+   reddening). The 2:1 lunar resonance repeats the geometry every orbit.
+   Present a few days per orbit. Fit the moonlight spatial pattern per
+   cadence; its amplitude time series is the reference.
+2. **Earthshine.** More duty cycle. Earth's albedo changes as it rotates
+   and clouds evolve, mostly on hour timescales (affects < ~0.3 mHz).
+   Already shown to carry the solar signal (E ≈ 0.75–0.85).
+3. **Reference-free identification across lines of sight**
+   (cross-relation): y_i = K_i ∗ s + n_i, with responses that share no
+   common factors, determines all K_i up to one scale. An Earthshine or
+   moonshine channel (K = δ) anchors it and gives s directly. Needs high
+   S/N per line of sight across the band (superpixel mode).
+- **Archive feasibility test now:** in Earthshine-rich windows, build a
+   reference from the camera-wide scattered-light excess (gradients
+   between CCDs and stamps). Check its coherence with VIRGO, and whether
+   the dust response can be recovered with it instead of VIRGO.
+- Not viable: the spacecraft coarse sun sensors (analog, coarse
+   digitisation, thermal drift; ~10″ jitter at 45° incidence ≈ 35 ppm).
+
+## Direct-sunlight leakage test
+
+- No direct path (boresights ≥ 90° from the Sun, sunshade and bus). Even
+  10⁻¹⁹ suppression per pixel would be ~1% of the background, so worth
+  bounding.
+- Signature:
+  - a zero-delay term present in quiet windows (not ∝ level excess);
+  - varying with the Sun angle to the spacecraft (~27° per sector);
+  - a fixed spatial pattern per camera.
+- Now: S27 quiet-window zero-delay term −4 ± 22 e⁻/s/px (cam 1, ~15% of
+  the background, 1σ). The total area under the response (~1.0 per
+  unit floor vs ~1.15 × ZL fraction) leaves little room for a big leak.
+- **To do:** add a constant zero-delay term E₀ (and E₀ vs Sun angle) to
+  `joint.py`, and bound it with S27–38 × 4 cameras (expect a few % of the
+  background). Separating it from the nearest dust relies on frequency
+  dependence (flat vs ~1/f).
+- As a reference: unlikely (small fraction, mixed into every pixel). Only
+  with spatial data, if it dominates a region.
