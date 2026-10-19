@@ -17,31 +17,12 @@ import numpy as np
 sys.path.insert(0, __file__.rsplit('/', 2)[0])
 sys.path.insert(0, __file__.rsplit('/', 1)[0])
 import sensitivity as sm
+import geometry
 import joint
 
 ALPHAS = np.round(np.arange(0.2, 2.61, 0.2), 2)
 VS = np.round(np.arange(0.5, 2.51, 0.25), 2)
 NBOOT = 200
-
-
-def kernel_av(f, lat, alpha, v):
-    """Anti-sunward kernel at latitude lat: density r^-alpha x Kelsall fan
-    with |Z/R| scaled by 1/v; illumination r^-2."""
-    b = np.radians(lat)
-    smax, ns = 6.0, 20000
-    s = np.linspace(0, smax, ns + 1)[1:] - smax / ns / 2
-    x, z = 1 + s * np.cos(b), s * np.sin(b)
-    r = np.hypot(x, z)
-    tau = (r + s - 1) * sm.AU_LIGHT_S
-    zeta = np.abs(z / r) / v
-    mu = 0.189
-    g = np.where(zeta < mu, zeta ** 2 / (2 * mu), zeta - mu / 2)
-    w = r ** -alpha * np.exp(-4.14 * g ** 0.942) / r ** 2
-    w /= w.sum()
-    h = np.zeros(len(f), complex)
-    nz = f > 0
-    h[nz] = sm.transfer(f[nz], tau, w)
-    return h, tau, w
 
 
 class Terms:
@@ -53,7 +34,7 @@ class Terms:
         self.Q = {}
         self.U = {}
         cache = {}
-        for f, cad, X, Y, eps in parts:
+        for f, cad, X, Y, eps, u in parts:
             m = (f >= joint.F_LO) & (f <= joint.F_HI)
             fm = f[m]
             Xm, Ym = X[:, m], Y[:, m]
@@ -67,9 +48,9 @@ class Terms:
             ph = np.exp(-2j * np.pi * fm * dt)
             for al in ALPHAS:
                 for v in VS:
-                    key = (al, v, cad)
+                    key = (tuple(np.round(u, 2)), al, v, cad)
                     if key not in cache:
-                        cache[key] = kernel_av(fm, lat, al, v)[0]
+                        cache[key] = geometry.transfer(fm, u, al, v)
                     h = cache[key] * ph
                     self.P.setdefault((al, v), []).append(XX @ np.abs(h) ** 2)
                     self.Q.setdefault((al, v), []).append(XX @ h.real)
@@ -113,7 +94,7 @@ def main(datadir, spec, cameras='1,2,3,4', dt='0'):
                 ch = joint.Chunk(datadir, sec, prod, c, 'red')
             except FileNotFoundError:
                 continue
-            parts.append((ch.f, ch.cadence, ch.X, ch.Y, ch.eps))
+            parts.append((ch.f, ch.cadence, ch.X, ch.Y, ch.eps, ch.u))
         terms[c] = Terms(parts, joint.CAM_LAT[c], dt)
         print(f'camera {c}: {len(terms[c].eps)} windows')
     res = {c: terms[c].solve() for c in cams}

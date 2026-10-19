@@ -48,7 +48,7 @@ def main(datadir, spec, ref='red', cameras='1,2,3,4'):
     total = 0
     alpha_best = {}
     for c in cams:
-        t = joint.Terms([(ch.f, ch.cadence, ch.X, ch.Y, ch.eps) for ch in chunks[c]], joint.CAM_LAT[c])
+        t = joint.Terms([(ch.f, ch.cadence, ch.X, ch.Y, ch.eps, ch.u) for ch in chunks[c]], joint.CAM_LAT[c])
         chi, _ = t.solve()
         prof = chi.min(0)
         alpha_best[c] = joint.ALPHAS[int(np.argmin(chi[:, int(np.argmin(prof))]))]
@@ -66,7 +66,7 @@ def main(datadir, spec, ref='red', cameras='1,2,3,4'):
     for lab in labels:
         tot = 0
         for c in cams:
-            parts = [(ch.f, ch.cadence, ch.X, ch.Y, ch.eps) for ch in chunks[c] if ch.label == lab]
+            parts = [(ch.f, ch.cadence, ch.X, ch.Y, ch.eps, ch.u) for ch in chunks[c] if ch.label == lab]
             if not parts:
                 continue
             t = joint.Terms(parts, joint.CAM_LAT[c], alphas=[alpha_best[c]])

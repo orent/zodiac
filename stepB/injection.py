@@ -24,10 +24,10 @@ joint.DTS = np.arange(-120, 121, 5)
 A_INJ = 0.7
 
 
-def kernel_samples(lat, alpha, cadence, bump=0.0):
+def kernel_samples(u, alpha, cadence, bump=0.0):
     """Causal kernel sampled per cadence step (weights summing to 1, plus
-    an optional extra bump at 1350-1650 s)."""
-    _, tau, w = joint.kernel_h(np.array([1e-3]), lat, alpha)
+    an optional extra bump at 1350-1650 s), sightline u."""
+    _, tau, w = joint.kernel_h(np.array([1e-3]), u, alpha)
     nb = int(4000 / cadence) + 2
     # Fractional delays: split each weight linearly between neighbouring lags.
     pos = np.minimum(tau / cadence, nb - 1.001)
@@ -40,8 +40,8 @@ def kernel_samples(lat, alpha, cadence, bump=0.0):
     return k
 
 
-def true_bins(lat, alpha, bump=0.0):
-    _, tau, w = joint.kernel_h(np.array([1e-3]), lat, alpha)
+def true_bins(u, alpha, bump=0.0):
+    _, tau, w = joint.kernel_h(np.array([1e-3]), u, alpha)
     out = np.array([w[(tau >= a) & (tau < b)].sum() for a, b in
                     zip(joint.BIN_EDGES[:-1], joint.BIN_EDGES[1:])])
     if bump:
@@ -62,7 +62,7 @@ def injected_chunk(ch, shift, k):
     X, Y, L, _ = joint.windows(xn, r['y_norm'] + echo, r['level'], r['win'])
     if len(L) < 0.7 * len(ch.eps):
         return None
-    return (ch.f, ch.cadence, X, Y, (L - ch.floor) / ch.floor)
+    return (ch.f, ch.cadence, X, Y, (L - ch.floor) / ch.floor, ch.u)
 
 
 def fit_trial(parts_by_cam, cams):
@@ -101,10 +101,8 @@ def main(datadir, spec, cameras='1,2,3,4', ntrials='24'):
         for sh in shifts:
             parts = {}
             for c in cams:
-                k = {cad: kernel_samples(joint.CAM_LAT[c], alpha, cad, bump)
-                     for cad in {ch.cadence for ch in chunks[c]}}
-                parts[c] = [p for p in (injected_chunk(ch, sh, k[ch.cadence]) for ch in chunks[c])
-                            if p is not None]
+                parts[c] = [p for p in (injected_chunk(ch, sh, kernel_samples(ch.u, alpha, ch.cadence, bump))
+                                        for ch in chunks[c]) if p is not None]
             if all(len(parts[c]) >= 0.7 * len(chunks[c]) for c in cams):
                 res.append(fit_trial(parts, cams))
         dts = np.array([r['dt'] for r in res])
@@ -116,7 +114,7 @@ def main(datadir, spec, cameras='1,2,3,4', ntrials='24'):
             A = np.array([r[c]['A'] for r in res])
             E = np.array([r[c]['E'] for r in res])
             bins = np.array([r[c]['bins'] for r in res])
-            tb = true_bins(joint.CAM_LAT[c], alpha, bump)
+            tb = true_bins(chunks[c][0].u, alpha, bump)
             print(f'  cam {c}: alpha {np.median(al):.1f} [{np.percentile(al, 16):.1f},'
                   f'{np.percentile(al, 84):.1f}] (true {alpha}); '
                   f'A {np.median(A):.2f} [{np.percentile(A, 16):.2f},{np.percentile(A, 84):.2f}]'

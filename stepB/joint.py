@@ -27,7 +27,7 @@ usage: joint.py datadir SECTORS [red|tsi] [cameras, e.g. 1,2,3,4]
   e.g. 27-38,1-26_2min
 """
 
-import re, sys
+import os, re, sys
 import numpy as np
 from scipy.ndimage import uniform_filter1d
 from scipy.optimize import nnls
@@ -35,6 +35,7 @@ from scipy.optimize import nnls
 sys.path.insert(0, __file__.rsplit('/', 2)[0])
 sys.path.insert(0, __file__.rsplit('/', 1)[0])
 import sensitivity as sm
+import geometry
 from aligned import load
 
 WINDOW_S = 6 * 3600
@@ -113,25 +114,49 @@ class Chunk:
         # Raw series kept for time-domain injection tests (injection.py).
         self.raw = dict(x_all=a['x_all'], off=a['off'], per_day=a['per_day'], n=a['n'],
                         y_norm=ynorm, level=a['level'], win=win)
-        self.nulls = {}
-        for sh in NULL_SHIFTS:
-            i = a['off'] + sh * a['per_day']
-            if 0 <= i and i + a['n'] <= len(a['x_all']):
-                self.nulls[sh] = x_at(a['x_all'][i:i + a['n']], S, win)
+        self.starts = S
+        self.u = sightline(datadir, sector, cam)
+
+    def null_X(self, sh):
+        """Window FFTs of VIRGO shifted by sh days (computed on demand; storing
+        them for every shift and chunk does not fit in memory)."""
+        r = self.raw
+        i = r['off'] + sh * r['per_day']
+        if i < 0 or i + r['n'] > len(r['x_all']):
+            return None
+        return x_at(r['x_all'][i:i + r['n']], self.starts, r['win'])
+
+
+_geometry = {}
+
+
+def sightline(datadir, sector, cam):
+    """Unit sightline vector of (sector, camera) from geometry.csv; the
+    standard anti-sunward strip at CAM_LAT if the table is missing."""
+    if datadir not in _geometry:
+        p = os.path.join(datadir, 'geometry.csv')
+        _geometry[datadir] = geometry.load_table(p) if os.path.exists(p) else {}
+    u = _geometry[datadir].get((int(sector), int(cam)))
+    if u is None:
+        b = np.radians(CAM_LAT[cam])
+        u = np.array([np.cos(b), 0.0, np.sin(b)])
+    return u
 
 
 _kernel_cache = {}
 
 
 def kernel_h(f, lat, alpha, key=None):
-    ck = (lat, alpha, key)
+    """Kernel transfer function. lat: a sightline unit vector (geometry.py)
+    or an ecliptic latitude for the anti-sunward strip."""
+    u = np.asarray(lat, float)
+    if u.ndim == 0:
+        b = np.radians(float(lat))
+        u = np.array([np.cos(b), 0.0, np.sin(b)])
+    ck = (tuple(np.round(u, 2)), alpha, key)
     if key is not None and ck in _kernel_cache:
         return _kernel_cache[ck]
-    s, tau, w = sm.kernel(lat)
-    b = np.radians(lat)
-    r = np.hypot(1 + s * np.cos(b), s * np.sin(b))
-    w = w * r ** -(alpha - 1.34)
-    w /= w.sum()
+    tau, w = geometry.kernel(u, alpha)
     h = np.zeros(len(f), complex)
     nz = f > 0
     h[nz] = sm.transfer(f[nz], tau, w)
@@ -152,7 +177,7 @@ class Terms:
         P = {al: [] for al in alphas}
         Q = {al: [] for al in alphas}
         U = {al: [] for al in alphas}
-        for f, cad, X, Y, eps in parts:
+        for f, cad, X, Y, eps, u in (p if len(p) == 6 else (*p, lat) for p in parts):
             m = (f >= F_LO) & (f <= F_HI)
             fm = f[m]
             Xm, Ym = X[:, m], Y[:, m]
@@ -165,7 +190,7 @@ class Terms:
             acc['YY'].append((W * np.abs(Ym) ** 2).sum(1))
             ph = np.exp(-2j * np.pi * np.outer(DTS, fm))
             for al in alphas:
-                h = kernel_h(fm, lat, al, key=cad)[0]
+                h = kernel_h(fm, u, al, key=cad)[0]
                 hd = h[None, :] * ph
                 P[al].append(XX @ np.abs(h) ** 2)
                 Q[al].append(XX @ hd.real.T)
@@ -246,7 +271,7 @@ def main(datadir, spec, ref='red', cameras='1,2'):
             except FileNotFoundError:
                 pass
         cs = chunks[cam]
-        terms[cam] = Terms([(c.f, c.cadence, c.X, c.Y, c.eps) for c in cs], CAM_LAT[cam])
+        terms[cam] = Terms([(c.f, c.cadence, c.X, c.Y, c.eps, c.u) for c in cs], CAM_LAT[cam])
         grids[cam] = terms[cam].solve()
         print(f'camera {cam}: {len(terms[cam].eps)} windows from {len(cs)} sector products '
               f'({",".join(c.label for c in cs)})')
@@ -284,13 +309,13 @@ def main(datadir, spec, ref='red', cameras='1,2'):
         for sh in NULL_SHIFTS:
             parts = []
             for ch in chunks[c]:
-                Xn = ch.nulls.get(sh)
+                Xn = ch.null_X(sh)
                 if Xn is None:
                     continue
                 okr = np.isfinite(Xn[:, 1])
                 if okr.mean() < 0.7:
                     continue
-                parts.append((ch.f, ch.cadence, Xn[okr], ch.Y[okr], ch.eps[okr]))
+                parts.append((ch.f, ch.cadence, Xn[okr], ch.Y[okr], ch.eps[okr], ch.u))
             if len(parts) < 0.7 * len(chunks[c]):
                 continue
             tn = Terms(parts, CAM_LAT[c], alphas=[ALPHAS[i]])
@@ -330,7 +355,7 @@ def main(datadir, spec, ref='red', cameras='1,2'):
                                           zip(sol[:-1], lo_[:-1], hi_[:-1])) +
               f'   {sol[-1]:.2f} [{lo_[-1]:.2f},{hi_[-1]:.2f}]')
         area = bs[:, :-1].sum(1)
-        _, tau, w = kernel_h(np.array([1e-3]), CAM_LAT[c], 1.34)
+        _, tau, w = kernel_h(np.array([1e-3]), chunks[c][0].u, 1.34)
         model = [1.15 * w[(tau >= a) & (tau < b)].sum() for a, b in zip(BIN_EDGES[:-1], BIN_EDGES[1:])]
         print(f'  cam {c} model  ' + '  '.join(f'{v:5.3f}'.ljust(16) for v in model) +
               '   (alpha 1.34, A 1.15)')
