@@ -658,3 +658,30 @@ Reading:
    standard ≈ 0.75–1.25). Only ~1–2σ. It is the kind of signature the
    ~2° tilt of the cloud's symmetry plane would produce. It needs a tilt
    model and an injection test before it means anything.
+
+## Density vs heliocentric distance (`plot_density.py`, `density_profile.png`)
+
+Method:
+- Standard-pointing sectors (1–13 and 17–23 2-min, 27–38 20-s),
+  cameras 1 and 2.
+- Non-negative delay bins up to 2000 s, with bootstrap errors.
+- Each bin is converted into dust density along the sightline: measured
+  ÷ model bin weight × model density at the bin's mean r.
+- One scale per camera: 1.01 for camera 1, 0.92 for camera 2.
+
+Density relative to the Kelsall model, per bin, at mean r = 1.03, 1.12,
+1.28, 1.6, 2.3 AU:
+
+| | 1.03 | 1.12 | 1.28 | 1.6 | 2.3 AU |
+|---|---|---|---|---|---|
+| camera 1 | 0.81 | 1.14 | 1.05 | 0.87 | 1.05 |
+| camera 2 | 0.80 | 1.39 | 0.94 | 0.86 | 0.31 |
+
+- **The measured density follows the Kelsall r^−1.34 smooth cloud from
+  1.0 to ~2.3 AU** along the 18° sightline.
+- The 42° sightline follows its steeper model curve: the vertical
+  falloff matters more as the sightline climbs.
+- Camera 2's 900–2000 s point (off-scale low) is in the regime that
+  injection flagged as unreliable for cameras ≥ 2.
+- The first bin (≤ 60 s, r ≈ 1.03 AU) sits ~20% low in both cameras:
+  the Earthshine / nearest-dust degeneracy, at ~1σ.
