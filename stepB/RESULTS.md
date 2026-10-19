@@ -470,3 +470,115 @@ injection-recovery on 27-38, cameras (1, 2, 3, 4), 16 null shifts per case, A_in
 
 **Fix (v2):** noise weights from the chunk-average spectrum × one scale
 factor per window (`noise_weights` in `joint.py`). Re-tested below.
+
+## Injection–recovery v2 (chunk-level noise weights)
+
+```
+injection-recovery on 27-38, cameras (1, 2, 3, 4), 8 null shifts per case, A_inj = 0.7, dt_inj = 0
+
+== model (alpha 1.34, bump 0.0): 5 trials
+  dt: median +5.0 s, scatter (16-84%) +0 .. +9 s
+  cam 1: alpha 1.8 [1.2,1.9] (true 1.34); A 0.56 [0.52,0.69] (true 0.7); E +0.00 (true 0)
+     bins true 0.104 0.156 0.183 0.148 0.081 0.023
+     bins rec  0.084 0.133 0.152 0.133 0.059 0.028
+     bins 68%  0.021 0.024 0.028 0.054 0.043 0.034
+  cam 2: alpha 0.8 [0.7,1.3] (true 1.34); A 0.68 [0.65,0.72] (true 0.7); E -0.03 (true 0)
+     bins true 0.144 0.204 0.193 0.107 0.041 0.009
+     bins rec  0.133 0.217 0.185 0.118 0.163 0.233
+     bins 68%  0.018 0.036 0.024 0.022 0.054 0.091
+  cam 3: alpha 0.4 [0.4,1.8] (true 1.34); A 0.70 [0.62,0.74] (true 0.7); E -0.00 (true 0)
+     bins true 0.191 0.242 0.170 0.071 0.022 0.004
+     bins rec  0.177 0.217 0.217 0.028 0.106 0.121
+     bins 68%  0.053 0.056 0.040 0.050 0.073 0.080
+  cam 4: alpha 2.0 [0.5,4.0] (true 1.34); A 0.67 [0.65,0.71] (true 0.7); E +0.01 (true 0)
+     bins true 0.247 0.258 0.136 0.045 0.012 0.002
+     bins rec  0.261 0.280 0.096 0.043 0.072 0.052
+     bins 68%  0.023 0.022 0.033 0.029 0.055 0.046
+
+== extended (alpha 0.6, bump 0.0): 5 trials
+  dt: median +5.0 s, scatter (16-84%) +5 .. +14 s
+  cam 1: alpha 1.0 [0.5,1.1] (true 0.6); A 0.54 [0.48,0.63] (true 0.7); E +0.01 (true 0)
+     bins true 0.080 0.127 0.165 0.157 0.111 0.046
+     bins rec  0.065 0.098 0.136 0.138 0.085 0.054
+     bins 68%  0.019 0.025 0.028 0.052 0.042 0.044
+  cam 2: alpha 0.4 [0.4,0.5] (true 0.6); A 0.68 [0.62,0.70] (true 0.7); E -0.03 (true 0)
+     bins true 0.122 0.181 0.188 0.123 0.061 0.020
+     bins rec  0.120 0.190 0.184 0.132 0.180 0.244
+     bins 68%  0.019 0.038 0.023 0.023 0.055 0.092
+  cam 3: alpha 0.4 [0.4,1.3] (true 0.6); A 0.67 [0.59,0.69] (true 0.7); E +0.00 (true 0)
+     bins true 0.173 0.227 0.172 0.084 0.033 0.009
+     bins rec  0.167 0.204 0.215 0.041 0.107 0.122
+     bins 68%  0.058 0.061 0.041 0.052 0.075 0.083
+  cam 4: alpha 2.2 [0.5,4.0] (true 0.6); A 0.65 [0.62,0.68] (true 0.7); E +0.02 (true 0)
+     bins true 0.235 0.249 0.139 0.052 0.018 0.005
+     bins rec  0.263 0.255 0.092 0.048 0.071 0.048
+     bins 68%  0.019 0.028 0.032 0.033 0.057 0.045
+
+== bump (alpha 1.34, bump 0.05): 5 trials
+  dt: median +5.0 s, scatter (16-84%) +0 .. +9 s
+  cam 1: alpha 1.8 [1.3,1.9] (true 1.34); A 0.56 [0.51,0.68] (true 0.7); E +0.00 (true 0)
+     bins true 0.104 0.156 0.183 0.148 0.116 0.023
+     bins rec  0.084 0.133 0.152 0.131 0.097 0.029
+     bins 68%  0.021 0.025 0.028 0.053 0.044 0.033
+  cam 2: alpha 0.8 [0.7,1.3] (true 1.34); A 0.67 [0.64,0.72] (true 0.7); E -0.03 (true 0)
+     bins true 0.144 0.204 0.193 0.107 0.076 0.009
+     bins rec  0.133 0.217 0.186 0.115 0.201 0.229
+     bins 68%  0.018 0.036 0.024 0.022 0.054 0.090
+  cam 3: alpha 0.4 [0.4,1.9] (true 1.34); A 0.70 [0.61,0.73] (true 0.7); E -0.00 (true 0)
+     bins true 0.191 0.242 0.170 0.071 0.057 0.004
+     bins rec  0.178 0.217 0.218 0.024 0.148 0.118
+     bins 68%  0.052 0.057 0.039 0.047 0.081 0.073
+  cam 4: alpha 2.2 [0.7,4.0] (true 1.34); A 0.67 [0.65,0.70] (true 0.7); E +0.01 (true 0)
+     bins true 0.247 0.258 0.136 0.045 0.047 0.002
+     bins rec  0.260 0.280 0.096 0.037 0.113 0.052
+     bins 68%  0.023 0.022 0.032 0.028 0.057 0.046
+
+```
+
+**Findings (v2):**
+- **A is unbiased for cameras 2–4** (0.65–0.70 vs 0.7). Camera 1 is
+  0.56 [0.52, 0.69]; only 5 trials, so it may still be biased.
+- **The 0–900 s bins are recovered within ~1σ in all cameras.**
+- **Bins ≥ 900 s are unreliable** (spurious +0.1–0.2 for cameras 2–3).
+  They need low-frequency work.
+- **Per-camera α scatters widely** (camera 3, true 1.34: 0.4–1.8;
+  camera 4: 0.5–4.0). The real high-latitude "extended response"
+  (α at the grid edge) is therefore **not significant**, and the real
+  camera 3 far-bin pattern matches the injected artifacts.
+- **Δt:** +5 s bias (possibly the 5-s grid), ±5 s scatter.
+
+## Full 20-s stack with the corrected estimator (v2)
+
+| cam | lat | A per unit floor | Earthshine E | A / null σ |
+|---|---|---|---|---|
+| 1 | 18° | **1.18** [1.02, 1.27] | 0.72 | 12.4 |
+| 2 | 42° | 0.92 [0.81, 0.96] | 0.77 | 14.6 |
+| 3 | 66° | 0.67 [0.59, 0.74] | 0.86 | 9.9 |
+| 4 | 90° | 0.58 [0.52, 0.62] | 0.79 | 13.1 |
+
+**Δt = 0 s** (bootstrap ±10 s).
+
+**Camera 1 in absolute units** (per unit quiet floor), against the
+Kelsall smooth-cloud model with A = 1.15 (i.e. the whole quiet floor is
+zodiacal light):
+
+| bin [s] | 0–60 | 60–180 | 180–420 | 420–900 | 900–2000 |
+|---|---|---|---|---|---|
+| measured | 0.13 ± 0.03 | 0.21 ± 0.04 | 0.28 ± 0.03 | 0.26 ± 0.05 | 0.14 ± 0.09 |
+| Kelsall model | 0.17 | 0.26 | 0.30 | 0.24 | 0.13 |
+
+- **The near-ecliptic depth profile matches the standard smooth-cloud
+  model in absolute terms**, bin by bin, out to ~2 AU.
+- Total area: 1.03 [0.92, 1.23] vs 1.15. Near the ecliptic,
+  essentially all of the quiet background is solar-modulated zodiacal
+  light.
+- **Do not trust the parametric α** (camera 1: 0.6 [0.4, 0.8]). It is
+  scattered and biased in injections; the bins are the reliable product.
+
+**Amplitude vs latitude:** 1.18 → 0.92 → 0.67 → 0.58. The zodiacal share
+of the quiet background falls toward the pole, as expected: ZL is
+fainter there, and unresolved starlight and diffuse galactic light are a
+larger share. Viewing-angle coherence loss may contribute.
+
+**Earthshine is now consistent across cameras: E ≈ 0.72–0.92**, i.e. the
+scattered-light excess is nearly fully solar-modulated.
