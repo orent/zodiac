@@ -685,3 +685,92 @@ Density relative to the Kelsall model, per bin, at mean r = 1.03, 1.12,
   injection flagged as unreliable for cameras ≥ 2.
 - The first bin (≤ 60 s, r ≈ 1.03 AU) sits ~20% low in both cameras:
   the Earthshine / nearest-dust degeneracy, at ~1σ.
+
+## Night run: validation (`validate.py`, `tdomain.py`, `injection.py`; raw output in `night/`)
+
+### Jackknife splits (`night/validate.txt`)
+A, E per unit floor at a fixed α = 1.4, with block-bootstrap σ.
+
+| split | cam 1 A | cam 2 A | cam 3 A | cam 4 A |
+|---|---|---|---|---|
+| all standard pointing | 0.94 ± 0.03 | 0.86 ± 0.03 | 0.72 ± 0.03 | 0.61 ± 0.03 |
+| odd sectors | 0.96 ± 0.05 | 0.88 ± 0.05 | 0.74 ± 0.05 | 0.61 ± 0.04 |
+| even sectors | 0.93 ± 0.06 | 0.84 ± 0.05 | 0.69 ± 0.06 | 0.62 ± 0.04 |
+| year 1 (2-min, south) | 0.89 ± 0.05 | 0.87 ± 0.04 | 0.70 ± 0.05 | 0.63 ± 0.04 |
+| year 2 standard (2-min, north) | 1.07 ± 0.09 | 0.97 ± 0.09 | 0.93 ± 0.10 | 0.73 ± 0.09 |
+| year 3 (20-s, south) | 1.00 ± 0.06 | 0.81 ± 0.06 | 0.67 ± 0.05 | 0.56 ± 0.05 |
+| quiet windows | 0.94 ± 0.04 | 0.85 ± 0.04 | 0.67 ± 0.05 | 0.61 ± 0.03 |
+| bright windows | 1.00 ± 0.05 | 0.90 ± 0.05 | 0.76 ± 0.05 | 0.63 ± 0.04 |
+
+- **Odd/even and quiet/bright agree within 1σ.** So the echo is neither
+  a few-sector artefact nor tied to the background level.
+- **Year 2 (northern sky) is 10–30% higher** in all cameras; cam 3 is
+  ~2.3σ above year 1. This is either a real north/south asymmetry or a
+  geometry error in the far-north pointings. It matches the earlier
+  north/south hint in v.
+- 20-s (year 3) and 2-min (year 1) data give the same amplitudes within
+  errors, though they come from different products, targets and
+  cadences.
+- The per-split best α wanders (0.4–3.2) at fixed amplitude. This is
+  the known weak α constraint, worst for cameras 3–4.
+
+### Mirror test
+Causal and time-reversed (acausal) model kernels were fitted together.
+The acausal term must vanish.
+
+| | cam 1 | cam 2 | cam 3 | cam 4 |
+|---|---|---|---|---|
+| acausal / causal | +0.03 ± 0.03 (+1.2σ) | −0.03 ± 0.03 (−0.9σ) | +0.01 ± 0.03 (+0.1σ) | +0.06 ± 0.03 (+2.0σ) |
+
+- No significant acausal response: **the signal follows the Sun, not
+  the other way round.**
+- Cam 4's +2σ is likely zero-delay leakage. Earthshine is largest
+  there, and the time-reversed kernel's first bins overlap zero delay.
+
+### Time-domain cross-check (`night/tdomain.txt`)
+This is an independent estimator: a lag-binned regression of the TESS
+background on VIRGO, NNLS, no FFT and no windows. Totals over 0–2040 s,
+per unit floor, standard-pointing archive:
+
+| | cam 1 | cam 2 | cam 3 | cam 4 |
+|---|---|---|---|---|
+| time domain | 0.93 [0.89, 0.96] | 0.84 [0.80, 0.89] | 0.87 [0.83, 0.95] | 0.77 [0.73, 0.82] |
+| frequency domain (A at α = 1.4) | 0.94 | 0.86 | 0.72 | 0.61 |
+
+- **Cameras 1–2 agree to 2%.**
+- Cameras 3–4 come out 15–25% higher in the time domain. Most of the
+  excess is in the last bin (960–2040 s), where the low-frequency common
+  mode dominates. The frequency-domain band starts at 0.1 mHz and
+  down-weights it.
+- The delay profile has the same shape in both estimators: about half
+  of the response arrives within 240 s and the rest decays over
+  ~1000 s.
+
+### Injection coverage (`night/injection_coverage.txt`)
+Synthetic echoes (A = 0.7) were injected into null-shifted data, 12
+trials per case.
+
+- **Timing:** unbiased (median 0 s), with 16–84% scatter of −10 to
+  +5 s. The Δχ² = 1 dt interval contains the truth in only 25–33% of
+  trials. Use **±8 s** (injection scatter) as the timing error, not the
+  profile interval.
+- **Amplitude:**
+  - Unbiased for cameras 2–4 (0.67–0.70 vs 0.70); scatter 0.04–0.08.
+  - Camera 1 is biased low (0.51–0.56) with a 0.2 scatter when α is
+    free, because α and A are degenerate on its narrow-angle kernel. At
+    fixed α it is fine.
+  - The headline amplitudes above are quoted at fixed α for this
+    reason.
+- **α:**
+  - Δχ² = 1 intervals (±0.1 grid) cover 33–83%, which is 2–3× too
+    narrow.
+  - Use bootstrap/injection spreads for α. The earlier α = 1.4 [1.4–1.6]
+    should be read as roughly 1.4 ± 0.5.
+- **Bump (+0.05 at 1500 s):**
+  - Recovered at the right size for cameras 2–4 (+0.04 in the 900–2000 s
+    bin), but bin scatter is 0.06–0.12, so a single bump of this size is
+    a ~0.5σ feature.
+  - The far tail needs the common-mode problem fixed (see ROADMAP) before
+    tail structure is claimable.
+- **Last bin (2000–4000 s):** reads +0.04 for every case, true or not.
+  This is a floor from the common mode, so ignore it.
