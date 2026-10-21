@@ -70,11 +70,14 @@ def fit_trial(parts_by_cam, cams):
     grids = {c: terms[c].solve() for c in cams}
     tot = sum(grids[c][0].min(0) for c in cams)
     j = int(np.argmin(tot))
-    out = {'dt': joint.DTS[j]}
+    okd = tot - tot.min() <= 1
+    out = {'dt': joint.DTS[j], 'dt_lo': joint.DTS[okd].min(), 'dt_hi': joint.DTS[okd].max()}
     for c in cams:
         chi, AE = grids[c]
         i = int(np.argmin(chi[:, j]))
-        out[c] = dict(alpha=joint.ALPHAS[i], A=AE[i, j, 0], E=AE[i, j, 1])
+        oka = chi[:, j] - chi[:, j].min() <= 1
+        out[c] = dict(alpha=joint.ALPHAS[i], A=AE[i, j, 0], E=AE[i, j, 1],
+                      a_lo=joint.ALPHAS[oka].min(), a_hi=joint.ALPHAS[oka].max())
         # Non-negative bins at the fitted dt.
         fake = [type('C', (), dict(f=p[0], X=p[2], Y=p[3], eps=p[4])) for p in parts_by_cam[c]]
         D, y, _ = joint.bin_rows(fake, joint.DTS[j])
@@ -109,12 +112,16 @@ def main(datadir, spec, cameras='1,2,3,4', ntrials='24'):
         print(f'\n== {name} (alpha {alpha}, bump {bump}): {len(res)} trials')
         print(f'  dt: median {np.median(dts):+.1f} s, scatter (16-84%) '
               f'{np.percentile(dts, 16):+.0f} .. {np.percentile(dts, 84):+.0f} s')
+        cov = np.mean([r['dt_lo'] <= 0 <= r['dt_hi'] for r in res])
+        print(f'  coverage: true dt = 0 inside the profile 68% interval in {cov:.0%} of trials')
         for c in cams:
             al = np.array([r[c]['alpha'] for r in res])
             A = np.array([r[c]['A'] for r in res])
             E = np.array([r[c]['E'] for r in res])
             bins = np.array([r[c]['bins'] for r in res])
             tb = true_bins(chunks[c][0].u, alpha, bump)
+            acov = np.mean([r[c]['a_lo'] - 0.1 <= alpha <= r[c]['a_hi'] + 0.1 for r in res])
+            print(f'  cam {c}: alpha interval coverage {acov:.0%}; A scatter {A.std():.3f}')
             print(f'  cam {c}: alpha {np.median(al):.1f} [{np.percentile(al, 16):.1f},'
                   f'{np.percentile(al, 84):.1f}] (true {alpha}); '
                   f'A {np.median(A):.2f} [{np.percentile(A, 16):.2f},{np.percentile(A, 84):.2f}]'

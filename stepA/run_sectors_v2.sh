@@ -32,8 +32,11 @@ for S in "$@"; do
         echo "  cam $C: $(grep -c ' ok\| cached' "$WORK/fetch_s${S}_c$C.log") files, $(grep -c failed "$WORK/fetch_s${S}_c$C.log") failed"
     done
     echo "  reduced $(du -sh "$RED" | cut -f1), $(date +%H:%M:%S)"
-    "$PY" "$HERE/stepA/noise.py" "$RED" "$WORK/noise_s$S.npz" > "$WORK/noise_s$S.log" 2>&1 || { echo "  noise failed"; continue; }
-    "$PY" "$HERE/stepA/compact.py" sector "$S" "$RED" "$WORK/noise_s$S.npz" "$DATA" > "$WORK/compact_s$S.log" 2>&1 || { echo "  compact failed"; continue; }
+    "$PY" "$HERE/stepA/noise.py" "$RED" "$WORK/noise_s$S$SUFFIX.npz" > "$WORK/noise_s$S$SUFFIX.log" 2>&1 || { echo "  noise failed"; continue; }
+    "$PY" "$HERE/stepA/compact.py" sector "$S" "$RED" "$WORK/noise_s$S$SUFFIX.npz" "$DATA" > "$WORK/compact_s$S$SUFFIX.log" 2>&1 || { echo "  compact failed"; continue; }
+    if [ "${CELLS:-0}" = 1 ]; then
+        "$PY" "$HERE/stepA/cells.py" "$S" "$RED" "$WORK/noise_s$S$SUFFIX.npz" "$DATA" > "$WORK/cells_s$S$SUFFIX.log" 2>&1 || echo "  cells failed"
+    fi
     "$PY" "$HERE/stepB/timebase.py" ephem "$DATA" "$S" "$SUFFIX" > /dev/null 2>&1 || echo "  ephem failed"
     (cd "$DATA" && git add -A && git commit -qm "Compact data: sector $S$SUFFIX, cameras 1-4
 
