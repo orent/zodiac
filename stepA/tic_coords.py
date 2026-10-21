@@ -2,7 +2,7 @@
 scripts (20-s *_fast-lc or 2-min *_lc), then assign TESS camera/CCD with
 tess-point."""
 
-import json, re, sys, urllib.parse, urllib.request
+import json, re, sys, time, urllib.parse, urllib.request
 import numpy as np
 from tess_stars2px import tess_stars2px_function_entry as stars2px
 
@@ -15,7 +15,14 @@ def tic_query(ids):
                       'filters': [{'paramName': 'ID', 'values': [str(i) for i in ids]}]},
            'pagesize': 5000}
     data = urllib.parse.urlencode({'request': json.dumps(req)}).encode()
-    out = json.load(urllib.request.urlopen(MAST, data, timeout=300))
+    for attempt in range(6):
+        try:
+            out = json.load(urllib.request.urlopen(MAST, data, timeout=300))
+            break
+        except Exception:
+            if attempt == 5:
+                raise
+            time.sleep(10 * 2 ** attempt)
     return {int(r['ID']): (r['ra'], r['dec'], r['Tmag']) for r in out['data']}
 
 
