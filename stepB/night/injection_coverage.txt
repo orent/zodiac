@@ -1,0 +1,73 @@
+injection-recovery on 27-38, cameras (1, 2, 3, 4), 20 null shifts per case, A_inj = 0.7, dt_inj = 0
+
+== model (alpha 1.34, bump 0.0): 12 trials
+  dt: median +0.0 s, scatter (16-84%) -10 .. +5 s
+  coverage: true dt = 0 inside the profile 68% interval in 33% of trials
+  cam 1: alpha interval coverage 58%; A scatter 0.206
+  cam 1: alpha 2.0 [0.8,3.0] (true 1.34); A 0.56 [0.52,0.82] (true 0.7); E -0.04 (true 0)
+     bins true 0.098 0.148 0.179 0.152 0.089 0.028
+     bins rec  0.081 0.178 0.186 0.117 0.062 0.046
+     bins 68%  0.026 0.047 0.032 0.084 0.113 0.122
+  cam 2: alpha interval coverage 58%; A scatter 0.073
+  cam 2: alpha 1.1 [0.4,2.0] (true 1.34); A 0.70 [0.63,0.75] (true 0.7); E +0.07 (true 0)
+     bins true 0.136 0.197 0.194 0.113 0.047 0.012
+     bins rec  0.120 0.214 0.188 0.108 0.080 0.039
+     bins 68%  0.038 0.024 0.030 0.052 0.073 0.096
+  cam 3: alpha interval coverage 58%; A scatter 0.081
+  cam 3: alpha 1.4 [0.4,2.2] (true 1.34); A 0.70 [0.64,0.82] (true 0.7); E +0.03 (true 0)
+     bins true 0.183 0.236 0.172 0.078 0.025 0.005
+     bins rec  0.181 0.243 0.179 0.074 0.062 0.036
+     bins 68%  0.062 0.052 0.046 0.028 0.078 0.052
+  cam 4: alpha interval coverage 33%; A scatter 0.041
+  cam 4: alpha 0.4 [0.4,4.0] (true 1.34); A 0.67 [0.62,0.72] (true 0.7); E -0.02 (true 0)
+     bins true 0.241 0.251 0.139 0.050 0.015 0.003
+     bins rec  0.241 0.242 0.133 0.051 0.013 0.041
+     bins 68%  0.033 0.034 0.024 0.045 0.057 0.059
+
+== extended (alpha 0.6, bump 0.0): 12 trials
+  dt: median +0.0 s, scatter (16-84%) -10 .. +10 s
+  coverage: true dt = 0 inside the profile 68% interval in 25% of trials
+  cam 1: alpha interval coverage 50%; A scatter 0.197
+  cam 1: alpha 1.6 [0.4,2.4] (true 0.6); A 0.51 [0.45,0.75] (true 0.7); E -0.05 (true 0)
+     bins true 0.073 0.118 0.159 0.159 0.121 0.054
+     bins rec  0.065 0.146 0.162 0.120 0.085 0.058
+     bins 68%  0.025 0.047 0.031 0.084 0.116 0.130
+  cam 2: alpha interval coverage 75%; A scatter 0.070
+  cam 2: alpha 0.5 [0.4,1.2] (true 0.6); A 0.67 [0.61,0.73] (true 0.7); E +0.06 (true 0)
+     bins true 0.113 0.173 0.187 0.128 0.069 0.024
+     bins rec  0.096 0.187 0.181 0.122 0.098 0.040
+     bins 68%  0.038 0.024 0.031 0.052 0.073 0.102
+  cam 3: alpha interval coverage 83%; A scatter 0.079
+  cam 3: alpha 0.8 [0.4,1.5] (true 0.6); A 0.69 [0.60,0.77] (true 0.7); E +0.03 (true 0)
+     bins true 0.164 0.219 0.173 0.090 0.038 0.012
+     bins rec  0.165 0.219 0.177 0.086 0.073 0.043
+     bins 68%  0.059 0.054 0.045 0.029 0.083 0.051
+  cam 4: alpha interval coverage 67%; A scatter 0.041
+  cam 4: alpha 0.4 [0.4,3.5] (true 0.6); A 0.64 [0.60,0.69] (true 0.7); E -0.02 (true 0)
+     bins true 0.228 0.241 0.140 0.058 0.023 0.007
+     bins rec  0.230 0.226 0.133 0.059 0.018 0.041
+     bins 68%  0.031 0.032 0.024 0.049 0.060 0.061
+
+== bump (alpha 1.34, bump 0.05): 12 trials
+  dt: median +0.0 s, scatter (16-84%) -10 .. +5 s
+  coverage: true dt = 0 inside the profile 68% interval in 33% of trials
+  cam 1: alpha interval coverage 50%; A scatter 0.207
+  cam 1: alpha 2.1 [0.8,3.0] (true 1.34); A 0.55 [0.51,0.82] (true 0.7); E -0.04 (true 0)
+     bins true 0.098 0.148 0.179 0.152 0.124 0.028
+     bins rec  0.081 0.178 0.186 0.115 0.098 0.036
+     bins 68%  0.026 0.047 0.032 0.084 0.117 0.121
+  cam 2: alpha interval coverage 58%; A scatter 0.076
+  cam 2: alpha 1.2 [0.4,2.1] (true 1.34); A 0.70 [0.62,0.75] (true 0.7); E +0.07 (true 0)
+     bins true 0.136 0.197 0.194 0.113 0.082 0.012
+     bins rec  0.119 0.214 0.189 0.101 0.119 0.025
+     bins 68%  0.038 0.024 0.030 0.052 0.074 0.095
+  cam 3: alpha interval coverage 58%; A scatter 0.082
+  cam 3: alpha 1.5 [0.4,2.4] (true 1.34); A 0.69 [0.63,0.81] (true 0.7); E +0.03 (true 0)
+     bins true 0.183 0.236 0.172 0.078 0.060 0.005
+     bins rec  0.181 0.243 0.180 0.066 0.102 0.024
+     bins 68%  0.062 0.052 0.045 0.028 0.097 0.039
+  cam 4: alpha interval coverage 42%; A scatter 0.044
+  cam 4: alpha 0.4 [0.4,4.0] (true 1.34); A 0.67 [0.62,0.72] (true 0.7); E -0.02 (true 0)
+     bins true 0.241 0.251 0.139 0.050 0.050 0.003
+     bins rec  0.241 0.242 0.134 0.047 0.053 0.039
+     bins 68%  0.032 0.034 0.024 0.044 0.061 0.058
