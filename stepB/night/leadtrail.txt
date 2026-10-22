@@ -1,0 +1,34 @@
+=== 20-s S27-38
+camera 1, 27-38, |dlon| > 3 deg  (A, E per unit cell floor at alpha 1.34)
+  lead : A = 1.118 ± 0.072   E = +0.26 ± 0.13   (9328 windows, median dlon +9.9 deg)
+  trail: A = 1.054 ± 0.081   E = +0.68 ± 0.13   (8383 windows, median dlon -9.8 deg)
+  trail - lead: -0.064 ± 0.109  (-0.6 sigma); ratio trail/lead 0.943
+camera 2, 27-38, |dlon| > 3 deg  (A, E per unit cell floor at alpha 1.34)
+  lead : A = 0.734 ± 0.066   E = +0.77 ± 0.13   (10911 windows, median dlon +10.9 deg)
+  trail: A = 0.773 ± 0.056   E = +0.60 ± 0.14   (10789 windows, median dlon -10.9 deg)
+  trail - lead: +0.038 ± 0.087  (+0.4 sigma); ratio trail/lead 1.052
+camera 3, 27-38, |dlon| > 3 deg  (A, E per unit cell floor at alpha 1.34)
+  lead : A = 0.493 ± 0.061   E = +1.12 ± 0.19   (10710 windows, median dlon +16.6 deg)
+  trail: A = 0.683 ± 0.058   E = +0.67 ± 0.15   (10719 windows, median dlon -17.0 deg)
+  trail - lead: +0.190 ± 0.084  (+2.3 sigma); ratio trail/lead 1.385
+camera 4, 27-38, |dlon| > 3 deg  (A, E per unit cell floor at alpha 1.34)
+  lead : A = 0.588 ± 0.035   E = +0.78 ± 0.07   (11897 windows, median dlon +92.6 deg)
+  trail: A = 0.595 ± 0.038   E = +0.60 ± 0.09   (11677 windows, median dlon -92.1 deg)
+  trail - lead: +0.007 ± 0.052  (+0.1 sigma); ratio trail/lead 1.011
+=== 2-min S27-38
+camera 1, 27-38_2min, |dlon| > 3 deg  (A, E per unit cell floor at alpha 1.34)
+  lead : A = 0.976 ± 0.036   E = +0.62 ± 0.09   (10270 windows, median dlon +9.4 deg)
+  trail: A = 0.941 ± 0.036   E = +0.50 ± 0.10   (8003 windows, median dlon -9.4 deg)
+  trail - lead: -0.035 ± 0.051  (-0.7 sigma); ratio trail/lead 0.964
+camera 2, 27-38_2min, |dlon| > 3 deg  (A, E per unit cell floor at alpha 1.34)
+  lead : A = 0.710 ± 0.031   E = +0.64 ± 0.11   (10748 windows, median dlon +10.9 deg)
+  trail: A = 0.895 ± 0.035   E = +0.44 ± 0.09   (10361 windows, median dlon -10.8 deg)
+  trail - lead: +0.185 ± 0.047  (+3.9 sigma); ratio trail/lead 1.260
+camera 3, 27-38_2min, |dlon| > 3 deg  (A, E per unit cell floor at alpha 1.34)
+  lead : A = 0.617 ± 0.038   E = +0.48 ± 0.13   (10744 windows, median dlon +16.5 deg)
+  trail: A = 0.643 ± 0.033   E = +0.73 ± 0.13   (10306 windows, median dlon -16.2 deg)
+  trail - lead: +0.026 ± 0.050  (+0.5 sigma); ratio trail/lead 1.043
+camera 4, 27-38_2min, |dlon| > 3 deg  (A, E per unit cell floor at alpha 1.34)
+  lead : A = 0.663 ± 0.029   E = +0.71 ± 0.07   (11365 windows, median dlon +94.2 deg)
+  trail: A = 0.553 ± 0.026   E = +0.67 ± 0.09   (11354 windows, median dlon -90.5 deg)
+  trail - lead: -0.110 ± 0.039  (-2.8 sigma); ratio trail/lead 0.834
