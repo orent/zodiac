@@ -774,3 +774,34 @@ trials per case.
     tail structure is claimable.
 - **Last bin (2000–4000 s):** reads +0.04 for every case, true or not.
   This is a floor from the common mode, so ignore it.
+
+## Night run: 2-min vs 20-s, same sectors 27–38 (`night/twenty_vs_2min.txt`)
+Sectors 27–38 were reduced a second time from the 2-min product. That
+product has a different target list (≤1000 random targets per camera),
+different pixels and a different cadence. The same joint fit was then
+applied.
+
+| A at α = 1.4 (per unit floor) | cam 1 | cam 2 | cam 3 | cam 4 |
+|---|---|---|---|---|
+| 20-s | 1.00 | 0.81 | 0.67 | 0.56 |
+| 2-min | 1.00 | 0.74 | 0.64 | 0.53 |
+| significance vs null shifts, 20-s / 2-min | 12σ / 21σ | 15σ / 16σ | 10σ / 14σ | 13σ / 11σ |
+| time-domain total, 20-s / 2-min | 0.79 / 0.79 | 0.72 / 0.75 | 0.60 / 0.55 | 0.61 / 0.55 |
+
+- **Agreement:** the two products agree to ≤ 10% in amplitude, and
+  both give dt = 0 … +10 s. The delay-bin profiles agree within their
+  bootstrap ranges: for camera 1, 0.13/0.21/0.28/0.26 (20-s) vs
+  0.15/0.20/0.28/0.21 (2-min) in the first four bins.
+- **Sensitivity:** the 2-min product is as sensitive as the 20-s one
+  (camera 1: 21σ vs 12σ). So the 2-min targets observed in the same
+  sectors as the 20-s ones are not wasted.
+- **Not independent:** both products see the same sky and the same
+  spacecraft systematics. So they are not two independent detections,
+  and combining them will gain less than √2.
+- **α disagreement:** the free-α best fits disagree (camera 2: 0.8 vs
+  0.4; camera 3: 1.6 vs 2.8). This is the poorly constrained direction
+  already flagged by the injection test, so only amplitudes at a fixed
+  α should be quoted per camera.
+- **Earthshine term:** E moves between products (camera 3: 0.84 vs
+  0.46) while A barely moves. A is robust; the split between E and the
+  first delay bin is not.
