@@ -805,3 +805,66 @@ applied.
 - **Earthshine term:** E moves between products (camera 3: 0.84 vs
   0.46) while A barely moves. A is robust; the split between E and the
   first delay bin is not.
+
+## Night run: leading/trailing test on sky cells (`leadtrail.py`, `night/leadtrail*.txt`)
+Method:
+- Each 6°×6° cell is split into thirds of its sector. Each piece gets
+  its own sightline (Sun longitude at the third's midpoint) and model
+  kernel.
+- Pieces with longitude offset from the anti-Sun point > +3° (toward
+  Earth's apex: leading) or < −3° (trailing) are fitted separately for
+  A and E at α = 1.34.
+- The geometry differences are in the model, so trail − lead measures
+  an east/west density difference.
+
+| trail − lead (A per unit floor) | cam 1 (±10°) | cam 2 (±11°) | cam 3 (±17°) | cam 4 (±92°) |
+|---|---|---|---|---|
+| 20-s cells | −0.06 ± 0.11 | +0.04 ± 0.09 | +0.19 ± 0.08 | +0.01 ± 0.05 |
+| 2-min cells | −0.04 ± 0.05 | +0.19 ± 0.05 | +0.03 ± 0.05 | −0.11 ± 0.04 |
+
+- **No detection.** The two products see the same sky in the same
+  sectors, so a real asymmetry must appear in both. The individually
+  "significant" entries (20-s cam 3 +2.3σ; 2-min cam 2 +3.9σ and
+  cam 4 −2.8σ) do not repeat in the other product.
+- **Systematics dominate.** The product-to-product scatter (~0.1–0.15)
+  is 2–3× the bootstrap errors, the same under-coverage the injection
+  test found.
+- **E/A trading again:** where A jumps, E moves the other way.
+- **Upper limit:** |trail − lead| ≲ 0.15 per unit floor, i.e. ≲ 15–20%
+  of A per camera. The expected Earth-ring signal is a few percent, so
+  this test is ~5× short.
+- **What would help:**
+  - Fitting both products jointly, with their correlation.
+  - The scattered-light proxy and POS_CORR regressors already stored
+    in `cells.npz`.
+  - A fixed-α kernel with E constrained across groups (E is a property
+    of the Earth, not of the sightline).
+
+## Sky-cell product status
+- `cells.npz` is on the `data` branch for 20-s and 2-min, sectors 27–38
+  (~11–15 MB per 20-s sector, ~3 MB per 2-min sector; branch total
+  541 MB).
+- Per camera it holds:
+  - 4×4 cells of 6°, each with a floor-normalised series (float16) and
+    a level decimated to 600 s;
+  - camera-mean POS_CORR1/2;
+  - per-cell ecliptic sightlines and predicted white noise.
+- Format: `data` branch README.
+- Not yet produced: cells for 2-min sectors 1–26. These need a
+  re-download (~10 min per sector, same script with `CELLS=1`).
+
+## Night run summary
+1. **Robust:**
+   - the echo amplitude per camera at a fixed α;
+   - causality (mirror test);
+   - timing (dt = 0 … +10 s, ±8 s);
+   - agreement between products (20-s vs 2-min) and between
+     estimators (frequency vs time domain, cameras 1–2).
+2. **Over-optimistic as quoted:** the Δχ² = 1 intervals for dt and α,
+   and per-split bootstrap errors (factor 2–3). α per camera is weakly
+   constrained; quote 1.4 ± 0.5 from the stack.
+3. **Not separable yet:** the Earthshine term vs the first delay bin,
+   and the tail beyond ~900 s for cameras ≥ 2 (common-mode floor).
+4. **Open:**
+   - the year-2 north excess (10–30%, ≤2.5σ);
+   - a leading/trailing asymmetry, limited by systematics at ~15–20%.
