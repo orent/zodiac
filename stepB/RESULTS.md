@@ -705,9 +705,18 @@ A, E per unit floor at a fixed α = 1.4, with block-bootstrap σ.
 - **Odd/even and quiet/bright agree within 1σ.** So the echo is neither
   a few-sector artefact nor tied to the background level.
 - **Year 2 (northern sky) is 10–30% higher** in all cameras; cam 3 is
-  ~2.3σ above year 1. This is either a real north/south asymmetry or a
-  geometry error in the far-north pointings. It matches the earlier
-  north/south hint in v.
+  ~2.3σ above year 1. The dust cloud itself has no reason to be
+  asymmetric: precessed orbits make it mirror-symmetric about its own
+  mid-plane. Treat this as a systematic until tested. Candidates:
+  - **Floor normalisation:** A is per unit floor, and the non-zodiacal
+    share of the floor differs between fields. Test: compare A × floor.
+  - **Unmodelled tilt:** the cloud's mid-plane is tilted ~2° from the
+    ecliptic (Kelsall: i ≈ 2.0°, Ω ≈ 78°), so Earth sits up to
+    ~0.035 AU off it. `geometry.py` uses the ecliptic. Sectors 17–23
+    cover only half a year, so the effect need not average out.
+  - **Geometry errors** in the far-north pointings.
+  It matches the earlier north/south hint in v, with the same
+  candidate causes.
 - 20-s (year 3) and 2-min (year 1) data give the same amplitudes within
   errors, though they come from different products, targets and
   cadences.
@@ -866,5 +875,6 @@ Method:
 3. **Not separable yet:** the Earthshine term vs the first delay bin,
    and the tail beyond ~900 s for cameras ≥ 2 (common-mode floor).
 4. **Open:**
-   - the year-2 north excess (10–30%, ≤2.5σ);
+   - the year-2 north excess (10–30%, ≤2.5σ), most likely a systematic
+     (floor normalisation, unmodelled ~2° mid-plane tilt or geometry);
    - a leading/trailing asymmetry, limited by systematics at ~15–20%.
