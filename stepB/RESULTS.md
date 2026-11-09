@@ -878,3 +878,50 @@ Method:
    - the year-2 north excess (10–30%, ≤2.5σ), most likely a systematic
      (floor normalisation, unmodelled ~2° mid-plane tilt or geometry);
    - a leading/trailing asymmetry, limited by systematics at ~15–20%.
+
+## North/south test (`northsouth.py`, `northsouth.txt`)
+Per (sector, camera) chunk: A at α = 1.4 with E fixed at the camera's
+pooled value; floor (e-/s/px); implied zodiacal brightness Z = A × floor
+/ 1.15; model brightness B of the sightline (Kelsall/Hong), flat or with
+the Kelsall tilted symmetry plane (i 2.03°, Ω 77.7°, centre offset;
+`GEOM_TILT=1`). Z/B is normalised per camera to year 1.
+
+Z/B with tilt, relative to year 1 (south):
+
+| group | cam 1 | cam 2 | cam 3 | cam 4 |
+|---|---|---|---|---|
+| year 1 same season, S4–10 (south) | 1.00 ± 0.05 | 1.01 ± 0.06 | 0.99 ± 0.11 | 1.07 ± 0.06 |
+| **year 2 std, S17–23 (north)** | **1.14 ± 0.08** | **1.04 ± 0.08** | **1.26 ± 0.09** | **1.11 ± 0.11** |
+| year 3, S27–38 (south), 2-min | 1.00 ± 0.04 | 0.90 ± 0.04 | 0.92 ± 0.06 | 0.90 ± 0.06 |
+| year 3, S27–38 (south), 20-s | 1.05 ± 0.06 | 0.93 ± 0.06 | 1.04 ± 0.07 | 0.92 ± 0.06 |
+| year 2 far north (model-dependent) | 0.84 ± 0.21 | 1.09 ± 0.15 | 1.40 ± 0.11 | 1.42 ± 0.07 |
+
+- **Not normalisation.** The northern floors are similar to or slightly
+  lower than the southern ones (cam 3: 83 vs 91–97 e-/s/px), and the
+  absolute echo Z is higher too (cam 3: 68 vs 49–51). The excess is in
+  the echo, not in the floor's non-zodiacal share.
+- **The tilt explains only a little.** It has the right sign but removes
+  only 2–7 points of the 7–33% excess (flat → tilted: cam 1 1.17 → 1.14,
+  cam 3 1.33 → 1.26).
+- **Not season.** Same-season south (S4–10) matches year 1 as a whole;
+  the northern sectors cover the same months a year later.
+- **Not the cloud model either.** For standard pointing, north and south
+  sightlines are mirror images at the same time of year (Earth near
+  perihelion in both). So density-law, phase-function and eccentricity
+  errors cancel in this comparison; only the tilt does not.
+- **Empirical systematic scale.** Two southern epochs (year 1 vs year 3)
+  already differ by up to ~10% per camera (cams 2 and 4: 0.90–0.93).
+  Against that scale the north excess (+14, +4, +26, +11%; weighted
+  ~+13%) is about 1–1.5× for cams 1, 2, 4. Only cam 3 stands out
+  (~2.5×).
+- **Far-north pointings are inconsistent with the model** (cam 1 0.84
+  vs cams 3–4 1.4). The model breaks for those sightlines, so they stay
+  excluded from shape fits.
+
+**Reading:** no physical north/south asymmetry is needed. The excess is
+mostly within the epoch-to-epoch systematic scale; the remaining
+cam-3-sized part is instrument-side. The prime suspect is Earthshine:
+with E free, year 2 gave a lower E and a higher A (`night/validate.txt`),
+and stray-light geometry differs when the spacecraft points north. A
+cheap discriminator is the per-CCD split: Earthshine stray light varies
+strongly across CCDs, the echo does not.
