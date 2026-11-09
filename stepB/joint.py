@@ -140,7 +140,27 @@ def sightline(datadir, sector, cam):
     if u is None:
         b = np.radians(CAM_LAT[cam])
         u = np.array([np.cos(b), 0.0, np.sin(b)])
+    if geometry.TILT:
+        u = np.append(u, earth_lon(datadir, sector))
     return u
+
+
+_earth_lon = {}
+
+
+def earth_lon(datadir, sector):
+    """Earth's heliocentric ecliptic longitude [rad] at mid-sector."""
+    key = (datadir, int(sector))
+    if key not in _earth_lon:
+        import glob
+        from astropy.coordinates import GeocentricTrueEcliptic, get_sun
+        from astropy.time import Time
+        c = np.load(sorted(glob.glob(os.path.join(datadir, f's{int(sector):04d}*', 'cam1.npz')))[0])
+        t_sc = c['t_sc'] if 't_sc' in c.files else \
+            c['t_sc0'] + (c['cadenceno'] - c['cadenceno'][0]) * c['t_sc_step']
+        t = Time(2457000 + np.nanmedian(t_sc), format='jd', scale='tdb')
+        _earth_lon[key] = get_sun(t).transform_to(GeocentricTrueEcliptic(equinox=t)).lon.rad + np.pi
+    return _earth_lon[key]
 
 
 _kernel_cache = {}

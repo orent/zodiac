@@ -13,6 +13,12 @@ n = r^-alpha x Kelsall fan with |Z/R| scaled by 1/v, Phi = Hong (1985)
 three-term Henyey-Greenstein fit to the visible zodiacal light.
 Delay tau = (r + s - 1) * 499.005 s.
 
+Optional cloud tilt (env GEOM_TILT=1): if the sightline carries a fourth
+component, Earth's heliocentric ecliptic longitude [rad], the density is
+evaluated in the Kelsall smooth-cloud frame (symmetry plane i = 2.03 deg,
+ascending node 77.7 deg, centre offset X0, Y0, Z0) instead of the ecliptic.
+Illumination, phase angle and delay still refer to the Sun.
+
 usage: geometry.py table out.csv datadir targets.csv [targets.csv ...]
 """
 
@@ -25,6 +31,12 @@ import sensitivity as sm
 # Hong 1985, A&A 146, 67: weights and asymmetry parameters.
 HONG = [(0.665, 0.70), (0.330, -0.20), (0.005, -0.81)]
 
+# Kelsall et al. 1998, smooth cloud: symmetry plane and centre offset (AU).
+TILT = os.environ.get('GEOM_TILT', '0') == '1'
+KELSALL_I = np.radians(2.03)
+KELSALL_NODE = np.radians(77.7)
+KELSALL_X0 = np.array([0.011868, 0.0054836, -0.0021505])
+
 
 def phase_hong(cos_theta):
     out = 0
@@ -33,23 +45,47 @@ def phase_hong(cos_theta):
     return out
 
 
-def kernel(u, alpha=1.34, v=1.0, smax=6.0, ns=20000):
-    """tau [s] and normalised weights along the sightline u (unit vector,
-    Sun-centred frame described above)."""
+def _weights(u, alpha, v, smax, ns):
+    """s, tau [s] and unnormalised weights per ds along the sightline."""
     u = np.asarray(u, float)
-    u = u / np.linalg.norm(u)
+    d = u[:3] / np.linalg.norm(u[:3])
     s = np.linspace(0, smax, ns + 1)[1:] - smax / ns / 2
-    p = np.array([1.0, 0.0, 0.0])[None, :] + s[:, None] * u[None, :]
+    p = np.array([1.0, 0.0, 0.0])[None, :] + s[:, None] * d[None, :]
     r = np.linalg.norm(p, axis=1)
     tau = (r + s - 1) * sm.AU_LIGHT_S
-    zeta = np.abs(p[:, 2] / r) / v
+    if TILT and len(u) == 4:
+        # Rotate into heliocentric ecliptic coordinates (Earth at longitude u[3]).
+        c, sn = np.cos(u[3]), np.sin(u[3])
+        pe = np.stack([p[:, 0] * c - p[:, 1] * sn, p[:, 0] * sn + p[:, 1] * c, p[:, 2]], 1)
+        pc = pe - KELSALL_X0
+        n = np.array([np.sin(KELSALL_I) * np.sin(KELSALL_NODE),
+                      -np.sin(KELSALL_I) * np.cos(KELSALL_NODE), np.cos(KELSALL_I)])
+        rc = np.linalg.norm(pc, axis=1)
+        zc = pc @ n
+    else:
+        rc, zc = r, p[:, 2]
+    zeta = np.abs(zc / rc) / v
     mu = 0.189
     g = np.where(zeta < mu, zeta ** 2 / (2 * mu), zeta - mu / 2)
-    dens = r ** -alpha * np.exp(-4.14 * g ** 0.942)
+    dens = rc ** -alpha * np.exp(-4.14 * g ** 0.942)
     # Scattering angle: incoming along p/r (from the Sun), outgoing along -u.
-    cos_theta = -(p @ u) / r
-    w = dens * phase_hong(cos_theta) / r ** 2
+    cos_theta = -(p @ d) / r
+    return s, tau, dens * phase_hong(cos_theta) / r ** 2
+
+
+def kernel(u, alpha=1.34, v=1.0, smax=6.0, ns=20000):
+    """tau [s] and normalised weights along the sightline u (unit vector,
+    Sun-centred frame described above; optional 4th component: Earth
+    longitude, used with GEOM_TILT=1)."""
+    _, tau, w = _weights(u, alpha, v, smax, ns)
     return tau, w / w.sum()
+
+
+def brightness(u, alpha=1.34, v=1.0, smax=6.0, ns=20000):
+    """Model surface brightness (arbitrary units, common to all
+    sightlines): integral of density x phase / r^2 along the sightline."""
+    _, _, w = _weights(u, alpha, v, smax, ns)
+    return w.sum() * smax / ns
 
 
 def transfer(f, u, alpha=1.34, v=1.0):
