@@ -925,3 +925,44 @@ with E free, year 2 gave a lower E and a higher A (`night/validate.txt`),
 and stray-light geometry differs when the spacecraft points north. A
 cheap discriminator is the per-CCD split: Earthshine stray light varies
 strongly across CCDs, the echo does not.
+
+## Per-CCD north/south test (`perccd.py`, `perccd.txt`)
+Each CCD is fitted separately at α = 1.4, with E free and with E fixed
+at that CCD's pooled value. Below, A (E fixed) relative to year 1,
+weighted mean of the four CCDs, with the χ² of the CCD-to-CCD spread
+(3 dof per camera):
+
+| comparison | cam 1 | cam 2 | cam 3 | cam 4 | spread χ² (12 dof) |
+|---|---|---|---|---|---|
+| **north S17–23 / year 1** | **1.07** | **1.05** | **1.27** | **1.30** | **22** |
+| south year 3 2-min / year 1 | 1.00 | 0.94 | 0.97 | 0.87 | 16 |
+| south year 3 20-s / year 1 | 1.05 | 0.91 | 0.99 | 0.88 | 21 |
+
+- **Not Earthshine.**
+  - A barely changes between E free and E fixed in every CCD group
+    (≤ 0.04), so the A–E trade-off is not what lifts year 2.
+  - The CCDs with the largest northern excess do not show the lower E
+    an Earthshine trade-off would need (cam 4 CCD 3: A 0.55 → 0.98
+    with E 0.90 → 1.80).
+  - Their floors do not show extra stray light either.
+- **No CCD-specific signature.** The excess is uneven across CCDs
+  (cam 3: 1.04, 1.67, 1.39, 0.94; cam 4: 1.03, 1.53, 1.78, 1.24).
+  But two south-vs-south comparisons are just as uneven (χ² 16 and 21
+  vs 22 for north/south). CCD-to-CCD scatter of ~0.1–0.2 in A is the
+  generic per-CCD systematic level (≈1.3× the bootstrap σ), not a
+  northern feature.
+- **What remains.** Cameras 1–2 are within the epoch-to-epoch scatter.
+  Cameras 3–4 are ~30% high in the north, above the ~10% scatter
+  between southern epochs. These are the sightlines near the ecliptic
+  poles. Excluded so far: floor normalisation, tilt, season, the
+  cloud-model geometry (mirror symmetry), and Earthshine.
+- **Remaining candidates are field-dependent, not dust:**
+  - The southern pole fields of cams 3–4 include the LMC, a crowded,
+    bright field where the pipeline background may respond differently.
+  - The northern 2-min target population differs.
+- **Decisive data:**
+  - The repeat of the northern pointing in year 4 (S40–55, with 20-s
+    data) and later southern years: an independent epoch of the same
+    fields.
+  - Within the existing S27–38 sky cells, cam-4 cells near vs far from
+    the LMC.
