@@ -57,16 +57,18 @@ def main(sector, reduced, noise_npz, outdir):
     c0 = min(np.load(p)['cadenceno'].min() for p in files)
     c1 = max(np.load(p)['cadenceno'].max() for p in files)
     ncad = c1 - c0 + 1
+    # Headers only here; each stamp's arrays are loaded when its camera is
+    # processed (a 20-s sector's ~1300 stamps do not fit in memory at once).
     stamps = []
     for p in files:
         try:
-            h, s = nz.load(p)
+            h = ast.literal_eval(str(np.load(p)['header']))
         except Exception:
             continue
         r = byt.get(h['TICID'])
         if r is None:
             continue
-        stamps.append((h, s, r))
+        stamps.append((h, p, r))
     # Vetting as in noise.py: in-band excess < 3x camera median; bright targets
     # with raw-flux coherence > 0.05 dropped.
     keep = []
@@ -95,7 +97,8 @@ def main(sector, reduced, noise_npz, outdir):
         ix = np.clip(((xi + half) // CELL_DEG).astype(int), 0, NGRID - 1)
         iy = np.clip(((eta + half) // CELL_DEG).astype(int), 0, NGRID - 1)
         xs, ss, levs, pc1, pc2 = [], [], [], [], []
-        for h, s, r in cs:
+        for h, path, r in cs:
+            h, s = nz.load(path)
             x, sigma = nz.fractional(h, s)
             fx = np.full(ncad, np.nan, np.float32)
             fs = np.full(ncad, np.nan, np.float32)

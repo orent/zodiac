@@ -15,7 +15,7 @@ Conventions (see TIMEBASE.md):
 usage: timebase.py ephem datadir sector [suffix]   (fetch and store Horizons ranges)
 """
 
-import json, os, sys, urllib.parse, urllib.request
+import json, re, os, sys, urllib.parse, urllib.request
 import numpy as np
 from astropy.time import Time
 
@@ -34,20 +34,25 @@ VIRGO_STAMP = 0.5
 
 
 def horizons_range(body, start, stop, step='10m'):
-    """Heliocentric distance [AU] of a spacecraft vs TDB JD."""
+    """Heliocentric distance [AU] of a spacecraft vs TDB JD.
+
+    Plain-text output: in 2026 the API's CSV output dropped the vector
+    columns (only JD and calendar date remain), so the X, Y, Z lines of the
+    text table are parsed instead."""
     q = {'format': 'json', 'COMMAND': f"'{body}'", 'CENTER': "'500@10'",
          'MAKE_EPHEM': "'YES'", 'EPHEM_TYPE': "'VECTORS'", 'VEC_TABLE': "'2'",
          'START_TIME': f"'{start}'", 'STOP_TIME': f"'{stop}'", 'STEP_SIZE': f"'{step}'",
-         'CSV_FORMAT': "'YES'", 'TIME_TYPE': "'TDB'", 'OUT_UNITS': "'AU-D'",
+         'CSV_FORMAT': "'NO'", 'TIME_TYPE': "'TDB'", 'OUT_UNITS': "'AU-D'",
          'REF_PLANE': "'ECLIPTIC'"}
     url = HORIZONS + '?' + urllib.parse.urlencode(q)
     text = json.load(urllib.request.urlopen(url, timeout=300))['result']
     body_ = text[text.index('$$SOE') + 5:text.index('$$EOE')]
-    jd, r = [], []
-    for line in body_.strip().splitlines():
-        f = [x.strip() for x in line.split(',')]
-        jd.append(float(f[0]))
-        r.append(np.sqrt(sum(float(v) ** 2 for v in f[2:5])))
+    num = r'([-+]?\d*\.?\d+(?:[EeDd][-+]?\d+)?)'
+    jd = [float(m) for m in re.findall(r'^\s*(\d+\.\d+)\s*=', body_, re.M)]
+    xyz = re.findall(rf'X\s*=\s*{num}\s*Y\s*=\s*{num}\s*Z\s*=\s*{num}', body_)
+    if len(jd) != len(xyz) or not jd:
+        raise ValueError(f'Horizons parse: {len(jd)} epochs, {len(xyz)} vectors')
+    r = [np.sqrt(sum(float(v) ** 2 for v in t)) for t in xyz]
     return np.array(jd), np.array(r)
 
 

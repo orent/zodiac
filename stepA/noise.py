@@ -113,20 +113,24 @@ def combine(xs, sigmas):
 
 
 def main(reduced, out=None):
-    stamps = []
+    # Two passes, one stamp in memory at a time: a 20-s sector with ~1300
+    # stamps does not fit in memory if all stamps are held at once.
+    paths = []
+    c0, c1 = None, None
     for path in sorted(glob.glob(f'{reduced}/*.npz')):
         try:
-            h, d = load(path)
+            cad = np.load(path)['cadenceno']
         except Exception as e:
             print('skip', path, e)
             continue
-        stamps.append((h, d))
-    c0 = min(d['cadenceno'].min() for h, d in stamps)
-    c1 = max(d['cadenceno'].max() for h, d in stamps)
+        paths.append(path)
+        c0 = cad.min() if c0 is None else min(c0, cad.min())
+        c1 = cad.max() if c1 is None else max(c1, cad.max())
     ncad = c1 - c0 + 1
 
     rows, series = [], {}
-    for h, d in stamps:
+    for path in paths:
+        h, d = load(path)
         x, sigma = fractional(h, d)
         f, p, nseg = welch(x)
         if nseg < 20:
@@ -141,11 +145,12 @@ def main(reduced, out=None):
         rows.append(dict(tic=h['TICID'], cam=h['CAMERA'], ccd=h['CCD'], tmag=h['TESSMAG'],
                          nbkg=h['NPIX_BKG'], level=np.nanmedian(d['sap_bkg']) / h['NPIX_AP'],
                          pred=pred, bands=[band_mean(f, p, *b) for b in BANDS], leak=leak))
-        full_x = np.full(ncad, np.nan)
-        full_s = np.full(ncad, np.nan)
+        full_x = np.full(ncad, np.nan, np.float32)
+        full_s = np.full(ncad, np.nan, np.float32)
         full_x[d['cadenceno'] - c0] = x
         full_s[d['cadenceno'] - c0] = sigma
         series[h['TICID']] = (h['CAMERA'], full_x, full_s, rows[-1])
+        del d
 
     print(f'{len(rows)} stamps with >=20 good 6-h windows\n')
     print('Per-stamp PSD, median over stamps [ppm^2/uHz]; excess = measured / photon+read prediction')
@@ -168,8 +173,8 @@ def main(reduced, out=None):
         exc = np.array([v[3]['bands'][1] / v[3]['pred'] for v in vs])
         keep = [v for v, e in zip(vs, exc) if e < 3 * np.median(exc)
                 and not (v[3]['tmag'] < 10 and v[3]['leak'] > 0.05)]
-        xs = np.array([v[1] for v in keep])
-        ss = np.array([v[2] for v in keep])
+        xs = np.array([v[1] for v in keep], dtype=np.float64)
+        ss = np.array([v[2] for v in keep], dtype=np.float64)
         comb, pred = combine(xs, ss)
         perm = rng.permutation(len(keep))
         a, _ = combine(xs[perm[::2]], ss[perm[::2]])
