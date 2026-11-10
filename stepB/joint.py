@@ -115,7 +115,8 @@ class Chunk:
         self.raw = dict(x_all=a['x_all'], off=a['off'], per_day=a['per_day'], n=a['n'],
                         y_norm=ynorm, level=a['level'], win=win)
         self.starts = S
-        self.u = sightline(datadir, sector, cam)
+        # Per-CCD units ('cam3_ccd2') use their camera's sightline.
+        self.u = sightline(datadir, sector, int(str(cam)[3]) if isinstance(cam, str) else cam)
 
     def null_X(self, sh):
         """Window FFTs of VIRGO shifted by sh days (computed on demand; storing
