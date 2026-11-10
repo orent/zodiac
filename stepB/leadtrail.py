@@ -10,7 +10,7 @@ an amplitude difference between the groups measures an east/west density
 asymmetry (Earth's resonant ring / trailing blob). Earthshine (zero-delay,
 proportional to the cell's level excess) is fitted per group.
 
-usage: leadtrail.py datadir SECTORS [cameras] [min_dlon_deg]
+usage: [LEADTRAIL_E=0.8] leadtrail.py datadir SECTORS [cameras] [min_dlon_deg]
 """
 
 import os, sys
@@ -22,6 +22,9 @@ import timebase as tb
 from aligned import highpass
 
 NBOOT = 200
+# Earthshine fixed at one value (env LEADTRAIL_E, e.g. 0.8 from gls.py: one
+# E fits all four cameras); unset: E fitted per group.
+E_FIX = float(os.environ['LEADTRAIL_E']) if os.environ.get('LEADTRAIL_E') else None
 
 
 def sun_lon_deg(jd_tdb):
@@ -115,8 +118,15 @@ def main(datadir, spec, cameras='1', min_dlon='3'):
             if not parts:
                 continue
             t = joint.Terms(parts, joint.CAM_LAT[cam], alphas=[1.34])
-            A, E = t.solve()[1][0, 0]
-            bs = np.array([t.solve(joint.block_weights(len(t.eps), rng))[1][0, 0] for _ in range(NBOOT)])
+            if E_FIX is None:
+                fit = lambda wk: t.solve(wk)[1][0, 0]
+            else:
+                def fit(wk):
+                    m11 = np.sum(wk * t.P[1.34])
+                    m12 = ((wk * t.eps) @ t.Q[1.34])[0]
+                    return np.array([((wk @ t.U[1.34])[0] - E_FIX * m12) / m11, E_FIX])
+            A, E = fit(np.ones(len(t.eps)))
+            bs = np.array([fit(joint.block_weights(len(t.eps), rng)) for _ in range(NBOOT)])
             res[g] = (A, bs[:, 0].std(), E, bs[:, 1].std(), len(t.eps), np.median(dl[g]))
         print(f'camera {cam}, {spec}, |dlon| > {min_dlon:g} deg  (A, E per unit cell floor at alpha 1.34)')
         for g, (A, sA, E, sE, n, md) in res.items():
