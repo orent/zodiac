@@ -25,6 +25,10 @@ def highpass(x, size=180):
 
 
 def load(datadir, sector, cam, ref='red', stamp=tb.VIRGO_STAMP, product=''):
+    # VIRGO_REF=red23 makes every script that asks for 'red' use the SPM red
+    # 2023 release (needed from sector 39 on; see TIMEBASE.md).
+    if ref == 'red':
+        ref = os.environ.get('VIRGO_REF', 'red')
     sdir = os.path.join(datadir, f's{int(sector):04d}{product}')
     eph = tb.Ephem(os.path.join(sdir, 'ephem.npz'))
     unit = cam if isinstance(cam, str) else f'cam{cam}'       # e.g. 'cam1' or 'cam1_ccd2'
