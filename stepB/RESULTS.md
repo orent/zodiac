@@ -951,18 +951,23 @@ weighted mean of the four CCDs, with the χ² of the CCD-to-CCD spread
   vs 22 for north/south). CCD-to-CCD scatter of ~0.1–0.2 in A is the
   generic per-CCD systematic level (≈1.3× the bootstrap σ), not a
   northern feature.
-- **What remains.** Cameras 1–2 are within the epoch-to-epoch scatter.
-  Cameras 3–4 are ~30% high in the north, above the ~10% scatter
-  between southern epochs. These are the sightlines near the ecliptic
-  poles. Excluded so far: floor normalisation, tilt, season, the
-  cloud-model geometry (mirror symmetry), and Earthshine.
-- **Remaining candidates are field-dependent, not dust:**
-  - The southern pole fields of cams 3–4 include the LMC, a crowded,
-    bright field where the pipeline background may respond differently.
-  - The northern 2-min target population differs.
-- **Decisive data:**
-  - The repeat of the northern pointing in year 4 (S40–55, with 20-s
-    data) and later southern years: an independent epoch of the same
-    fields.
-  - Within the existing S27–38 sky cells, cam-4 cells near vs far from
-    the LMC.
+- **What remains.** The per-CCD ratios are in A per unit floor, so part
+  of them is floor dilution (cam 3 CCD 2: floor 114 in the south, 86 in
+  the north).
+  - In absolute terms (`northsouth.txt`, tilted model) the northern
+    excess is +14, +4, +26 and +11% for cams 1–4.
+  - The scatter between southern epochs is ~10%, so only cam 3 clearly
+    stands out (~2.5×).
+  - Excluded so far: floor normalisation, tilt, season, cloud-model
+    geometry (mirror symmetry), and Earthshine.
+- **No candidate remains.**
+  - A constant (unmodulated) background such as the LMC near the south
+    ecliptic pole cannot produce or suppress a VIRGO-correlated signal.
+    It enters only through the floor normalisation, which the
+    absolute-echo test removes. The background estimators shift
+    one-for-one with a uniform sky change, so there is no other route.
+  - Status: an unexplained ~2.5σ-equivalent excess in one camera. No
+    mechanism is identified, and a real dust asymmetry is implausible.
+- **Decisive data:** the repeat of the northern pointing in year 4
+  (S40–55, with 20-s data) and later southern years, an independent
+  epoch of the same fields.
