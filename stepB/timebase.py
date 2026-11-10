@@ -23,6 +23,10 @@ C_AU_PER_DAY = 173.1446326742403
 HORIZONS = 'https://ssd.jpl.nasa.gov/api/horizons.api'
 RED_EPOCH = Time('1996-01-23T00:00:00', scale='utc')
 TAI_EPOCH = Time('1958-01-01T00:00:00', scale='tai')
+# SOHO archive SPM L2 mission-long files (2023 release): column 0 is TAI
+# seconds since this epoch (DATE-OBS 1996-01-23T00:00:04.46 TAI, plus the
+# documented 30-s daily-pulse shift of 1996-03-26/27 already in the times).
+RED23_EPOCH = Time('1996-01-23T00:00:00', scale='tai')
 # Stamp position within the sample, as a fraction of the sample length
 # (0 = start, 0.5 = mid). VIRGO files give the mid point (Appourchaux et
 # al. 2018, A&A 617, A108, Table A.1).
@@ -83,6 +87,13 @@ def tess_emission(t_sc, eph):
 def virgo_red_emission(days, eph, stamp=VIRGO_STAMP):
     """SPM red stamps -> emission time of the sample mid point (s TDB since J2000)."""
     t = (RED_EPOCH + days).tdb.jd + (0.5 - stamp) * 60 / 86400
+    return (t - eph.light_time_days('soho', t) - 2451545.0) * 86400
+
+
+def virgo_red23_emission(tai_s, eph, stamp=VIRGO_STAMP):
+    """SPM red 2023 release (TAI s since RED23_EPOCH) -> emission time."""
+    t = Time(RED23_EPOCH.jd1, RED23_EPOCH.jd2 + tai_s / 86400, format='jd', scale='tai').tdb.jd
+    t = t + (0.5 - stamp) * 60 / 86400
     return (t - eph.light_time_days('soho', t) - 2451545.0) * 86400
 
 

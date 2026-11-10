@@ -43,6 +43,14 @@ def load(datadir, sector, cam, ref='red', stamp=tb.VIRGO_STAMP, product=''):
         t0 = (tb.Time(2457000 + c['t_sc'][0], format='jd', scale='tdb') - tb.RED_EPOCH).jd
         t1 = (tb.Time(2457000 + c['t_sc'][-1], format='jd', scale='tdb') - tb.RED_EPOCH).jd
         sel = np.flatnonzero((tv > t0 - 1) & (tv < t1 + 1))
+    elif ref == 'red23':
+        v = np.load(os.path.join(datadir, 'virgo', 'spm_red_1min_2023.npz'))
+        tv = v['tai_seconds_since_1996_01_23_tai']
+        xv = v['red_ppm'].astype(float) * 1e-6
+        conv = lambda t: tb.virgo_red23_emission(t, eph, stamp)
+        t0 = (tb.Time(2457000 + c['t_sc'][0], format='jd', scale='tdb') - tb.RED23_EPOCH).sec
+        t1 = (tb.Time(2457000 + c['t_sc'][-1], format='jd', scale='tdb') - tb.RED23_EPOCH).sec
+        sel = np.flatnonzero((tv > t0 - 86400) & (tv < t1 + 86400))
     elif ref == 'tsi':
         v = np.load(os.path.join(datadir, 'virgo', 'tsi_pmo6_1min.npz'))
         tv = v['tai_seconds_since_1958']

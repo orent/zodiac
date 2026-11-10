@@ -17,6 +17,7 @@ Code:
 | TESS `TIME − TIMECORR` | spacecraft JD − 2457000 | TDB at the spacecraft | mid-cadence | `TIMECORR` = per-target barycentric correction, up to ±500 s |
 | VIRGO SPM red (Montillet F60d) | days since 1996-01-23 | **UTC** | **mid point** | see below |
 | VIRGO PMO6 TSI minute (V8) | s since 1958-01-01 | TAI (FITS header) | **mid point** | see below |
+| VIRGO SPM red, SOHO archive 2023 release (`red23`) | s since 1996-01-23T00:00:00 TAI | TAI (FITS header) | **mid point** (assumed) | see below |
 
 Evidence for the VIRGO conventions:
 - **Mid point.** Appourchaux et al. 2018 (A&A 617, A108, arXiv:1807.00998),
@@ -32,6 +33,25 @@ Evidence for the VIRGO conventions:
 - That 1996 paper's p-mode timing compares intensity against velocity
   instruments. It cannot calibrate intensity timing absolutely, because
   the intrinsic I–V phase difference is about 80 s at 3 mHz.
+
+## SPM red 2023 release (`red23`)
+The SOHO archive's `VIRGO-SPM-RED-L2-MISSIONLONG.fits` (2023-05-24)
+runs to 2023-04-30; the Montillet F60d file stops at 2021-05-15.
+- **Same samples.** Over 2020 the first differences of the two series
+  correlate at 1.0000, with equal rms.
+- **Timing comes from the header.**
+  - DATE-OBS is 1996-01-23T00:00:04.46 TAI, plus the documented 30-s
+    daily-pulse shift on 1996-03-26/27.
+  - That puts the stamps at :57.46 UTC (2017 on), **4.46 s later** than
+    the :53 UTC inferred above for the F60d file.
+  - The red-vs-TSI offset then becomes 44.5 s, against the measured
+    "about 40 s", so both readings are compatible.
+  - The header is the explicit statement, so `red23` follows it.
+- **Effect on S27–38.** Amplitudes are unchanged (A at α = 1.4: 0.99,
+  0.78, 0.67, 0.57 vs 1.00, 0.81, 0.67, 0.56). dt moves from 0 to
+  −10 s on the 10-s grid, within the ±8 s timing error.
+- Results from sector 39 on use `red23`. Earlier results are quoted
+  with `red` unless stated.
 
 ## Corrections applied
 

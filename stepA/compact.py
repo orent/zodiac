@@ -5,6 +5,7 @@ files, and the TESS-era cut of the VIRGO series. Everything downstream
 usage:
   compact.py sector reduced_dir noise.npz outdir
   compact.py virgo red.fits tsi.fits outdir
+  compact.py virgo23 VIRGO-SPM-RED-L2-MISSIONLONG.fits outdir
 """
 
 import ast, csv, glob, os, re, sys
@@ -99,5 +100,19 @@ def virgo(red_fits, tsi_fits, outdir):
     print('virgo written')
 
 
+def virgo23(red_fits, outdir):
+    """SOHO archive SPM red L2 mission-long file (2023 release, to
+    2023-04-30): column 0 TAI s since 1996-01-23T00:00:00 TAI, column 1 ppm.
+    The TESS-era cut, as virgo/spm_red_1min_2023.npz."""
+    from astropy.io import fits
+    os.makedirs(outdir, exist_ok=True)
+    r = fits.getdata(red_fits)
+    m = r[:, 0] / 86400 + 2450105.5 >= TESS_ERA_START_JD
+    np.savez_compressed(os.path.join(outdir, 'spm_red_1min_2023.npz'),
+                        tai_seconds_since_1996_01_23_tai=r[m, 0],
+                        red_ppm=r[m, 1].astype(np.float32))
+    print('virgo23 written', m.sum())
+
+
 if __name__ == '__main__':
-    {'sector': sector, 'virgo': virgo}[sys.argv[1]](*sys.argv[2:])
+    {'sector': sector, 'virgo': virgo, 'virgo23': virgo23}[sys.argv[1]](*sys.argv[2:])
