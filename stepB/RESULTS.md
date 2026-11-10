@@ -1064,17 +1064,13 @@ tilted model, normalised per camera to year 1 (south):
 | **year 4 ecliptic S42–46 (20-s)** | 1.03 ± 0.09 | 1.04 ± 0.10 | 1.09 ± 0.08 | 1.11 ± 0.09 |
 | year 4 far north | 0.83 ± 0.14 | 1.24 ± 0.09 | 0.99 ± 0.08 | 1.21 ± 0.05 |
 
-### North/south: closed
-- **The year-2 excess does not repeat.** Cam 3 read 1.27 in the north
-  in year 2. In the same geometry two years later it reads 0.97 ± 0.10
-  (2-min) and 1.10 ± 0.12 (20-s).
-- Year-4 north sits within the spread of the southern epochs for every
-  camera. The year-2 excess was specific to that epoch, not a property
-  of the northern sky or the dust. This matches the expectation that
-  the cloud is mirror-symmetric about its plane.
-- **The same sectors disagree between products by up to 0.28**
-  (cam 4: 2-min 0.97, 20-s 1.25). That is the product-level systematic
-  found in step 2, and it is as large as the year-2 "excess".
+### North/south (superseded: see "Sector scatter and the full archive" below)
+- **Year 4's 2-min product does not repeat the year-2 excess.** Cam 3
+  reads 0.97 ± 0.10, against 1.27 for year 2.
+- **The 20-s product partly does** (cam 3: 1.10, cam 4: 1.25).
+- The two products of the same sectors differ by up to 0.28. With the
+  full archive and honest errors (below), the question is **not
+  closed**.
 
 ### Ecliptic sectors: a new geometry passes
 - **The sightlines are new.** They lie in the plane of the cloud from
@@ -1098,3 +1094,61 @@ tilted model, normalised per camera to year 1 (south):
 - Still inconsistent between cameras (0.83–1.24), as in year 2. The
   model does not describe sightlines past the ecliptic pole toward the
   Sun side, so they stay excluded.
+
+## Sector scatter and the full archive, S1–63 (`sectorscatter.py`, `step3/sectorscatter_*.txt`)
+One product per sector (two variants: 2-min for S1–26 and 20-s from
+S27; or 2-min throughout), `red23`, tilted model. Per sector:
+q = Z/B = A × floor / 1.15 / B, with E fixed per camera. The extra
+per-sector scatter is the amount that brings χ²/dof to 1; it enters
+every group error below.
+
+| | cam 1 | cam 2 | cam 3 | cam 4 |
+|---|---|---|---|---|
+| χ²/dof of per-sector q (bootstrap σ only), 20-s / 2-min | 1.00 / 1.48 | 1.46 / 2.31 | 1.02 / 1.04 | 1.61 / 1.76 |
+| extra per-sector scatter, 20-s / 2-min | 0.00 / 0.10 | 0.16 / 0.21 | 0.03 / 0.06 | 0.18 / 0.20 |
+| **north − south**, 20-s from S27 | +0.11 ± 0.06 | +0.07 ± 0.09 | +0.14 ± 0.07 | +0.23 ± 0.09 |
+| **north − south**, 2-min throughout | +0.11 ± 0.06 | +0.13 ± 0.09 | +0.08 ± 0.08 | +0.15 ± 0.09 |
+| ecliptic S42–46 / standard, 20-s | 0.99 ± 0.10 | 1.07 ± 0.13 | 1.00 ± 0.08 | 1.15 ± 0.12 |
+| ecliptic S42–46 / standard, 2-min | 1.03 ± 0.08 | 1.01 ± 0.11 | 1.04 ± 0.09 | 0.88 ± 0.11 |
+
+Year by year, 2-min throughout (mean of the archive = 1):
+
+| | cam 1 | cam 2 | cam 3 | cam 4 |
+|---|---|---|---|---|
+| year 1 south S1–13 | 0.98 ± 0.06 | 1.06 ± 0.08 | 1.02 ± 0.08 | 0.94 ± 0.08 |
+| year 2 north S17–23 | 1.14 ± 0.09 | 1.08 ± 0.12 | 1.29 ± 0.11 | 1.10 ± 0.13 |
+| year 3 south S27–39 | 0.98 ± 0.05 | 0.92 ± 0.08 | 0.95 ± 0.06 | 0.88 ± 0.08 |
+| year 4 north S47–55 | 0.99 ± 0.08 | 1.04 ± 0.11 | 0.95 ± 0.09 | 0.88 ± 0.12 |
+| year 5 north S56–60 | 1.10 ± 0.09 | 1.09 ± 0.12 | 0.93 ± 0.12 | 1.25 ± 0.13 |
+| year 5 south S61–63 | 0.83 ± 0.10 | 0.63 ± 0.16 | 0.82 ± 0.22 | 1.01 ± 0.17 |
+
+### Reading
+- **The north excess appears in both products.**
+  - North − south is positive in all four cameras in both variants.
+  - Weighted over cameras it is +0.13 ± 0.04 (20-s) or +0.12 ± 0.04
+    (2-min), nominally ~3σ.
+  - That nominal figure treats the cameras as independent. They are
+    not entirely, because the low-frequency noise is common.
+- **Epoch-level systematics dominate.**
+  - Epochs in the same hemisphere differ by as much as north from
+    south: cam 3 north year 2 is 1.29 ± 0.11, year 4 0.95 ± 0.09
+    (2.4σ); cam 2 south year 1 is 1.06, year 5 0.63.
+  - So the scatter is correlated within an epoch: whole years move
+    together. The per-sector scatter does not capture that.
+  - With ~3 epochs per hemisphere and an epoch-level scatter of ~0.1,
+    the north − south error becomes ~0.08 and is shared by the cameras.
+    The excess is then ~1.5σ.
+- **Verdict: unresolved, and not claimable.**
+  - The data show a ~10% north excess at the level of epoch-to-epoch
+    systematics.
+  - There is no physical mechanism for a mirror-asymmetric smooth cloud.
+    The tilt is already modelled and reduces the excess.
+  - The most likely cause is an epoch-correlated instrumental or
+    pointing systematic that has not been identified.
+- **Ecliptic sectors: robust.** In both products, all four cameras agree
+  with the standard-pointing mean within errors (0.88–1.15). The model
+  carries over to in-plane sightlines, where the absolute echo is up to
+  4× larger.
+- **Archive precision.** The per-camera archive mean has an honest
+  error of ±3–4%, against bootstrap-only ±2–4%. Epoch-correlated
+  systematics would add to that and are not included.
