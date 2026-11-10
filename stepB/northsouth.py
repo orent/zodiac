@@ -39,6 +39,10 @@ GROUPS = [
     ('year 4 far north, S40-41,52-53', lambda s, p: s in (40, 41, 52, 53)),
     ('year 4 ecliptic, S42-46, 2-min', lambda s, p: p == '_2min' and 42 <= s <= 46),
     ('year 4 ecliptic, S42-46, 20-s', lambda s, p: p == '' and 42 <= s <= 46),
+    ('year 5 std, S56-60 (N), 2-min', lambda s, p: p == '_2min' and 56 <= s <= 60),
+    ('year 5 std, S56-60 (N), 20-s', lambda s, p: p == '' and 56 <= s <= 60),
+    ('late south, S39,61-63, 2-min', lambda s, p: p == '_2min' and s in (39, 61, 62, 63)),
+    ('late south, S39,61-63, 20-s', lambda s, p: p == '' and s in (39, 61, 62, 63)),
 ]
 
 
