@@ -119,6 +119,32 @@ def solve(M, v, nonneg=False):
     return nnls(R, z)[0]
 
 
+def q(M, v, th):
+    """chi^2 up to a constant (x2 for circular complex noise)."""
+    return 2 * (th @ M @ th - 2 * th @ v)
+
+
+def shared_E(Mp, vp, Mb, vb, rng):
+    """Fits with one Earthshine coefficient for all four cameras: the four
+    E columns (the last four parameters) replaced by their sum. Returns
+    (param, bins) solutions, their bootstrap draws and the chi^2 cost of
+    sharing E relative to free E."""
+    res = []
+    for M, v, nonneg in ((Mp, vp, False), (Mb, vb, True)):
+        P = M.shape[1]
+        T = np.zeros((P, P - 3))
+        T[:P - 4, :P - 4] = np.eye(P - 4)
+        T[P - 4:, P - 4] = 1
+        Ms, vs = np.einsum('pa,wpq,qb->wab', T, M, T), v @ T
+        th_s = solve(Ms.sum(0), vs.sum(0), nonneg)
+        th_f = solve(M.sum(0), v.sum(0), nonneg)
+        dchi = q(Ms.sum(0), vs.sum(0), th_s) - q(M.sum(0), v.sum(0), th_f)
+        bs = np.array([solve(np.tensordot(w, Ms, 1), w @ vs, nonneg) for w in
+                       (boot_weights(len(vs), rng) for _ in range(NBOOT))])
+        res.append((th_s, bs, dchi))
+    return res
+
+
 def boot_weights(nw, rng):
     return joint.block_weights(nw, rng)
 
@@ -134,7 +160,7 @@ def main(datadir, spec=SPEC, alpha='1.4', nnull='60'):
             continue
     nw = sum(len(j.starts) for j in js)
     print(f'GLS four-camera fit, {spec}: {len(js)} sector products, {nw} common windows, alpha {alpha}, dt 0')
-    out = {}
+    out, shared = {}, {}
     for kind in ('diag', 'gls'):
         Mp, vp, Mb, vb = [], [], [], []
         for j in js:
@@ -149,7 +175,7 @@ def main(datadir, spec=SPEC, alpha='1.4', nnull='60'):
                        (boot_weights(len(vb), rng) for _ in range(NBOOT))])
         # Null shifts.
         nulls = []
-        for sh in joint.NULL_SHIFTS[::max(1, len(joint.NULL_SHIFTS) // nnull)][:nnull]:
+        for sh in (joint.NULL_SHIFTS[::max(1, len(joint.NULL_SHIFTS) // nnull)][:nnull] if nnull else []):
             Ms, vs = [], []
             for j in js:
                 Xn = j.null_X(sh)
@@ -159,8 +185,9 @@ def main(datadir, spec=SPEC, alpha='1.4', nnull='60'):
             if len(Ms) >= 0.7 * len(js):
                 Ms, vs = np.concatenate(Ms), np.concatenate(vs)
                 nulls.append(solve(Ms.sum(0), vs.sum(0)))
-        nulls = np.array(nulls)
+        nulls = np.array(nulls) if nulls else np.full((1, 8), np.nan)
         out[kind] = (th, bs, bins, bb, nulls)
+        shared[kind] = shared_E(Mp, vp, Mb, vb, rng)
 
     nb = len(joint.BIN_EDGES) - 1
     print('\n(a) A at fixed alpha (per unit floor): estimate, bootstrap sigma, null-shift sigma, A/null sigma')
@@ -171,7 +198,7 @@ def main(datadir, spec=SPEC, alpha='1.4', nnull='60'):
             sn = nulls[:, i].std()
             line.append(f'{kind:4s} A {th[i]:.3f} ± {bs[:, i].std():.3f} (null σ {sn:.3f}, '
                         f'{th[i] / sn:5.1f}σ)  E {th[4 + i]:+.2f}')
-        ratio = out['diag'][4][:, i].std() / out['gls'][4][:, i].std()
+        ratio = out['diag'][4][:, i].std() / out['gls'][4][:, i].std() if nnull else np.nan
         print(f'  cam {c}: ' + '   '.join(line) + f'   null-σ ratio diag/gls {ratio:.2f}')
     print('\n(b) non-negative delay bins (per unit floor; bootstrap 68% half-width)')
     print('  bin [s]  ' + ''.join(f'{a}-{b}'.rjust(16) for a, b in zip(joint.BIN_EDGES[:-1], joint.BIN_EDGES[1:]))
@@ -184,6 +211,18 @@ def main(datadir, spec=SPEC, alpha='1.4', nnull='60'):
                      for b in range(nb)]
             e = 4 * nb + i
             print(f'  cam {c} {kind:4s}' + ''.join(cells) + f'   {bins[e]:.2f}±{(hi[e] - lo[e]) / 2:.2f}')
+
+    print('\n(c) one Earthshine coefficient shared by the four cameras')
+    for kind in ('diag', 'gls'):
+        (tp, bp, dp), (tb, bb, db) = shared[kind]
+        print(f'  {kind}: shared E (param) {tp[4]:.2f} ± {bp[:, 4].std():.2f}; '
+              f'chi2 cost of sharing: param {dp:+.1f}, bins {db:+.1f} (3 fewer parameters)')
+        print('     A at fixed alpha: ' + '  '.join(f'cam {c} {tp[i]:.3f}±{bp[:, i].std():.3f}' for i, c in enumerate(CAMS)))
+        lo, hi = np.percentile(bb, [16, 84], axis=0)
+        for i, c in enumerate(CAMS):
+            print(f'     cam {c} bins ' + ' '.join(f'{tb[i * nb + b]:.3f}±{(hi[i * nb + b] - lo[i * nb + b]) / 2:.3f}'
+                                         for b in range(nb)))
+        print(f'     shared E (bins) {tb[4 * nb]:.2f}±{(hi[4 * nb] - lo[4 * nb]) / 2:.2f}')
 
 
 if __name__ == '__main__':
