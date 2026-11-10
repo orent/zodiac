@@ -1,0 +1,72 @@
+north/south test: per-chunk A at alpha 1.4 (E fixed per camera), floor in e-/s/px,
+implied zodiacal brightness Z = A x floor / 1.15, model brightness B (Kelsall/Hong),
+Z/B normalised per camera to the year-1 (south) group.
+
+camera 1  (E fixed at +0.88; 82 chunks)
+  group                              n   lat             A  floor             Z       Z/B flat     Z/B tilted
+  year 1, S1-13 (south)             13   -18  0.897±0.039  141.5 103.79±4.47   1.000±0.043   1.000±0.043
+  year 1 same season, S4-10 (south)   7   -18  0.906±0.043  126.3 103.64±4.97   0.998±0.048   1.003±0.048
+  year 2 std, S17-23 (north)         7   +18  1.066±0.076  131.2 122.38±8.63   1.183±0.083   1.159±0.082
+  year 2 far north, S14-16,24-26     6   +49  0.321±0.105  158.3  45.58±13.35   0.710±0.208   0.758±0.211
+  year 3, S27-38 (south), 2-min     12   -18  0.950±0.039  127.0 104.68±4.30   0.998±0.041   1.004±0.041
+  year 3, S27-38 (south), 20-s      12   -18  0.971±0.059  129.4 107.83±6.44   1.029±0.062   1.028±0.062
+  year 4 std, S47-51,54-55 (N), 2-min   7   +18  0.954±0.061  127.3 105.05±6.77   1.016±0.065   0.986±0.063
+  year 4 std, S47-51,54-55 (N), 20-s   7   +18  1.100±0.158  129.1 121.04±17.24   1.166±0.166   1.148±0.164
+  year 4 far north, S40-41,52-53     8   +50  0.399±0.075  140.1  50.26±8.41   0.789±0.132   0.825±0.137
+  year 4 ecliptic, S42-46, 2-min     5    +1  0.995±0.055  147.5 125.84±6.91   1.011±0.056   1.020±0.056
+  year 4 ecliptic, S42-46, 20-s      5    +1  0.988±0.087  147.2 127.27±11.40   1.016±0.092   1.025±0.093
+
+north/south test: per-chunk A at alpha 1.4 (E fixed per camera), floor in e-/s/px,
+implied zodiacal brightness Z = A x floor / 1.15, model brightness B (Kelsall/Hong),
+Z/B normalised per camera to the year-1 (south) group.
+
+camera 2  (E fixed at +0.79; 82 chunks)
+  group                              n   lat             A  floor             Z       Z/B flat     Z/B tilted
+  year 1, S1-13 (south)             13   -42  0.867±0.043  108.9  74.08±3.57   1.000±0.048   1.000±0.048
+  year 1 same season, S4-10 (south)   7   -42  0.880±0.050   97.7  73.78±4.14   0.995±0.056   1.018±0.057
+  year 2 std, S17-23 (north)         7   +42  0.958±0.070   98.4  80.31±5.77   1.085±0.078   1.051±0.075
+  year 2 far north, S14-16,24-26     6   +76  0.512±0.074  110.5  53.73±8.17   0.934±0.142   0.998±0.150
+  year 3, S27-38 (south), 2-min     12   -42  0.710±0.035  107.3  66.03±3.17   0.893±0.043   0.916±0.044
+  year 3, S27-38 (south), 20-s      12   -42  0.779±0.048  108.9  68.19±4.09   0.921±0.055   0.929±0.056
+  year 4 std, S47-51,54-55 (N), 2-min   7   +42  0.996±0.050  106.6  80.43±3.98   1.085±0.054   1.050±0.052
+  year 4 std, S47-51,54-55 (N), 20-s   7   +42  0.723±0.143  110.5  68.54±13.02   0.923±0.175   0.917±0.172
+  year 4 far north, S40-41,52-53     8   +73  0.659±0.048  116.6  67.45±4.90   1.166±0.085   1.242±0.090
+  year 4 ecliptic, S42-46, 2-min     5    +1  1.010±0.056  139.5 125.39±6.98   0.981±0.055   0.996±0.055
+  year 4 ecliptic, S42-46, 20-s      5    +1  1.095±0.100  138.8 130.53±11.93   1.022±0.094   1.038±0.095
+
+north/south test: per-chunk A at alpha 1.4 (E fixed per camera), floor in e-/s/px,
+implied zodiacal brightness Z = A x floor / 1.15, model brightness B (Kelsall/Hong),
+Z/B normalised per camera to the year-1 (south) group.
+
+camera 3  (E fixed at +0.83; 82 chunks)
+  group                              n   lat             A  floor             Z       Z/B flat     Z/B tilted
+  year 1, S1-13 (south)             13   -68  0.632±0.053   91.4  50.30±4.06   1.000±0.081   1.000±0.080
+  year 1 same season, S4-10 (south)   7   -67  0.586±0.066   97.7  48.72±5.24   0.969±0.104   1.005±0.107
+  year 2 std, S17-23 (north)         7   +68  1.000±0.076   83.3  67.37±5.04   1.343±0.101   1.272±0.095
+  year 2 far north, S14-16,24-26     6   +85  0.808±0.068   95.7  67.34±5.76   1.284±0.110   1.363±0.116
+  year 3, S27-38 (south), 2-min     12   -67  0.580±0.040   97.0  48.54±3.12   0.961±0.062   0.935±0.060
+  year 3, S27-38 (south), 20-s      12   -67  0.648±0.049   96.0  53.87±3.83   1.067±0.076   1.052±0.074
+  year 4 std, S47-51,54-55 (N), 2-min   7   +66  0.621±0.072   85.2  50.25±5.33   0.992±0.105   0.968±0.101
+  year 4 std, S47-51,54-55 (N), 20-s   7   +66  0.719±0.079   85.6  57.33±6.06   1.132±0.120   1.101±0.116
+  year 4 far north, S40-41,52-53     8   +84  0.669±0.050   88.6  48.92±3.81   0.927±0.072   0.988±0.076
+  year 4 ecliptic, S42-46, 2-min     5    +1  0.960±0.074  152.3 124.96±9.76   1.042±0.080   1.042±0.080
+  year 4 ecliptic, S42-46, 20-s      5    +1  1.031±0.078  151.9 137.17±10.46   1.095±0.082   1.094±0.082
+
+north/south test: per-chunk A at alpha 1.4 (E fixed per camera), floor in e-/s/px,
+implied zodiacal brightness Z = A x floor / 1.15, model brightness B (Kelsall/Hong),
+Z/B normalised per camera to the year-1 (south) group.
+
+camera 4  (E fixed at +1.12; 82 chunks)
+  group                              n   lat             A  floor             Z       Z/B flat     Z/B tilted
+  year 1, S1-13 (south)             13   -90  0.589±0.029   80.2  40.83±2.02   1.000±0.050   1.000±0.050
+  year 1 same season, S4-10 (south)   7   -90  0.651±0.034   77.6  44.34±2.34   1.086±0.057   1.114±0.059
+  year 2 std, S17-23 (north)         7   +90  0.745±0.074   74.4  47.77±4.78   1.170±0.117   1.146±0.114
+  year 2 far north, S14-16,24-26     6   +59  0.670±0.038  162.7  90.97±5.15   1.298±0.073   1.380±0.078
+  year 3, S27-38 (south), 2-min     12   -90  0.530±0.038   80.4  35.70±2.55   0.873±0.062   0.901±0.064
+  year 3, S27-38 (south), 20-s      12   -90  0.541±0.039   81.1  37.32±2.70   0.913±0.066   0.927±0.067
+  year 4 std, S47-51,54-55 (N), 2-min   7   +90  0.484±0.049   95.6  40.69±4.06   0.996±0.099   0.969±0.095
+  year 4 std, S47-51,54-55 (N), 20-s   7   +90  0.706±0.050   96.5  54.13±3.86   1.325±0.095   1.247±0.090
+  year 4 far north, S40-41,52-53     8   +59  0.626±0.026  156.9  81.33±3.39   1.146±0.048   1.212±0.051
+  year 4 ecliptic, S42-46, 2-min     5    +1  0.930±0.060  185.6 155.47±10.07   0.921±0.059   0.913±0.059
+  year 4 ecliptic, S42-46, 20-s      5    +1  1.081±0.082  184.5 178.26±13.38   1.115±0.085   1.107±0.085
+

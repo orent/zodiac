@@ -1042,3 +1042,59 @@ The remaining levers are independent data (other epochs and
 geometries) and, for a future mode or mission, a common-mode-free
 design. Any forecast should treat the measured common mode as
 irreducible for this instrument.
+
+## Step 3: year 4 (S40–55), VIRGO `red23` (`northsouth.py`, `step3/northsouth_y4.txt`)
+Year-4 pointings (`geometry.csv`):
+- **Standard north:** S47–51 and S54–55. This repeats the year-2 S17–23
+  geometry.
+- **Far north:** S40–41 and S52–53.
+- **Ecliptic:** S42–46. All four cameras look along the ecliptic, at
+  elongations 73–178°, all on the leading side (dlon +22° to +107°).
+
+All groups below use the `red23` reference. Each entry is Z/B with the
+tilted model, normalised per camera to year 1 (south):
+
+| group | cam 1 | cam 2 | cam 3 | cam 4 |
+|---|---|---|---|---|
+| year 2 std north S17–23 (2-min) | 1.16 ± 0.08 | 1.05 ± 0.08 | **1.27 ± 0.10** | 1.15 ± 0.11 |
+| **year 4 std north (2-min)** | 0.99 ± 0.06 | 1.05 ± 0.05 | **0.97 ± 0.10** | 0.97 ± 0.10 |
+| **year 4 std north (20-s)** | 1.15 ± 0.16 | 0.92 ± 0.17 | 1.10 ± 0.12 | 1.25 ± 0.09 |
+| year 3 south (2-min / 20-s) | 1.00 / 1.03 | 0.92 / 0.93 | 0.94 / 1.05 | 0.90 / 0.93 |
+| **year 4 ecliptic S42–46 (2-min)** | 1.02 ± 0.06 | 1.00 ± 0.06 | 1.04 ± 0.08 | 0.91 ± 0.06 |
+| **year 4 ecliptic S42–46 (20-s)** | 1.03 ± 0.09 | 1.04 ± 0.10 | 1.09 ± 0.08 | 1.11 ± 0.09 |
+| year 4 far north | 0.83 ± 0.14 | 1.24 ± 0.09 | 0.99 ± 0.08 | 1.21 ± 0.05 |
+
+### North/south: closed
+- **The year-2 excess does not repeat.** Cam 3 read 1.27 in the north
+  in year 2. In the same geometry two years later it reads 0.97 ± 0.10
+  (2-min) and 1.10 ± 0.12 (20-s).
+- Year-4 north sits within the spread of the southern epochs for every
+  camera. The year-2 excess was specific to that epoch, not a property
+  of the northern sky or the dust. This matches the expectation that
+  the cloud is mirror-symmetric about its plane.
+- **The same sectors disagree between products by up to 0.28**
+  (cam 4: 2-min 0.97, 20-s 1.25). That is the product-level systematic
+  found in step 2, and it is as large as the year-2 "excess".
+
+### Ecliptic sectors: a new geometry passes
+- **The sightlines are new.** They lie in the plane of the cloud from
+  73° to 178° elongation. Year 1 calibrated each camera at ecliptic
+  latitude 18–90°.
+- **The echo grows with the model.** The implied zodiacal brightness Z
+  is 2.5–4× higher than in year 1 for cams 3–4 (cam 4: 155–178 vs 41
+  e-/s/px). The Kelsall/Hong model predicts that rise: Z/B stays at
+  0.91–1.11.
+- This is the first check of the model outside the calibration
+  geometry. The echo tracks the model brightness across a factor of
+  ~4.
+
+### Solar activity
+- **The echo is constant.** Year 1 (2018–19) was solar minimum; year 4
+  (2021–22) was the rising phase of cycle 25. Standard-pointing Z/B is
+  unchanged within the ~10% epoch scatter. The probe signal changed,
+  the dust response did not.
+
+### Far north
+- Still inconsistent between cameras (0.83–1.24), as in year 2. The
+  model does not describe sightlines past the ecliptic pole toward the
+  Sun side, so they stay excluded.
