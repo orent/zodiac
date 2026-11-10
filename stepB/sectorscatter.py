@@ -14,7 +14,7 @@ Then per camera:
     chi^2/dof = 1;
   - group means with errors from sqrt(sigma_boot^2 + s_x^2).
 
-usage: VIRGO_REF=red23 sectorscatter.py datadir [cameras]
+usage: VIRGO_REF=red23 [SCATTER_PRODUCT=2min] sectorscatter.py datadir [cameras]
 """
 
 import os, sys
@@ -42,6 +42,10 @@ GROUPS = [
 
 
 def product(s):
+    # SCATTER_PRODUCT=2min: the 2-min product for every sector (it exists
+    # for all of S1-63), to test whether a result depends on the product.
+    if os.environ.get('SCATTER_PRODUCT') == '2min':
+        return '_2min'
     return '_2min' if s <= 26 else ''
 
 
