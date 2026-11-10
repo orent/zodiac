@@ -26,7 +26,7 @@ import joint
 
 ALPHA = 1.4
 NBOOT = 40
-SPEC = '1-38_2min,27-38'
+SPEC = os.environ.get('NS_SPEC', '1-38_2min,27-38')
 GROUPS = [
     ('year 1, S1-13 (south)', lambda s, p: p == '_2min' and 1 <= s <= 13),
     ('year 1 same season, S4-10 (south)', lambda s, p: p == '_2min' and 4 <= s <= 10),
@@ -34,6 +34,11 @@ GROUPS = [
     ('year 2 far north, S14-16,24-26', lambda s, p: p == '_2min' and s in (14, 15, 16, 24, 25, 26)),
     ('year 3, S27-38 (south), 2-min', lambda s, p: p == '_2min' and 27 <= s <= 38),
     ('year 3, S27-38 (south), 20-s', lambda s, p: p == '' and 27 <= s <= 38),
+    ('year 4 std, S47-51,54-55 (N), 2-min', lambda s, p: p == '_2min' and s in (47, 48, 49, 50, 51, 54, 55)),
+    ('year 4 std, S47-51,54-55 (N), 20-s', lambda s, p: p == '' and s in (47, 48, 49, 50, 51, 54, 55)),
+    ('year 4 far north, S40-41,52-53', lambda s, p: s in (40, 41, 52, 53)),
+    ('year 4 ecliptic, S42-46, 2-min', lambda s, p: p == '_2min' and 42 <= s <= 46),
+    ('year 4 ecliptic, S42-46, 20-s', lambda s, p: p == '' and 42 <= s <= 46),
 ]
 
 
@@ -71,7 +76,8 @@ def main(datadir, cameras='1,2,3,4', spec=SPEC):
             except FileNotFoundError:
                 continue
         # Pooled E over the standard-pointing chunks.
-        std = [c for s, p, c in chunks if not (p == '_2min' and s in (14, 15, 16, 24, 25, 26))]
+        std = [c for s, p, c in chunks if not (p == '_2min' and s in (14, 15, 16, 24, 25, 26))
+               and s not in (40, 41, 42, 43, 44, 45, 46, 52, 53)]
         tp = joint.Terms([(c.f, c.cadence, c.X, c.Y, c.eps, c.u) for c in std], None, alphas=[ALPHA])
         E = tp.solve()[1][0, 0, 1]
         for sec, prod, ch in chunks:
