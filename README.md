@@ -26,6 +26,7 @@ The code lives on the analysis branch
     virgo/
       spm_red_1min.npz   VIRGO SPM red channel, 1-min, 2018-07-01 -> 2021-05-15
       tsi_pmo6_1min.npz  VIRGO PMO6 TSI, 1-min, 2018-07-01 -> 2026-05-05
+      spm_red_1min_2023.npz  VIRGO SPM red, SOHO archive 2023 release, 1-min, 2018-07-01 -> 2023-04-30
 
 Each sector is about 3 MB. The VIRGO cut is 31 MB and is shared by all
 sectors.
@@ -115,6 +116,8 @@ These are unmodified values, only cut in time (and stored as float32).
 
 Sources:
 - SPM red: `projects.pmodwrc.ch/virgo/SSI/Montillet/RED-960123-210515-F60d-NEW.fits`
+- SPM red 2023 release: `soho.nascom.nasa.gov/data/EntireMissionBundles/VIRGO-SPM-RED-L2-MISSIONLONG.fits`
+  (keys `tai_seconds_since_1996_01_23_tai`, `red_ppm`; header TAI timing, see TIMEBASE.md)
 - TSI: `projects.pmodwrc.ch/virgo/TSI/VIRGO_TSI_Minute_V8_August2026_2026-08-26_13-55-06.fits`
 
 Cite Finsterle et al. 2021 (Sci. Rep. 11, 7835) and acknowledge "the VIRGO
