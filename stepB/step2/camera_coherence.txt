@@ -1,0 +1,21 @@
+S27: cross-camera coherence (bands 0.1-0.5 / 0.5-2 / 2-8 mHz), 168 segs
+   cam1-cam2: 0.425  0.021  0.008
+   cam2-cam3: 0.754  0.009  0.001
+   cam3-cam4: 0.607  0.019  0.007
+   cam1-cam4: 0.437  0.030  0.014
+   within cam1: cam1_x0y0 vs cam1_x3y3: 0.214  0.000  0.000  (159 segs)
+   within cam3: cam3_x0y0 vs cam3_x3y3: 0.032  0.000  0.000  (168 segs)
+S34: cross-camera coherence (bands 0.1-0.5 / 0.5-2 / 2-8 mHz), 158 segs
+   cam1-cam2: 0.425  0.306  0.187
+   cam2-cam3: 0.175  0.317  0.184
+   cam3-cam4: 0.167  0.173  0.097
+   cam1-cam4: 0.435  0.092  0.048
+   within cam1: cam1_x0y0 vs cam1_x3y3: 0.029  0.006  0.003  (154 segs)
+   within cam3: cam3_x0y0 vs cam3_x3y3: 0.027  0.003  0.001  (155 segs)
+S27_2min: cross-camera coherence (bands 0.1-0.5 / 0.5-2 / 2-8 mHz), 170 segs
+   cam1-cam2: 0.274  0.025  0.031
+   cam2-cam3: 0.578  0.029  0.011
+   cam3-cam4: 0.205  0.004  0.005
+   cam1-cam4: 0.065  0.004  0.006
+   within cam1: cam1_x0y0 vs cam1_x3y3: 0.498  0.006  0.000  (137 segs)
+   within cam3: cam3_x0y0 vs cam3_x3y3: 0.116  0.000  0.001  (165 segs)

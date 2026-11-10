@@ -1,0 +1,34 @@
+GLS four-camera fit, 27-38,1-13_2min,17-23_2min: 32 sector products, 3241 common windows, alpha 1.4, dt 0
+
+(a) A at fixed alpha (per unit floor): estimate, bootstrap sigma, null-shift sigma, A/null sigma
+  cam 1: diag A 0.942 ± 0.036 (null σ nan,   nanσ)  E +0.74   gls  A 0.946 ± 0.032 (null σ nan,   nanσ)  E +0.84   null-σ ratio diag/gls nan
+  cam 2: diag A 0.884 ± 0.033 (null σ nan,   nanσ)  E +0.69   gls  A 0.853 ± 0.034 (null σ nan,   nanσ)  E +0.68   null-σ ratio diag/gls nan
+  cam 3: diag A 0.714 ± 0.035 (null σ nan,   nanσ)  E +0.83   gls  A 0.733 ± 0.031 (null σ nan,   nanσ)  E +0.87   null-σ ratio diag/gls nan
+  cam 4: diag A 0.622 ± 0.027 (null σ nan,   nanσ)  E +0.82   gls  A 0.632 ± 0.026 (null σ nan,   nanσ)  E +0.81   null-σ ratio diag/gls nan
+
+(b) non-negative delay bins (per unit floor; bootstrap 68% half-width)
+  bin [s]              0-60          60-180         180-420         420-900        900-2000       2000-4000        E
+  cam 1 diag     0.124±0.020     0.220±0.023     0.251±0.020     0.190±0.026     0.149±0.043     0.000±0.017   0.75±0.09
+  cam 1 gls      0.119±0.025     0.235±0.023     0.244±0.019     0.201±0.020     0.147±0.037     0.003±0.035   0.86±0.11
+  cam 2 diag     0.152±0.026     0.291±0.030     0.231±0.024     0.148±0.026     0.044±0.051     0.000±0.020   0.72±0.12
+  cam 2 gls      0.132±0.027     0.307±0.030     0.213±0.023     0.121±0.024     0.051±0.040     0.000±0.027   0.71±0.13
+  cam 3 diag     0.133±0.031     0.314±0.032     0.178±0.031     0.069±0.031     0.135±0.056     0.000±0.028   0.91±0.13
+  cam 3 gls      0.128±0.032     0.338±0.031     0.185±0.027     0.099±0.033     0.165±0.053     0.131±0.064   0.98±0.11
+  cam 4 diag     0.237±0.025     0.204±0.028     0.159±0.024     0.064±0.027     0.034±0.040     0.000±0.000   0.84±0.07
+  cam 4 gls      0.234±0.021     0.215±0.027     0.156±0.023     0.058±0.027     0.036±0.043     0.000±0.012   0.83±0.06
+
+(c) one Earthshine coefficient shared by the four cameras
+  diag: shared E (param) 0.77 ± 0.06; chi2 cost of sharing: param +2.5, bins +2.8 (3 fewer parameters)
+     A at fixed alpha: cam 1 0.940±0.038  cam 2 0.879±0.034  cam 3 0.717±0.031  cam 4 0.627±0.028
+     cam 1 bins 0.121±0.022 0.222±0.021 0.251±0.020 0.190±0.025 0.149±0.043 0.000±0.020
+     cam 2 bins 0.146±0.026 0.293±0.028 0.231±0.020 0.148±0.028 0.043±0.045 0.000±0.012
+     cam 3 bins 0.141±0.031 0.310±0.035 0.178±0.027 0.068±0.030 0.136±0.059 0.000±0.037
+     cam 4 bins 0.241±0.024 0.203±0.026 0.159±0.023 0.063±0.027 0.035±0.046 0.000±0.000
+     shared E (bins) 0.80±0.06
+  gls: shared E (param) 0.80 ± 0.05; chi2 cost of sharing: param +6.2, bins +7.8 (3 fewer parameters)
+     A at fixed alpha: cam 1 0.948±0.029  cam 2 0.845±0.033  cam 3 0.738±0.032  cam 4 0.634±0.025
+     cam 1 bins 0.121±0.023 0.234±0.022 0.244±0.019 0.201±0.020 0.147±0.037 0.004±0.033
+     cam 2 bins 0.123±0.023 0.310±0.027 0.213±0.024 0.122±0.023 0.051±0.041 0.000±0.026
+     cam 3 bins 0.141±0.032 0.335±0.034 0.186±0.026 0.098±0.030 0.165±0.045 0.131±0.074
+     cam 4 bins 0.235±0.025 0.215±0.029 0.156±0.018 0.058±0.032 0.036±0.048 0.000±0.016
+     shared E (bins) 0.83±0.06

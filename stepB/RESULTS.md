@@ -971,3 +971,74 @@ weighted mean of the four CCDs, with the χ² of the CCD-to-CCD spread
 - **Decisive data:** the repeat of the northern pointing in year 4
   (S40–55, with 20-s data) and later southern years, an independent
   epoch of the same fields.
+
+## Step 2: common mode and shared Earthshine (`gls.py`, `step2/`)
+
+### What the slow noise is
+- **Not pointing jitter.** POS_CORR1/2 explain ~1% of the background
+  power in every band (chance level). The exception is one event (S30
+  cam 1, 32% at 0.1–0.5 mHz). See `step2/poscorr_coherence.txt`.
+- **It is spacecraft-wide.** Camera-mean backgrounds are coherent with
+  each other at 0.1–0.5 mHz (coherence 0.2–0.75 between camera pairs).
+  Above 0.5 mHz they are incoherent (≤ 0.03, except S34). The solar
+  echo is far too weak to cause this, so it is a common mode shared by
+  all four cameras. See `step2/camera_coherence.txt`.
+
+### Joint four-camera fit with the noise cross-covariance (GLS)
+Per sector: windows common to all four cameras, the measured 4×4 noise
+cross-spectrum, and generalised least squares (unbiased by
+construction). The diagonal version on the same windows is the old
+independent fit. Standard-pointing archive, 3241 windows, 100 null
+shifts:
+
+| | cam 1 | cam 2 | cam 3 | cam 4 |
+|---|---|---|---|---|
+| A, independent | 0.942 (21.5σ) | 0.884 (22.8σ) | 0.714 (16.2σ) | 0.622 (18.6σ) |
+| A, GLS | 0.946 (21.5σ) | 0.853 (22.7σ) | 0.733 (18.3σ) | 0.632 (20.1σ) |
+| null-σ ratio independent/GLS | 0.99 | 1.03 | 1.10 | 1.06 |
+
+- **A improves by at most 10%.** A is constrained mostly above 0.5 mHz,
+  where the common mode is absent.
+- **The far tail does not improve.** The 900–2000 s and 2000–4000 s
+  bins keep the same errors (cam 1: ±0.043 → ±0.042), and cam 3's last
+  bin gets a spurious 0.13.
+- The common mode is coherent, but its pattern across cameras (and its
+  variation between windows) is not separable from the echo's pattern
+  with four camera means.
+- **Conclusion: it is not removable with these data.** This sets the
+  far-tail limit.
+
+### One Earthshine coefficient for all four cameras
+- **Universal value:** E = 0.80 ± 0.05 (GLS) / 0.77 ± 0.06
+  (independent).
+- **Cost of sharing:** Δχ² = +2.5 (independent) and +6 to +8 (GLS) for
+  3 fewer parameters. So a universal E is consistent, marginally so
+  under GLS. Physically, the excess light is mostly reflected sunlight,
+  with some zodiacal light in the level excess.
+- **Archive level: no gain.** The first delay bin keeps its error
+  (cam 1: 0.124 ± 0.020 → 0.121 ± 0.022), because per-camera E was
+  already pinned to ±0.1.
+- **Leading/trailing with E fixed at 0.8:** the product-to-product
+  disagreements stay (`step2/leadtrail_E0.8.txt`):
+
+| trail − lead | cam 1 | cam 2 | cam 3 | cam 4 |
+|---|---|---|---|---|
+| 20-s | −0.03 ± 0.11 | +0.03 ± 0.09 | +0.16 ± 0.08 | −0.01 ± 0.05 |
+| 2-min | −0.04 ± 0.05 | +0.17 ± 0.05 | +0.04 ± 0.05 | −0.11 ± 0.04 |
+
+  The A–E trade-off was not what caused the disagreements. They are
+  product- and target-set systematics at ~0.1.
+
+### Reading
+Neither analysis fix moves the archive-level results. What limits them:
+1. **Far tail:** a spacecraft-wide low-frequency common mode that four
+   camera means cannot separate from the echo.
+2. **Subsets (cells, CCDs, lead/trail):** systematics that depend on the
+   product and target set, at ~0.1 in A, about 1.3–2× the bootstrap
+   errors.
+
+With the archived stamps, analysis-side gains are essentially used up.
+The remaining levers are independent data (other epochs and
+geometries) and, for a future mode or mission, a common-mode-free
+design. Any forecast should treat the measured common mode as
+irreducible for this instrument.
