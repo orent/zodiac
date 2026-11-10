@@ -32,7 +32,8 @@ def main(sector, cadence, out):
     with open(out, 'w') as f:
         f.write('#!/bin/sh\n')
         for obs in rows:
-            fn = obs + suffix
+            # From sector 40 on, 20-s obs_ids already end in '_fast'.
+            fn = obs.removesuffix('_fast') + suffix
             f.write(f'curl -C - -L -o {fn} {DL}{fn}\n')
     print(f'sector {sector}: {len(rows)} files')
 
