@@ -174,7 +174,9 @@ def kernel_h(f, lat, alpha, key=None):
     if u.ndim == 0:
         b = np.radians(float(lat))
         u = np.array([np.cos(b), 0.0, np.sin(b)])
-    ck = (tuple(np.round(u, 2)), alpha, key)
+    # The frequency grid is part of the key: band-limited fits (epochs.py)
+    # reuse the same sightline and cadence with a shorter grid.
+    ck = (tuple(np.round(u, 2)), alpha, key, len(f), round(float(f[0]), 9) if len(f) else 0.0)
     if key is not None and ck in _kernel_cache:
         return _kernel_cache[ck]
     tau, w = geometry.kernel(u, alpha)
