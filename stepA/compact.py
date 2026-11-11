@@ -136,9 +136,22 @@ def loi(row_dir, first_index, outdir):
                   for k in range(12)])
     x = P.mean(0)
     x[(P == 0).all(0)] = np.nan
+    # 84,000 of the 86,000 gaps (2018-2025) last 1-5 min and are spread over
+    # the day, breaking most 6-h windows; fill those by linear
+    # interpolation, keep longer gaps.
+    nan = np.isnan(x).astype(int)
+    d = np.diff(np.concatenate([[0], nan, [0]]))
+    starts, ends = np.flatnonzero(d == 1), np.flatnonzero(d == -1)
+    good = np.flatnonzero(~np.isnan(x))
+    fill = np.zeros(len(x), bool)
+    for a, b in zip(starts, ends):
+        if b - a <= 5 and a > 0 and b < len(x):
+            fill[a:b] = True
+    x[fill] = np.interp(np.flatnonzero(fill), good, x[good])
     t = 69 * 86400 + 4.46 + (int(first_index) + np.arange(len(x))) * 60.0 + LOI_TO_RED23_S
     np.savez_compressed(os.path.join(outdir, 'loi_1min.npz'),
-                        tai_seconds_since_1996_01_23_tai=t, loi_frac=x.astype(np.float32))
+                        tai_seconds_since_1996_01_23_tai=t, loi_frac=x.astype(np.float32),
+                        filled=fill)
     print('loi written', len(x), 'samples,', np.isnan(x).mean(), 'gap fraction')
 
 
