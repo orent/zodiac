@@ -6,6 +6,7 @@ usage:
   compact.py sector reduced_dir noise.npz outdir
   compact.py virgo red.fits tsi.fits outdir
   compact.py virgo23 VIRGO-SPM-RED-L2-MISSIONLONG.fits outdir
+  compact.py loi row_dir first_index outdir
 """
 
 import ast, csv, glob, os, re, sys
@@ -114,5 +115,32 @@ def virgo23(red_fits, outdir):
     print('virgo23 written', m.sum())
 
 
+# LOI header stamps are 31.27 +- 0.18 s early relative to the SPM red 2023
+# stamps (cross-spectrum phase, 0.5-5 mHz, 3009 six-hour windows 2018-2023;
+# stable to ~1.5 s by year; a phase-slope scan with interpolation gives
+# +28 +- 3 s). That is the 30 s of a start-of-minute vs mid-minute stamp,
+# plus ~1 s. LOI times are moved onto the red23 time base, whose timing is
+# checked by the echo itself (TIMEBASE.md).
+LOI_TO_RED23_S = 31.27
+
+
+def loi(row_dir, first_index, outdir):
+    """VIRGO LOI level 2 (SOHO archive, to 2025-03-31): rows 0-11 are the
+    science pixels (fractional intensity; gaps stored as exact zeros), rows
+    12-15 the guiders. row_dir holds row0.bin..row11.bin, big-endian float64
+    sample ranges starting at sample first_index of each FITS row (1-min
+    samples, TAI from 1996-04-01T00:00:04.46). Writes the 12-pixel mean on
+    the red23 time base as virgo/loi_1min.npz."""
+    os.makedirs(outdir, exist_ok=True)
+    P = np.array([np.fromfile(os.path.join(row_dir, f'row{k}.bin'), dtype='>f8').astype(np.float64)
+                  for k in range(12)])
+    x = P.mean(0)
+    x[(P == 0).all(0)] = np.nan
+    t = 69 * 86400 + 4.46 + (int(first_index) + np.arange(len(x))) * 60.0 + LOI_TO_RED23_S
+    np.savez_compressed(os.path.join(outdir, 'loi_1min.npz'),
+                        tai_seconds_since_1996_01_23_tai=t, loi_frac=x.astype(np.float32))
+    print('loi written', len(x), 'samples,', np.isnan(x).mean(), 'gap fraction')
+
+
 if __name__ == '__main__':
-    {'sector': sector, 'virgo': virgo, 'virgo23': virgo23}[sys.argv[1]](*sys.argv[2:])
+    {'sector': sector, 'virgo': virgo, 'virgo23': virgo23, 'loi': loi}[sys.argv[1]](*sys.argv[2:])
