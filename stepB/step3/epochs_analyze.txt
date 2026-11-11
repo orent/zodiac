@@ -1,0 +1,46 @@
+2. per-sector deviations: common to the cameras?
+   cam 1-2: correlation of normalised residuals +0.55 (n 48, 1/sqrt(n) = 0.14)
+   cam 1-3: correlation of normalised residuals +0.42 (n 48, 1/sqrt(n) = 0.14)
+   cam 1-4: correlation of normalised residuals +0.42 (n 48, 1/sqrt(n) = 0.14)
+   cam 2-3: correlation of normalised residuals +0.41 (n 48, 1/sqrt(n) = 0.14)
+   cam 2-4: correlation of normalised residuals +0.41 (n 48, 1/sqrt(n) = 0.14)
+   cam 3-4: correlation of normalised residuals +0.14 (n 48, 1/sqrt(n) = 0.14)
+   camera-average per sector: chi2/dof 4.27 over 48 sectors; common-factor scatter ~0.19 (median error of the average 0.10)
+
+3. year means (r, weighted; per-sector bootstrap errors only)
+   year            cam 1         cam 2         cam 3         cam 4   all cameras
+   Y1 S       0.97±0.05     1.01±0.05     1.02±0.07     0.98±0.05   0.99±0.03
+   Y2 N       1.13±0.06     1.13±0.08     1.26±0.10     1.08±0.10   1.15±0.04
+   Y3 S       0.99±0.04     0.96±0.04     0.96±0.06     0.88±0.05   0.96±0.02
+   Y4 N       1.05±0.06     1.11±0.06     0.92±0.09     0.96±0.08   1.04±0.03
+   Y5 N       1.05±0.07     1.05±0.06     0.96±0.13     1.28±0.08   1.10±0.04
+   Y5 S       0.79±0.08     0.64±0.09     0.77±0.22     1.04±0.12   0.78±0.05
+   cam 1: chi2 of year means 13.5 for 5 dof
+   cam 2: chi2 of year means 23.4 for 5 dof
+   cam 3: chi2 of year means 9.5 for 5 dof
+   cam 4: chi2 of year means 19.1 for 5 dof
+
+4. single-covariate weighted regressions of r (all cameras; slope per 1 sd of the covariate)
+   floor/median                           slope -0.034 ± 0.028  (-1.2 sigma)
+   eps_mean                               slope -0.090 ± 0.025  (-3.6 sigma)
+   eps_p90                                slope -0.086 ± 0.025  (-3.4 sigma)
+   E_free - E_pool                        slope +0.012 ± 0.021  (+0.6 sigma)
+   VIRGO lo/hi power                      slope -0.008 ± 0.017  (-0.5 sigma)
+   VIRGO mid power                        slope +0.013 ± 0.018  (+0.7 sigma)
+   TESS lo-band noise / camera median     slope -0.028 ± 0.019  (-1.5 sigma)
+   TESS mid-band noise / camera median    slope -0.046 ± 0.022  (-2.1 sigma)
+   n_win                                  slope -0.006 ± 0.019  (-0.3 sigma)
+   n_stamps                               slope +0.024 ± 0.049  (+0.5 sigma)
+   sin earth_lon                          slope +0.087 ± 0.018  (+4.8 sigma)
+   cos earth_lon                          slope -0.010 ± 0.018  (-0.6 sigma)
+   north (1) / south (0)                  slope +0.065 ± 0.017  (+3.8 sigma)
+   sector number                          slope -0.004 ± 0.018  (-0.2 sigma)
+
+5. frequency bands: r_band by year (all cameras, weighted)
+   year    0.1-1 mHz      1-3 mHz        3-8.3 mHz
+   Y1 S    0.93±0.02    0.94±0.06    0.28±0.21
+   Y2 N    0.97±0.04    1.21±0.08    1.14±0.38
+   Y3 S    0.84±0.02    0.97±0.05    0.31±0.22
+   Y4 N    0.84±0.04    0.91±0.07    1.51±0.29
+   Y5 N    1.01±0.04    1.16±0.07    1.27±0.31
+   Y5 S    0.78±0.05    0.77±0.11   -0.37±0.40

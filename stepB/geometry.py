@@ -45,14 +45,15 @@ def phase_hong(cos_theta):
     return out
 
 
-def _weights(u, alpha, v, smax, ns):
-    """s, tau [s] and unnormalised weights per ds along the sightline."""
+def _weights(u, alpha, v, smax, ns, r_earth=1.0):
+    """s, tau [s] and unnormalised weights per ds along the sightline;
+    r_earth: Earth's heliocentric distance [AU] (default 1)."""
     u = np.asarray(u, float)
     d = u[:3] / np.linalg.norm(u[:3])
     s = np.linspace(0, smax, ns + 1)[1:] - smax / ns / 2
-    p = np.array([1.0, 0.0, 0.0])[None, :] + s[:, None] * d[None, :]
+    p = np.array([r_earth, 0.0, 0.0])[None, :] + s[:, None] * d[None, :]
     r = np.linalg.norm(p, axis=1)
-    tau = (r + s - 1) * sm.AU_LIGHT_S
+    tau = (r + s - r_earth) * sm.AU_LIGHT_S
     if TILT and len(u) == 4:
         # Rotate into heliocentric ecliptic coordinates (Earth at longitude u[3]).
         c, sn = np.cos(u[3]), np.sin(u[3])
@@ -81,10 +82,11 @@ def kernel(u, alpha=1.34, v=1.0, smax=6.0, ns=20000):
     return tau, w / w.sum()
 
 
-def brightness(u, alpha=1.34, v=1.0, smax=6.0, ns=20000):
+def brightness(u, alpha=1.34, v=1.0, smax=6.0, ns=20000, r_earth=1.0):
     """Model surface brightness (arbitrary units, common to all
-    sightlines): integral of density x phase / r^2 along the sightline."""
-    _, _, w = _weights(u, alpha, v, smax, ns)
+    sightlines): integral of density x phase / r^2 along the sightline,
+    seen from Earth at heliocentric distance r_earth [AU]."""
+    _, _, w = _weights(u, alpha, v, smax, ns, r_earth)
     return w.sum() * smax / ns
 
 

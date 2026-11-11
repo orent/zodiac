@@ -1152,3 +1152,86 @@ Year by year, 2-min throughout (mean of the archive = 1):
 - **Archive precision.** The per-camera archive mean has an honest
   error of ±3–4%, against bootstrap-only ±2–4%. Epoch-correlated
   systematics would add to that and are not included.
+
+## The epoch systematic is seasonal (`epochs.py`, `epochs_analyze.py`, `epochs_tilt.py`, `step3/epochs_*`)
+One row per (sector, camera), 2-min product throughout so no product
+change is mixed in, `red23`, tilted model, α = 1.4. Each row holds Z/B
+plus candidate drivers: stray light, free-E, band amplitudes, VIRGO and
+TESS band power, n_win, n_stamps, Earth longitude λ, hemisphere.
+
+### The deviations are common to the cameras
+- Per-sector residuals correlate between cameras at +0.41 to +0.55
+  (cams 3–4: +0.14), against 0.14 from noise alone.
+- The four-camera average per sector has χ²/dof 4.3. A common factor
+  of ~0.19 per sector moves all four cameras together.
+- The cause is therefore shared: spacecraft, Sun, season or geometry.
+  It is not a camera artefact.
+
+### What tracks it
+Single-covariate fits (`epochs_analyze.txt`):
+- **Season:** sin λ, +4.8σ.
+- **Hemisphere:** +3.8σ.
+- **Stray light:** ε, −3.6σ.
+- **No effect:** free-E offset, VIRGO spectrum shape, solar power,
+  n_win, n_stamps, sector number (|t| < 1).
+
+Season and hemisphere are aliased. The northern years sampled
+December–March more often (Y2: Oct–Apr). The joint fit separates them.
+
+Joint fit of Z/B, 192 rows, χ²/dof 1.49, errors scaled
+(`epochs_tilt.txt`):
+
+| term | Earth at 1 AU | with Earth's true distance |
+|---|---|---|
+| hemisphere offset (north +, south −) | +0.032 ± 0.022 | +0.032 ± 0.023 |
+| sin λ (both hemispheres) | **+0.141 ± 0.033** | **+0.103 ± 0.033** |
+| cos λ | −0.022 ± 0.023 | −0.012 ± 0.023 |
+| h sin λ | +0.043 ± 0.033 | +0.041 ± 0.033 |
+| h cos λ | −0.060 ± 0.023 | −0.060 ± 0.023 |
+
+- **The north/south "excess" is mostly season.**
+  - With the seasonal terms in the fit, the plain hemisphere offset is
+    +3 ± 2% (1.4σ).
+  - Northern sectors happened to fall more often in the high season.
+  - This is in line with a mirror-symmetric cloud.
+- **A seasonal term shared by both hemispheres dominates.**
+  - It reaches its maximum at λ ≈ 90°, i.e. late December, close to
+    perihelion (λ ≈ 103°).
+  - Earth's eccentricity, now in the model (`geometry.brightness`
+    `r_earth`), explains 0.04 of it: ±4% in brightness.
+  - **+0.10 ± 0.03 (3.1σ) remains unexplained.**
+- **The per-floor A swings more than Z/B, and that is dilution.**
+  - A's seasonal amplitude is +0.18, against +0.14 for Z/B.
+  - The floor is 12% lower around December (sin λ −0.12, 3.7σ). Zodiacal
+    light is brighter then, so the drop is a seasonal stray-light
+    component.
+  - The zodiacal share of the floor therefore rises, and so does A.
+  - Z/B removes the dilution by construction. The +0.10 residual is in
+    the absolute echo.
+- **There is a hint of a different symmetry plane.**
+  - The hemisphere-antisymmetric seasonal term has amplitude 0.07 at
+    phase h·sin(λ − 56°), 2.6σ in one component.
+  - This would be extra beyond the Kelsall tilt, which the model already
+    contains: amplitude 0.09 at phase 79°.
+  - In season bins, north − south is +0.20 ± 0.05 (4.2σ) for λ 90–180°
+    and ≈ 0 in the other three bins.
+  - A local symmetry plane tilted more than Kelsall's, or with its node
+    nearer 55°, would produce this pattern.
+  - At ~2.5σ, and next to an unexplained seasonal term, it is a hint
+    only.
+
+### Status
+- **Year-to-year scatter.** Most of it is a common seasonal
+  modulation, peaking in late December. After eccentricity, its
+  amplitude is about ±10%.
+- **Unexplained.** Seasonal candidates not yet tested:
+  - TESS's orbit orientation relative to the Sun, which sets its thermal
+    and scattered-light environment over the year;
+  - a seasonal change in the target population;
+  - a residual of the model geometry.
+- **North/south.** No significant offset once season is modelled.
+- **Next tests:**
+  - per-sector engineering parameters (camera temperatures, orbit and
+    Sun angles) from the TESS data release notes;
+  - the same seasonal fit on the sky cells, to see whether the term
+    varies across the field.

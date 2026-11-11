@@ -1,0 +1,31 @@
+== Earth at 1 AU
+joint fit, 192 (sector, camera) rows, chi2/dof 1.49 (errors scaled):
+   north offset (h)   +0.032 ± 0.022  (+1.5 sigma)
+   h sin lam          +0.043 ± 0.033  (+1.3 sigma)
+   h cos lam          -0.060 ± 0.023  (-2.6 sigma)
+   sin lam            +0.141 ± 0.033  (+4.3 sigma)
+   cos lam            -0.022 ± 0.023  (-1.0 sigma)
+   hemisphere-antisymmetric seasonal term: amplitude 0.073, phase: h * sin(lam - 55 deg)
+   for scale, the modelled Kelsall tilt itself: h-antisymmetric amplitude 0.094, phase sin(lam - 79 deg)
+
+north - south at matched season (bins of Earth longitude; errors scaled by the bin chi2):
+   lam   0- 90: north 1.082±0.054 (n 24)  south 1.067±0.028 (n 24)  N-S +0.016±0.061 (+0.3 sigma)
+   lam  90-180: north 1.147±0.034 (n 28)  south 0.951±0.033 (n 40)  N-S +0.197±0.047 (+4.2 sigma)
+   lam 180-270: north 0.954±0.094 (n 12)  south 0.845±0.040 (n 28)  N-S +0.108±0.102 (+1.1 sigma)
+   lam 270-360: north 0.832±0.092 (n 12)  south 0.834±0.059 (n 24)  N-S -0.003±0.109 (-0.0 sigma)
+
+== Earth's true distance (ECCENTRIC=1)
+joint fit, 192 (sector, camera) rows, chi2/dof 1.49 (errors scaled):
+   north offset (h)   +0.032 ± 0.023  (+1.4 sigma)
+   h sin lam          +0.041 ± 0.033  (+1.2 sigma)
+   h cos lam          -0.060 ± 0.023  (-2.6 sigma)
+   sin lam            +0.103 ± 0.033  (+3.1 sigma)
+   cos lam            -0.012 ± 0.023  (-0.5 sigma)
+   hemisphere-antisymmetric seasonal term: amplitude 0.072, phase: h * sin(lam - 56 deg)
+   for scale, the modelled Kelsall tilt itself: h-antisymmetric amplitude 0.094, phase sin(lam - 79 deg)
+
+north - south at matched season (bins of Earth longitude; errors scaled by the bin chi2):
+   lam   0- 90: north 1.079±0.053 (n 24)  south 1.060±0.028 (n 24)  N-S +0.020±0.060 (+0.3 sigma)
+   lam  90-180: north 1.128±0.034 (n 28)  south 0.934±0.032 (n 40)  N-S +0.195±0.047 (+4.2 sigma)
+   lam 180-270: north 0.973±0.096 (n 12)  south 0.868±0.042 (n 28)  N-S +0.105±0.104 (+1.0 sigma)
+   lam 270-360: north 0.862±0.095 (n 12)  south 0.872±0.061 (n 24)  N-S -0.010±0.113 (-0.1 sigma)
