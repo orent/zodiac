@@ -15,7 +15,7 @@ Conventions (see TIMEBASE.md):
 usage: timebase.py ephem datadir sector [suffix]   (fetch and store Horizons ranges)
 """
 
-import json, re, os, sys, urllib.parse, urllib.request
+import json, re, os, sys, time, urllib.parse, urllib.request
 import numpy as np
 from astropy.time import Time
 
@@ -45,7 +45,14 @@ def horizons_range(body, start, stop, step='10m'):
          'CSV_FORMAT': "'NO'", 'TIME_TYPE': "'TDB'", 'OUT_UNITS': "'AU-D'",
          'REF_PLANE': "'ECLIPTIC'"}
     url = HORIZONS + '?' + urllib.parse.urlencode(q)
-    text = json.load(urllib.request.urlopen(url, timeout=300))['result']
+    for attempt in range(6):
+        try:
+            text = json.load(urllib.request.urlopen(url, timeout=300))['result']
+            break
+        except OSError:                 # connection resets, timeouts
+            if attempt == 5:
+                raise
+            time.sleep(10 * 2 ** attempt)
     body_ = text[text.index('$$SOE') + 5:text.index('$$EOE')]
     num = r'([-+]?\d*\.?\d+(?:[EeDd][-+]?\d+)?)'
     jd = [float(m) for m in re.findall(r'^\s*(\d+\.\d+)\s*=', body_, re.M)]
