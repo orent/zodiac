@@ -1235,3 +1235,67 @@ Joint fit of Z/B, 192 rows, χ²/dof 1.49, errors scaled
     Sun angles) from the TESS data release notes;
   - the same seasonal fit on the sky cells, to see whether the term
     varies across the field.
+
+## Seasonal term across the field, orbit phase, and the tilt (`cellseason*.py`, `orbit*.py`, `tiltscale.py`, `step3/`)
+
+### Sky cells: is the seasonal term uniform across the field? (`cellseason_fit.txt`)
+Per cell position (16 per camera), 2-min product, S27–63, standard
+pointing. Fit r = c0 + s sin λ + c cos λ.
+
+| | cam 1 | cam 2 | cam 3 | cam 4 |
+|---|---|---|---|---|
+| mean s over the 16 cells | +0.08 ± 0.03 | +0.11 ± 0.03 | −0.08 ± 0.04 | +0.23 ± 0.04 |
+| χ² of s across cells (15 dof) | 7.3 | 9.2 | 20.5 | 25.2 |
+
+- **Cams 1–2: uniform across the field.** That rules out a
+  position-dependent stray-light cause for them.
+- **Cam 4: a gradient.** The upper half of the field reads +0.2 to
+  +0.7, the lower half ≈ 0. Cam 3 is mildly non-uniform.
+- **Not one common scale factor.** The term differs between cameras
+  (cam 3 vs cam 2: 3.9σ, opposite sign). A VIRGO or solar cause would
+  scale all cameras alike.
+- **No dependence on field position overall.** Pooled over cells, s
+  shows no trend with xi, eta or distance from the camera centre
+  (|t| < 1.2).
+
+### Calendar or TESS orbit? (`orbitgeom.csv`, `orbitfit.py`)
+- The apogee-minus-anti-Sun angle φ comes from JPL Horizons per sector.
+  It is about 105° − λ, drifting about 10° per year.
+- Fitting with φ instead of λ improves χ² by only 3.8, and the fit with
+  both is degenerate. The two cannot be separated with five years of
+  data.
+- The seasonal maximum corresponds to the apogee pointing roughly away
+  from the Sun. That is when the stray-light floor is lowest (floor:
+  sin λ −0.12).
+
+### Tilt strength from the echo (`tiltscale_*.txt`)
+- **The tilt has its own signature.** The model's own tilt effect per
+  row is T = B_tilted / B_flat − 1. It is antisymmetric between the
+  hemispheres, grows with ecliptic latitude, and has a seasonal phase
+  set by the node.
+- **Fit.** r = per-camera (c0 + s sin λ + c cos λ) + k T. Here k = 0
+  means the Kelsall tilt is right; k = 1 means the tilt effect is twice
+  Kelsall's.
+
+| node of the extra term | camera table, S1–63 | cell table, S27–63 |
+|---|---|---|
+| 77.7° (Kelsall) | k = +0.86 ± 0.26 (Δχ² −17 vs k = 0) | k = +0.09 ± 0.16 |
+| 30° | **+1.12 ± 0.26** (best, χ² 275.6) | +0.85 ± 0.17 |
+| 0° | +0.92 ± 0.28 | **+1.15 ± 0.18** (best, Δχ² −60) |
+
+- **Both tables prefer a tilt effect about twice Kelsall's, at a node
+  between 0° and 30°.** Adding the extra term to the Kelsall tilt (to
+  first order) gives an effective symmetry plane with i ≈ 3.4–3.9° and
+  Ω ≈ 36–52°, against Kelsall's 2.03° and 77.7°.
+- **Not a measurement.** Four caveats:
+  1. The two tables share the 2-min stamps of S27–63, so they are not
+     independent.
+  2. Their best nodes are in tension (Δχ² 10–24).
+  3. Every camera has an unexplained seasonal term of its own (cam 4
+     +0.23 with a field gradient, cam 3 negative). Combined with uneven
+     hemisphere sampling by season, these can mimic a tilt term.
+  4. An inclination of ~4° is larger than published local planes
+     (1.5–3°).
+- **Status: a hint of a stronger local tilt.** An instrumental seasonal
+  systematic, differing per camera, is the main alternative and has not
+  been ruled out.

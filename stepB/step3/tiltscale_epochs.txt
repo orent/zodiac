@@ -1,0 +1,25 @@
+epochs: 192 rows
+  model tilt effect T (Kelsall node 77.7): rms 0.070, max |T| 0.115
+  no tilt term (reference): k = -219210754.04 ± 1249219404.90  (chi2 303.1, dof 179)
+      cam 1: s +0.103±0.056  c -0.013±0.037
+      cam 2: s +0.142±0.051  c +0.021±0.043
+      cam 3: s +0.002±0.071  c -0.037±0.067
+      cam 4: s +0.083±0.057  c -0.013±0.058
+  Kelsall node 77.7 deg: k = +0.86 ± 0.26  (chi2 285.8, dof 179)
+      cam 1: s +0.094±0.054  c -0.039±0.037
+      cam 2: s +0.140±0.050  c -0.001±0.042
+      cam 3: s +0.008±0.069  c -0.059±0.065
+      cam 4: s +0.095±0.055  c -0.031±0.056
+  node scan (k fitted at each node):
+    node   0: k +0.92 ± 0.28   chi2 286.4
+    node  30: k +1.12 ± 0.26   chi2 275.6
+    node  60: k +1.02 ± 0.26   chi2 278.7
+    node  90: k +0.71 ± 0.27   chi2 291.6
+    node 120: k +0.18 ± 0.28   chi2 302.4
+    node 150: k -0.43 ± 0.28   chi2 299.0
+    node 180: k -0.85 ± 0.26   chi2 285.6
+    node 210: k -1.01 ± 0.24   chi2 276.2
+    node 240: k -1.00 ± 0.24   chi2 276.8
+    node 270: k -0.83 ± 0.26   chi2 287.0
+    node 300: k -0.38 ± 0.29   chi2 300.3
+    node 330: k +0.34 ± 0.30   chi2 301.0
