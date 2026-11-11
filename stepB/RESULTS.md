@@ -1299,3 +1299,72 @@ pointing. Fit r = c0 + s sin λ + c cos λ.
 - **Status: a hint of a stronger local tilt.** An instrumental seasonal
   systematic, differing per camera, is the main alternative and has not
   been ruled out.
+
+## Reconciling the seasonal terms (`galfit.py`, `tiltshared.py`, `step3/galfit.txt`, `tiltscale_bands.txt`, `tiltshared.txt`)
+Seasonal signals can only come from what changes as Earth orbits. For
+standard pointing, each camera's Sun-relative geometry repeats every
+sector. Candidates tested:
+
+| candidate | test | result |
+|---|---|---|
+| Earthshine varying with season | E free per sector | the seasonal terms stay or grow (cam 4: +0.08 → +0.17); **not it** |
+| Galactic crowding | add exp(−\|b\|/10°) per field | no effect on the season terms (crowding coefficient ≤ 1.7σ); **not it** (metric does not separate the Galactic centre from the anticentre) |
+| LMC in cam 4's southern field | flag sectors with the LMC within 12° | −0.17 ± 0.08 for cam 4, but in cam 4 "LMC" = "south": **aliased** |
+| frequency dependence | tilt fit in 0.1–1 mHz and 1–3 mHz separately (independent noise) | same node and k: +1.08 ± 0.36 and +1.52 ± 0.52 at node 30°; **consistent** |
+| one plane for all cameras | common season + k·T(node) vs per-camera season | see below |
+
+Camera table, 192 rows (`tiltshared.txt`):
+
+| model | χ² | parameters |
+|---|---|---|
+| per-camera seasonal terms, no extra tilt | 303.1 | 12 |
+| common seasonal term, no extra tilt | 308.4 | 6 |
+| **common seasonal term + one extra tilt (node scanned)** | **280.2–280.8** | 8 |
+| per-camera seasonal + extra tilt | 275.2 | 14 |
+
+- **The cameras do not need their own seasonal terms.** Per-camera terms
+  improve χ² by only 5.3 for 6 more parameters.
+- **One extra tilt fits.** An extra tilt shared by all cameras improves
+  χ² by 28 for 2 parameters. Scaled by χ²/dof = 1.68, that is ~17,
+  about 3.6σ.
+- **The economical description:**
+  - a common seasonal term s = +0.12 ± 0.03 (peak at λ ≈ 90°);
+  - an extra tilt k = +1.09 ± 0.26 at node 45°.
+  - Together with Kelsall's own tilt, that is an effective local
+    symmetry plane of i ≈ 4.1°, Ω ≈ 61° to first order, against
+    Kelsall's 2.03°, 77.7°.
+- **What remains of the camera dependence** (cell table: cam 3 negative,
+  cam 4 field gradient) is at the level of cell-level systematics. Cam 4
+  is aliased with the LMC.
+
+### Physical reading, if real
+- **Mostly local dust.** The echo is dominated by dust within ~0.15 AU
+  of Earth: both bands' effective delays are ≲ 130 s.
+- **A common seasonal term would be a centre offset.** It would mean the
+  near-Earth dust density peaks when Earth is at λ ≈ 90°. That is a
+  centre offset of ~0.03 AU toward λ ≈ 90°, beyond Kelsall's 0.013 AU at
+  25° and Earth's eccentricity (already modelled).
+- **The extra antisymmetric term would be a different local plane.** It
+  implies a more inclined local symmetry plane, i ≈ 4°, Ω ≈ 60°.
+- **Conflict with COBE.** COBE/DIRBE fitted exactly such seasonal
+  modulations and found Kelsall's values. A ~2× larger local tilt would
+  have to be missed by COBE's integrated brightness and seen only by the
+  echo's near-Earth weighting.
+
+### Instrumental reading
+- **TESS's orbit orientation cannot be separated from the calendar.** It
+  explains a common seasonal term as easily as the dust does.
+- **The north/south years differ in spacecraft orientation.** That
+  could mimic the antisymmetric term.
+
+### Status
+- **Reconciled:** one common seasonal term plus one extra plane, the
+  same for all cameras and both frequency bands, describes the data. The
+  camera-dependent seasonal terms are not needed.
+- **Open:** whether it is dust or TESS. The physical reading needs
+  local cloud parameters roughly twice Kelsall's.
+- **The discriminator:**
+  - more seasons with different orbit phasing (2023+, needs a VIRGO
+    reference);
+  - per-sector TESS engineering data;
+  - or COBE/DIRBE's own seasonal residuals at the TESS sightlines.

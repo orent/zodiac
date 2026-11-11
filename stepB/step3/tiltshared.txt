@@ -1,0 +1,31 @@
+192 rows
+  A per-camera season, no tilt     chi2   303.1  (params 12)
+  B common season, no tilt         chi2   308.4  (params 6)
+  node   0:  C (common season + tilt) chi2   291.7, k +0.91±0.22   D (per-camera + tilt) chi2   286.4, k +0.92±0.23
+  node  15:  C (common season + tilt) chi2   284.7, k +1.05±0.22   D (per-camera + tilt) chi2   279.4, k +1.06±0.22
+  node  30:  C (common season + tilt) chi2   280.8, k +1.11±0.21   D (per-camera + tilt) chi2   275.6, k +1.12±0.21
+  node  45:  C (common season + tilt) chi2   280.5, k +1.09±0.21   D (per-camera + tilt) chi2   275.5, k +1.09±0.21
+  node  60:  C (common season + tilt) chi2   283.7, k +1.02±0.21   D (per-camera + tilt) chi2   278.7, k +1.02±0.21
+  node  75:  C (common season + tilt) chi2   289.4, k +0.90±0.21   D (per-camera + tilt) chi2   284.6, k +0.89±0.21
+  node  90:  C (common season + tilt) chi2   296.5, k +0.72±0.21   D (per-camera + tilt) chi2   291.6, k +0.71±0.21
+  node 105:  C (common season + tilt) chi2   303.3, k +0.48±0.21   D (per-camera + tilt) chi2   298.2, k +0.47±0.21
+  node 120:  C (common season + tilt) chi2   307.6, k +0.19±0.21   D (per-camera + tilt) chi2   302.4, k +0.18±0.22
+  node 135:  C (common season + tilt) chi2   308.1, k -0.13±0.22   D (per-camera + tilt) chi2   302.7, k -0.13±0.22
+  node 150:  C (common season + tilt) chi2   304.3, k -0.43±0.21   D (per-camera + tilt) chi2   299.0, k -0.43±0.21
+  node 165:  C (common season + tilt) chi2   297.9, k -0.67±0.21   D (per-camera + tilt) chi2   292.6, k -0.68±0.21
+  node 180:  C (common season + tilt) chi2   290.9, k -0.84±0.20   D (per-camera + tilt) chi2   285.6, k -0.85±0.20
+  node 195:  C (common season + tilt) chi2   285.0, k -0.95±0.20   D (per-camera + tilt) chi2   279.8, k -0.96±0.20
+  node 210:  C (common season + tilt) chi2   281.3, k -1.00±0.19   D (per-camera + tilt) chi2   276.2, k -1.01±0.19
+  node 225:  C (common season + tilt) chi2   280.2, k -1.01±0.19   D (per-camera + tilt) chi2   275.2, k -1.02±0.19
+  node 240:  C (common season + tilt) chi2   281.8, k -1.00±0.19   D (per-camera + tilt) chi2   276.8, k -1.00±0.19
+  node 255:  C (common season + tilt) chi2   285.8, k -0.94±0.20   D (per-camera + tilt) chi2   280.9, k -0.94±0.20
+  node 270:  C (common season + tilt) chi2   292.0, k -0.83±0.21   D (per-camera + tilt) chi2   287.0, k -0.83±0.21
+  node 285:  C (common season + tilt) chi2   299.3, k -0.65±0.21   D (per-camera + tilt) chi2   294.1, k -0.65±0.22
+  node 300:  C (common season + tilt) chi2   305.5, k -0.38±0.22   D (per-camera + tilt) chi2   300.3, k -0.38±0.22
+  node 315:  C (common season + tilt) chi2   308.4, k -0.03±0.23   D (per-camera + tilt) chi2   303.1, k -0.03±0.23
+  node 330:  C (common season + tilt) chi2   306.3, k +0.34±0.23   D (per-camera + tilt) chi2   301.0, k +0.34±0.23
+  node 345:  C (common season + tilt) chi2   299.9, k +0.67±0.23   D (per-camera + tilt) chi2   294.6, k +0.68±0.23
+
+best single plane: node 225 deg, k -1.01±0.19, chi2 280.2 (params 8 incl. node)
+  vs A (per-camera season, 12 params): delta chi2 -22.9; vs B (common season, 6): -28.2; D at that node: 275.2
+  reduced chi2 of A: 1.68; scale delta chi2 by it for significance

@@ -1,0 +1,50 @@
+== band lo
+epochs: 192 rows
+  model tilt effect T (Kelsall node 77.7): rms 0.070, max |T| 0.115
+      cam 1: s +0.063±0.065  c +0.002±0.043
+      cam 2: s +0.215±0.067  c +0.045±0.056
+      cam 3: s +0.071±0.095  c -0.140±0.084
+      cam 4: s +0.226±0.074  c +0.022±0.065
+  Kelsall node 77.7 deg: k = +0.53 ± 0.34  (chi2 346.8, dof 179)
+      cam 1: s +0.054±0.065  c -0.011±0.044
+      cam 2: s +0.225±0.067  c +0.027±0.057
+      cam 3: s +0.076±0.095  c -0.154±0.085
+      cam 4: s +0.242±0.074  c +0.008±0.065
+  node scan (k fitted at each node):
+    node   0: k +1.14 ± 0.38   chi2 334.7
+    node  30: k +1.08 ± 0.36   chi2 334.4
+    node  60: k +0.76 ± 0.34   chi2 342.0
+    node  90: k +0.35 ± 0.34   chi2 349.5
+    node 120: k -0.14 ± 0.35   chi2 351.3
+    node 150: k -0.64 ± 0.36   chi2 345.4
+    node 180: k -0.90 ± 0.34   chi2 338.4
+    node 210: k -0.88 ± 0.32   chi2 337.5
+    node 240: k -0.70 ± 0.32   chi2 342.4
+    node 270: k -0.39 ± 0.33   chi2 348.9
+    node 300: k +0.10 ± 0.36   chi2 351.4
+    node 330: k +0.73 ± 0.38   chi2 344.6
+== band mid
+epochs: 192 rows
+  model tilt effect T (Kelsall node 77.7): rms 0.070, max |T| 0.115
+      cam 1: s +0.235±0.118  c -0.061±0.084
+      cam 2: s +0.132±0.103  c -0.048±0.084
+      cam 3: s -0.141±0.126  c +0.085±0.115
+      cam 4: s +0.076±0.093  c +0.046±0.091
+  Kelsall node 77.7 deg: k = +0.77 ± 0.49  (chi2 266.8, dof 179)
+      cam 1: s +0.231±0.117  c -0.080±0.083
+      cam 2: s +0.136±0.102  c -0.057±0.084
+      cam 3: s -0.133±0.125  c +0.073±0.114
+      cam 4: s +0.077±0.092  c +0.030±0.091
+  node scan (k fitted at each node):
+    node   0: k +1.53 ± 0.56   chi2 259.5
+    node  30: k +1.52 ± 0.52   chi2 258.2
+    node  60: k +1.10 ± 0.50   chi2 263.2
+    node  90: k +0.51 ± 0.50   chi2 268.8
+    node 120: k -0.23 ± 0.52   chi2 270.1
+    node 150: k -1.00 ± 0.53   chi2 265.1
+    node 180: k -1.42 ± 0.51   chi2 259.2
+    node 210: k -1.36 ± 0.48   chi2 259.0
+    node 240: k -1.04 ± 0.47   chi2 263.2
+    node 270: k -0.59 ± 0.49   chi2 268.2
+    node 300: k +0.07 ± 0.53   chi2 270.4
+    node 330: k +0.92 ± 0.56   chi2 266.4

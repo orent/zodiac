@@ -1,0 +1,21 @@
+field galactic latitude |b| by camera (median, min, max) and the sin(lam) correlation:
+  cam 1: |b| median  35.7, range   0.1- 76.1; corr(sin lam, exp(-|b|/10)) +0.15; LMC within 12 deg in 0 sectors
+  cam 2: |b| median  18.4, range   0.2- 76.1; corr(sin lam, exp(-|b|/10)) +0.02; LMC within 12 deg in 0 sectors
+  cam 3: |b| median  23.4, range   6.5- 52.9; corr(sin lam, exp(-|b|/10)) -0.06; LMC within 12 deg in 0 sectors
+  cam 4: |b| median  29.8, range  28.8- 31.4; corr(sin lam, exp(-|b|/10)) -0.01; LMC within 12 deg in 29 sectors
+
+per camera: season-only vs season + crowding (exp(-|b|/10 deg)) [+ LMC flag for cam 4]
+  cam 1: season only  s +0.104±0.052 c -0.012±0.035 (chi2 67.1)
+         + crowding    s +0.114±0.054 c -0.013±0.035 (chi2 66.3); crowding -0.027±0.037
+  cam 2: season only  s +0.142±0.059 c +0.022±0.049 (chi2 101.1)
+         + crowding    s +0.147±0.060 c +0.017±0.050 (chi2 100.2); crowding -0.027±0.044
+  cam 3: season only  s +0.003±0.061 c -0.036±0.058 (chi2 57.0)
+         + crowding    s -0.010±0.060 c -0.054±0.058 (chi2 53.4); crowding -0.082±0.048
+  cam 4: season only  s +0.084±0.058 c -0.013±0.058 (chi2 77.9)
+         + crowding    s +0.078±0.056 c -0.035±0.057 (chi2 69.2); crowding/LMC -0.024±0.036 -0.168±0.077
+
+same season fit with E free per sector (q from A_free):
+  cam 1: E free  s +0.111±0.056 c -0.021±0.037   (E fixed: see above; errors inflated 1.3x for the freer fit)
+  cam 2: E free  s +0.157±0.061 c +0.012±0.050   (E fixed: see above; errors inflated 1.3x for the freer fit)
+  cam 3: E free  s +0.039±0.071 c -0.028±0.067   (E fixed: see above; errors inflated 1.3x for the freer fit)
+  cam 4: E free  s +0.170±0.060 c +0.003±0.061   (E fixed: see above; errors inflated 1.3x for the freer fit)
