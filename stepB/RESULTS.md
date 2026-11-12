@@ -1447,3 +1447,94 @@ cut.
 - **What would decide it:** a reference beyond March 2025, so that more
   independent sectors can be added (VIRGO's coverage beyond that date is
   unknown). Or a cross-check against COBE/DIRBE's seasonal residuals.
+
+## Step 5: headline numbers for the research note (`stepB/final/`, `stepB/note/`)
+Setup: the 66 standard-pointing sectors (S1–90 with the ecliptic and
+far-north pointings removed), 2-min product throughout, the LOI
+reference (to 2025-03-31), and tilted Kelsall geometry with Earth's
+true distance.
+
+### Stray-light cut: adopted (`EPS_MAX=0.3`)
+- **What it does:** removes windows whose level exceeds the quiet floor
+  by more than 30%. That is 11–18% of the windows in cameras 1–3 and
+  more in camera 4.
+- **Why it's adopted:** the null-shift significance rises in every
+  camera even though fewer windows are used. The amplitudes move by
+  less than their errors.
+
+  | Camera (latitude) | A, all windows | A, cut | A / null σ, all | A / null σ, cut |
+  |---|---|---|---|---|
+  | 1 (18°) | 0.46 | 0.44 | 35.7 | 41.8 |
+  | 2 (42°) | 0.38 | 0.36 | 33.8 | 37.2 |
+  | 3 (66°) | 0.32 | 0.30 | 23.9 | 26.6 |
+  | 4 (90°) | 0.31 | 0.32 | 26.4 | 32.5 |
+- **Timing:** the shared timing offset is 0 s with the cut and −10 s
+  without; the bootstrap range is −10 to 0 s in both.
+- **Earthshine coefficient E:** its bootstrap interval widens with the
+  cut, as expected, because the cut narrows the stray-light range it is
+  fitted against.
+
+### Injection check on the final pipeline (`final/injection_loi_eps03.txt`)
+S27–38, cameras 1–2, LOI with the cut. The injected amplitude was 0.7
+and the true timing offset 0 s.
+- **Amplitude:** recovered without bias, 0.69–0.72, with a scatter of
+  0.04–0.07.
+- **Timing offset:** recovered at −7 s, with a scatter from −15 to
+  +6 s. The measured −10 to 0 s is therefore consistent with zero lag.
+- **Profile index α:** biased low by 0.3–0.4, so it is not quoted as a
+  measurement. The binned kernel is the result.
+- **Delay bins:** recovered within 5–15% for 0–900 s. The 900–2000 s
+  bin reads about 20% low, and the 2000–4000 s bin is driven to zero,
+  so it is not used.
+- **Bump test:** an injected bump at 1500 s is recovered.
+
+### Note figure (`note/fig_kernel_density.png`, `fig_note.py`)
+- **Method:** a non-negative binned kernel with errors from a bootstrap
+  over whole sectors, so the errors include the sector-to-sector
+  systematic. The model kernel is averaged over the per-sector
+  sightlines; averaging the sightline vectors over north and south
+  sectors would put them near the ecliptic.
+- **Density relative to Kelsall, cameras 1–2** (68% intervals):
+
+  | Mean distance | Camera 1 | Camera 2 |
+  |---|---|---|
+  | 1.03 AU | 1.05 | 1.11 |
+  | 1.11 AU | 1.07 | 1.05 |
+  | 1.27 AU | 1.03 | 0.98 |
+  | 1.6 AU | 0.89 [0.80, 0.97] | 0.80 [0.67, 0.96] |
+  | 2.2–2.3 AU | 0.96 [0.75, 1.23] | 0.66 [0.2, 1.2] |
+
+  Given the injection bias of the outer bins, this is consistent with
+  Kelsall out to about 2.3 AU.
+- **Cameras 3–4:** these follow the model to about 420 s of delay
+  (1.2 AU). Camera 3 is about 0.5 of the model at 420–900 s, which is
+  the known high-latitude deficit.
+
+### Per-sector scatter and honest archive errors (`final/sectorscatter_loi_eps03.txt`)
+Z/B is normalised to each camera's weighted mean.
+
+| Camera | Extra scatter per sector | Archive mean | North − south | Ecliptic / standard |
+|---|---|---|---|---|
+| 1 | 0.17 | 1.036 ± 0.030 | −0.02 ± 0.06 | 1.10 ± 0.09 |
+| 2 | 0.23 | 0.989 ± 0.038 | +0.11 ± 0.08 | 1.02 ± 0.10 |
+| 3 | 0.04 | 1.000 ± 0.029 | +0.06 ± 0.06 | 0.98 ± 0.05 |
+| 4 | 0.17 | 1.012 ± 0.032 | **+0.30 ± 0.07** | 0.94 ± 0.08 |
+
+- **Archive precision:** ±3–4% per camera, including the sector
+  scatter.
+- **Ecliptic pointings:** agree with standard pointing in all four
+  cameras.
+- **Camera 4, north − south:** +0.30 ± 0.07 with the cut and
+  +0.22 ± 0.08 without (`final/sectorscatter_loi_nocut_cam4.txt`). In
+  S1–63 with red23 it was +0.15 ± 0.09 (2-min) and +0.23 ± 0.09 (20-s).
+  - It is not created by the cut, and it is camera-specific: cameras
+    1–3 show no significant difference.
+  - Orbital dynamics gives no reason for a north–south difference.
+    LMC light is a constant offset, so it cancels in Z/B, which is
+    built from A × floor.
+  - So it is read as a pole-pointing systematic. Camera 4 sees each
+    ecliptic pole only from its own hemisphere, so a camera-4 Earthshine
+    or scattered-light geometry that differs between the north and
+    south orientations would mimic it.
+  - The note should quote camera 4's archive mean with this as a
+    caveat, or base the headline numbers on cameras 1–3.
