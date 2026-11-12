@@ -1,0 +1,29 @@
+camera 1 (66 sectors, mean |sightline latitude| 19 deg): model scale 0.455, E 0.43 [0.38,0.48]
+       0-   60 s: 0.068 [0.062,0.074]  model 0.064  ratio 1.05  r_mean 1.03 AU
+      60-  180 s: 0.104 [0.098,0.110]  model 0.098  ratio 1.07  r_mean 1.11 AU
+     180-  420 s: 0.120 [0.114,0.126]  model 0.117  ratio 1.03  r_mean 1.28 AU
+     420-  900 s: 0.087 [0.078,0.095]  model 0.098  ratio 0.89  r_mean 1.61 AU
+     900- 2000 s: 0.054 [0.042,0.070]  model 0.057  ratio 0.96  r_mean 2.29 AU
+    2000- 4000 s: 0.011 [0.000,0.031]  model 0.017  ratio 0.61  r_mean 3.69 AU
+camera 2 (66 sectors, mean |sightline latitude| 42 deg): model scale 0.383, E 0.31 [0.19,0.40]
+       0-   60 s: 0.084 [0.075,0.093]  model 0.075  ratio 1.11  r_mean 1.02 AU
+      60-  180 s: 0.113 [0.103,0.124]  model 0.108  ratio 1.05  r_mean 1.10 AU
+     180-  420 s: 0.103 [0.095,0.110]  model 0.105  ratio 0.98  r_mean 1.25 AU
+     420-  900 s: 0.049 [0.041,0.059]  model 0.062  ratio 0.80  r_mean 1.55 AU
+     900- 2000 s: 0.017 [0.005,0.031]  model 0.025  ratio 0.66  r_mean 2.20 AU
+    2000- 4000 s: 0.000 [0.000,0.001]  model 0.006  ratio 0.00  r_mean 3.59 AU
+camera 3 (66 sectors, mean |sightline latitude| 67 deg): model scale 0.304, E 0.47 [0.35,0.57]
+       0-   60 s: 0.058 [0.045,0.072]  model 0.080  ratio 0.72  r_mean 1.02 AU
+      60-  180 s: 0.131 [0.119,0.140]  model 0.102  ratio 1.28  r_mean 1.07 AU
+     180-  420 s: 0.067 [0.059,0.075]  model 0.075  ratio 0.89  r_mean 1.19 AU
+     420-  900 s: 0.017 [0.009,0.029]  model 0.034  ratio 0.49  r_mean 1.45 AU
+     900- 2000 s: 0.015 [0.002,0.034]  model 0.011  ratio 1.32  r_mean 2.06 AU
+    2000- 4000 s: 0.000 [0.000,0.018]  model 0.002  ratio 0.00  r_mean 3.43 AU
+camera 4 (66 sectors, mean |sightline latitude| 89 deg): model scale 0.335, E 0.40 [0.27,0.50]
+       0-   60 s: 0.133 [0.122,0.144]  model 0.116  ratio 1.14  r_mean 1.00 AU
+      60-  180 s: 0.108 [0.095,0.119]  model 0.120  ratio 0.90  r_mean 1.02 AU
+     180-  420 s: 0.060 [0.054,0.069]  model 0.066  ratio 0.91  r_mean 1.09 AU
+     420-  900 s: 0.020 [0.012,0.029]  model 0.024  ratio 0.85  r_mean 1.32 AU
+     900- 2000 s: 0.007 [0.000,0.017]  model 0.007  ratio 0.92  r_mean 1.90 AU
+    2000- 4000 s: 0.016 [0.000,0.040]  model 0.002  ratio 10.33  r_mean 3.26 AU
+figure written stepB/note/fig_kernel_density.png
