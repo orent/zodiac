@@ -47,6 +47,7 @@ BIN_EDGES = [0, 60, 180, 420, 900, 2000, 4000]
 NBOOT = 300
 BLOCK = 4                      # windows per bootstrap block (50% overlap)
 NULL_SHIFTS = list(range(-400, -29, 3)) + list(range(30, 400, 3))
+EPS_MAX = float(os.environ['EPS_MAX']) if os.environ.get('EPS_MAX') else None
 
 
 def noise_weights(Y):
@@ -111,6 +112,11 @@ class Chunk:
         ynorm = a['y'] * a['level'] / self.floor
         self.X, self.Y, L, S = windows(a['x'], ynorm, a['level'], win)
         self.eps = (L - self.floor) / self.floor
+        # EPS_MAX: drop windows whose level exceeds the quiet floor by more
+        # than this fraction (stray light from Earth/Moon).
+        if EPS_MAX is not None:
+            k = self.eps <= EPS_MAX
+            self.X, self.Y, self.eps, S = self.X[k], self.Y[k], self.eps[k], S[k]
         # Raw series kept for time-domain injection tests (injection.py).
         self.raw = dict(x_all=a['x_all'], off=a['off'], per_day=a['per_day'], n=a['n'],
                         y_norm=ynorm, level=a['level'], win=win)
