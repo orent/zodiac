@@ -1,0 +1,13 @@
+ecliptic sectors vs standard pointing, Z/B with tilted model and Earth true distance, LOI reference, 2-min product
+  cam 1 S42-46      : 1.04 ± 0.09  (n 5)
+  cam 1 S70-72      : 0.79 ± 0.14  (n 3)
+  cam 1 all ecliptic: 0.97 ± 0.09  (n 8)
+  cam 2 S42-46      : 1.07 ± 0.07  (n 5)
+  cam 2 S70-72      : 1.00 ± 0.16  (n 3)
+  cam 2 all ecliptic: 1.05 ± 0.07  (n 8)
+  cam 3 S42-46      : 1.06 ± 0.09  (n 5)
+  cam 3 S70-72      : 0.90 ± 0.14  (n 3)
+  cam 3 all ecliptic: 1.00 ± 0.07  (n 8)
+  cam 4 S42-46      : 0.97 ± 0.08  (n 5)
+  cam 4 S70-72      : 0.92 ± 0.18  (n 3)
+  cam 4 all ecliptic: 0.96 ± 0.07  (n 8)

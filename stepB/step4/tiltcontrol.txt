@@ -1,0 +1,9 @@
+264 rows
+  controls: none                 season-only s +0.093±0.028 c +0.055±0.024 (chi2 521.6)
+      + tilt: best node  45  k +0.92±0.27  s +0.112±0.028 c +0.034±0.024  chi2 498.9 (delta -22.7, scaled -11.2)
+  controls: stray light          season-only s +0.051±0.032 c +0.055±0.024 (chi2 494.9)
+      + tilt: best node  30  k +1.01±0.27  s +0.078±0.032 c +0.036±0.024  chi2 469.5 (delta -25.5, scaled -13.2)  controls +0.121±0.080 -0.194±0.071
+  controls: trend                season-only s +0.080±0.028 c +0.053±0.024 (chi2 509.0)
+      + tilt: best node  15  k +0.95±0.29  s +0.108±0.029 c +0.040±0.024  chi2 487.9 (delta -21.1, scaled -10.6)  controls -0.050±0.018
+  controls: stray light + trend  season-only s +0.050±0.032 c +0.054±0.024 (chi2 492.6)
+      + tilt: best node  30  k +0.99±0.27  s +0.077±0.032 c +0.036±0.024  chi2 468.2 (delta -24.5, scaled -12.7)  controls +0.106±0.082 -0.173±0.076 -0.016±0.019

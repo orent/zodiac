@@ -1368,3 +1368,82 @@ Camera table, 192 rows (`tiltshared.txt`):
     reference);
   - per-sector TESS engineering data;
   - or COBE/DIRBE's own seasonal residuals at the TESS sightlines.
+
+## Step 4: S64–90 with the VIRGO LOI reference (`step4/`)
+
+### LOI as a reference
+VIRGO's Luminosity Oscillations Imager is at 500 nm; its SOHO-archive
+level-2 file runs to 2025-03-31. `compact.py loi` builds the reference
+cut.
+- **Contents:** rows 0–11 of the file are the science pixels; their
+  mean is the reference. Rows 12–15 are guider channels.
+- **File quirks:** the values are fractional, not ppm. Gaps are stored
+  as zeros; gaps of up to 5 min (84,000 of 86,000) are filled by linear
+  interpolation.
+- **Timing:** the header stamps are 31.27 ± 0.18 s early relative to
+  red23, stable by year. That is consistent with a start-of-minute
+  versus mid-minute convention. Times are moved onto the red23 base.
+- **Validation on S27–38 (`joint_loi_27-38.txt`):**
+  - the same dt (−10 s);
+  - the same significance per camera (10.4/13.7/9.7/12.6σ, against
+    12.8/13.3/10.3/11.7σ with red23);
+  - 1856 windows against 1587 with red23;
+  - amplitudes scaled by ~0.48, the larger granulation contrast at
+    500 nm;
+  - the same delay profile.
+
+### New sectors
+- 27 sectors (S64–90, April 2023 – March 2025), both products, with
+  cells and ephemerides. The data branch is now 2.4 GB.
+- **Pointings (`geometry.csv`):**
+  - S64–69 and S87–90: standard south;
+  - S73 and S80–86: standard north;
+  - S70–72: ecliptic (leading side);
+  - S74–79: far north.
+- `sectors.py` now holds the sector groups for all scripts: 66
+  standard-pointing sectors, 27 of them northern.
+- LOI covers everything except the last ~30% of S90.
+
+### Results, S1–90, LOI reference throughout (`epochs_analyze.txt`, `tiltcontrol.txt`, `tilt_replication.txt`, `ecliptic_loi.txt`)
+- **The deviations are still common to the cameras.** Residual
+  correlations are +0.25 to +0.45 (cams 3–4: 0.00). The common-factor
+  scatter is ~0.23 per sector.
+- **Stray light now shows clearly.** The per-sector deviation falls with
+  the window-level excess (−4.9σ) and with TESS mid-band noise (−4.1σ).
+  There is also a time trend (−3.3σ) that disappears once stray light
+  is controlled.
+- **Part of the shared seasonal term is stray light.** With stray-light
+  controls, s drops from +0.093 ± 0.028 to +0.051 ± 0.032.
+- **The tilt term survives every control set:** k = +0.92 … +1.01
+  ± 0.27, best node 15–45°, scaled Δχ² −11 to −13 for 2 parameters
+  (~3σ).
+- **It does not replicate independently:**
+
+  | k at node 45° | no controls | stray-light controls |
+  |---|---|---|
+  | S1–63 (discovery), LOI | +1.04 ± 0.29 | +1.10 ± 0.30 |
+  | S64–90 (new) | +0.09 ± 0.62 | +0.28 ± 0.59 |
+
+  - The discovery-set value is the same with LOI as with red23
+    (+1.09), so it is not an artefact of the red channel.
+  - The new data alone have about half the power. They are consistent
+    with zero and 1.3–1.5σ below the discovery value.
+  - Replication: **not confirmed, not refuted.** The combined value is
+    driven by S1–63.
+- **The ecliptic sectors agree.** Over all eight (42–46, 70–72), Z/B
+  relative to standard pointing is 0.97, 1.05, 1.00 and 0.96, each
+  ±0.07–0.09. The model holds in the plane across three years.
+- **Solar maximum.** Year means for 2023–25 (Y5 S 0.82, Y6 N 0.96,
+  Y7 S 0.88) sit below the archive mean. Stray light explains the trend,
+  and there is no sign of an activity dependence of the dust response.
+
+### Status of the tilt hint
+- **Persists in the full set:** ~3σ, ~2× Kelsall's tilt effect, node
+  15–45°.
+- **Not confirmed:** the new data (k ≈ 0.1–0.3 ± 0.6) do not
+  independently confirm it.
+- **Reading:** still a hint. Most likely a residual of epoch-correlated
+  systematics in years 1–5; a real local plane is the alternative.
+- **What would decide it:** a reference beyond March 2025, so that more
+  independent sectors can be added (VIRGO's coverage beyond that date is
+  unknown). Or a cross-check against COBE/DIRBE's seasonal residuals.

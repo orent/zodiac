@@ -1,0 +1,6 @@
+replication at the previously best node (45 deg), LOI reference throughout:
+  S1-63 (discovery) (192 rows, 48 sectors), no controls: k(node 45) = +1.04 ± 0.29  (+3.5 sigma); scaled delta chi2 -11.8; season s +0.087±0.033
+  S1-63 (discovery) (192 rows, 48 sectors), stray-light controls: k(node 45) = +1.10 ± 0.30  (+3.7 sigma); scaled delta chi2 -12.8; season s +0.012±0.043
+  S64-90 (new, independent) (72 rows, 18 sectors), no controls: k(node 45) = +0.09 ± 0.62  (+0.1 sigma); scaled delta chi2 -0.0; season s +0.087±0.059
+  S64-90 (new, independent) (72 rows, 18 sectors), stray-light controls: k(node 45) = +0.28 ± 0.59  (+0.5 sigma); scaled delta chi2 -0.2; season s +0.122±0.057
+hemisphere coverage of the new data: [(64, 'S'), (65, 'S'), (66, 'S'), (67, 'S'), (68, 'S'), (69, 'S'), (73, 'N'), (80, 'N'), (81, 'N'), (82, 'N'), (83, 'N'), (84, 'N'), (85, 'N'), (86, 'N'), (87, 'S'), (88, 'S'), (89, 'S'), (90, 'S')]
