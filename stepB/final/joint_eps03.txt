@@ -1,0 +1,34 @@
+camera 1: 7348 windows from 66 sector products (1_2min,2_2min,3_2min,4_2min,5_2min,6_2min,7_2min,8_2min,9_2min,10_2min,11_2min,12_2min,13_2min,17_2min,18_2min,19_2min,20_2min,21_2min,22_2min,23_2min,27_2min,28_2min,29_2min,30_2min,31_2min,32_2min,33_2min,34_2min,35_2min,36_2min,37_2min,38_2min,39_2min,47_2min,48_2min,49_2min,50_2min,51_2min,54_2min,55_2min,56_2min,57_2min,58_2min,59_2min,60_2min,61_2min,62_2min,63_2min,64_2min,65_2min,66_2min,67_2min,68_2min,69_2min,73_2min,80_2min,81_2min,82_2min,83_2min,84_2min,85_2min,86_2min,87_2min,88_2min,89_2min,90_2min)
+camera 2: 7179 windows from 66 sector products (1_2min,2_2min,3_2min,4_2min,5_2min,6_2min,7_2min,8_2min,9_2min,10_2min,11_2min,12_2min,13_2min,17_2min,18_2min,19_2min,20_2min,21_2min,22_2min,23_2min,27_2min,28_2min,29_2min,30_2min,31_2min,32_2min,33_2min,34_2min,35_2min,36_2min,37_2min,38_2min,39_2min,47_2min,48_2min,49_2min,50_2min,51_2min,54_2min,55_2min,56_2min,57_2min,58_2min,59_2min,60_2min,61_2min,62_2min,63_2min,64_2min,65_2min,66_2min,67_2min,68_2min,69_2min,73_2min,80_2min,81_2min,82_2min,83_2min,84_2min,85_2min,86_2min,87_2min,88_2min,89_2min,90_2min)
+camera 3: 7239 windows from 66 sector products (1_2min,2_2min,3_2min,4_2min,5_2min,6_2min,7_2min,8_2min,9_2min,10_2min,11_2min,12_2min,13_2min,17_2min,18_2min,19_2min,20_2min,21_2min,22_2min,23_2min,27_2min,28_2min,29_2min,30_2min,31_2min,32_2min,33_2min,34_2min,35_2min,36_2min,37_2min,38_2min,39_2min,47_2min,48_2min,49_2min,50_2min,51_2min,54_2min,55_2min,56_2min,57_2min,58_2min,59_2min,60_2min,61_2min,62_2min,63_2min,64_2min,65_2min,66_2min,67_2min,68_2min,69_2min,73_2min,80_2min,81_2min,82_2min,83_2min,84_2min,85_2min,86_2min,87_2min,88_2min,89_2min,90_2min)
+camera 4: 6486 windows from 66 sector products (1_2min,2_2min,3_2min,4_2min,5_2min,6_2min,7_2min,8_2min,9_2min,10_2min,11_2min,12_2min,13_2min,17_2min,18_2min,19_2min,20_2min,21_2min,22_2min,23_2min,27_2min,28_2min,29_2min,30_2min,31_2min,32_2min,33_2min,34_2min,35_2min,36_2min,37_2min,38_2min,39_2min,47_2min,48_2min,49_2min,50_2min,51_2min,54_2min,55_2min,56_2min,57_2min,58_2min,59_2min,60_2min,61_2min,62_2min,63_2min,64_2min,65_2min,66_2min,67_2min,68_2min,69_2min,73_2min,80_2min,81_2min,82_2min,83_2min,84_2min,85_2min,86_2min,87_2min,88_2min,89_2min,90_2min)
+
+shared timing offset dt = +0 s  (profile 68%: +0 .. +0 s; bootstrap 68%: -10 .. +0 s)
+
+per camera at the shared dt (A, E per unit quiet floor; expected A ~1.15 x ZL fraction):
+  cam  lat  alpha best [boot 68%] [dchi2=1]   A [boot 68%]         E [boot 68%]        A/null_sigma   A at alpha=1.4
+  1     18  1.6 [1.4, 1.8] [1.6, 1.6]     0.44 [0.43, 0.47]    +0.42 [+0.35, +0.47]     41.8 (248 nulls)    0.46 (dchi2 3.0)
+  2     42  2.0 [1.6, 2.2] [1.8, 2.0]     0.36 [0.35, 0.38]    +0.30 [+0.21, +0.38]     37.2 (248 nulls)    0.38 (dchi2 5.5)
+  3     66  1.6 [0.8, 2.0] [1.2, 2.0]     0.30 [0.28, 0.32]    +0.40 [+0.28, +0.48]     26.6 (248 nulls)    0.30 (dchi2 0.1)
+  4     90  1.8 [0.4, 2.4] [1.2, 2.4]     0.32 [0.31, 0.34]    +0.43 [+0.30, +0.52]     32.5 (248 nulls)    0.32 (dchi2 0.2)
+
+profile chi^2 vs alpha at the shared dt, relative to best:
+  cam 1: 0.6:79.9 1.0:26.9 1.4:3.0 1.8:2.0 2.2:18.6 2.6:48.7 3.0:88.9 3.6:162.7
+  cam 2: 0.6:42.1 1.0:18.9 1.4:5.5 1.8:0.1 2.2:1.3 2.6:7.8 3.0:18.6 3.6:41.1
+  cam 3: 0.6:5.4 1.0:1.8 1.4:0.1 1.8:0.3 2.2:1.8 2.6:4.6 3.0:8.4 3.6:15.7
+  cam 4: 0.6:2.7 1.0:1.1 1.4:0.2 1.8:0.0 2.2:0.3 2.6:1.2 3.0:2.4 3.6:4.9
+
+non-negative log-binned kernel at dt = +0 s (per unit floor, per bin; bootstrap 68%):
+  bin [s]                    0-60            60-180           180-420           420-900          900-2000         2000-4000   Earthshine E
+  cam 1 fit    0.068 [0.06,0.08]  0.104 [0.10,0.11]  0.120 [0.11,0.13]  0.087 [0.08,0.09]  0.054 [0.04,0.07]  0.011 [0.00,0.03]   0.43 [0.36,0.48]
+  cam 1 model  0.152             0.237             0.293             0.256             0.154             0.048              (alpha 1.34, A 1.15)
+  cam 1 total area 0.44 [0.42, 0.48]  (expected ~1.15 x ZL fraction)
+  cam 2 fit    0.084 [0.07,0.09]  0.113 [0.11,0.12]  0.103 [0.10,0.11]  0.049 [0.04,0.06]  0.017 [0.00,0.03]  0.000 [0.00,0.00]   0.31 [0.22,0.41]
+  cam 2 model  0.208             0.316             0.329             0.195             0.079             0.019              (alpha 1.34, A 1.15)
+  cam 2 total area 0.37 [0.35, 0.39]  (expected ~1.15 x ZL fraction)
+  cam 3 fit    0.058 [0.05,0.07]  0.131 [0.12,0.14]  0.067 [0.06,0.08]  0.017 [0.01,0.03]  0.015 [0.00,0.03]  0.000 [0.00,0.01]   0.47 [0.39,0.58]
+  cam 3 model  0.280             0.389             0.296             0.131             0.042             0.009              (alpha 1.34, A 1.15)
+  cam 3 total area 0.29 [0.26, 0.32]  (expected ~1.15 x ZL fraction)
+  cam 4 fit    0.133 [0.12,0.14]  0.108 [0.10,0.12]  0.060 [0.05,0.07]  0.020 [0.01,0.03]  0.007 [0.00,0.02]  0.016 [0.00,0.04]   0.40 [0.31,0.52]
+  cam 4 model  0.377             0.426             0.234             0.083             0.024             0.005              (alpha 1.34, A 1.15)
+  cam 4 total area 0.34 [0.33, 0.38]  (expected ~1.15 x ZL fraction)
