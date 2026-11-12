@@ -26,9 +26,9 @@ import geometry
 import joint
 import northsouth as ns
 
-STANDARD = list(range(1, 14)) + list(range(17, 24)) + list(range(27, 40)) + \
-    [47, 48, 49, 50, 51, 54, 55] + list(range(56, 64))
-ECLIPTIC = [42, 43, 44, 45, 46]
+from sectors import STANDARD as _STD, ECLIPTIC as _ECL, SOUTH, NORTH
+STANDARD = sorted(_STD)
+ECLIPTIC = sorted(_ECL)
 GROUPS = [
     ('year 1 south S1-13', lambda s: 1 <= s <= 13),
     ('year 2 north S17-23', lambda s: 17 <= s <= 23),
@@ -36,8 +36,10 @@ GROUPS = [
     ('year 4 north S47-55', lambda s: s in (47, 48, 49, 50, 51, 54, 55)),
     ('year 5 north S56-60', lambda s: 56 <= s <= 60),
     ('year 5 south S61-63', lambda s: 61 <= s <= 63),
-    ('all south', lambda s: s in range(1, 14) or s in range(27, 40) or s in range(61, 64)),
-    ('all north', lambda s: s in range(17, 24) or s in (47, 48, 49, 50, 51, 54, 55) or s in range(56, 61)),
+    ('year 5-7 south S64-69,87-90', lambda s: s in range(64, 70) or s in range(87, 91)),
+    ('year 6 north S73,80-86', lambda s: s == 73 or s in range(80, 87)),
+    ('all south', lambda s: s in SOUTH),
+    ('all north', lambda s: s in NORTH),
 ]
 
 
@@ -105,8 +107,9 @@ def main(datadir, cameras='1,2,3,4'):
                 continue
             gm, gs = wmean(q[k], st[k])
             print(f'  {name:22s} n {len(k):2d}  {gm:.3f} ± {gs:.3f}   ({(gm - m) / gs:+.1f} sigma from the archive mean)')
-        n_s = [i for i, s in enumerate(ss) if GROUPS[6][1](s)]
-        n_n = [i for i, s in enumerate(ss) if GROUPS[7][1](s)]
+        g = dict(GROUPS)
+        n_s = [i for i, s in enumerate(ss) if g['all south'](s)]
+        n_n = [i for i, s in enumerate(ss) if g['all north'](s)]
         (a, sa), (b, sb) = wmean(q[n_n], st[n_n]), wmean(q[n_s], st[n_s])
         print(f'  north - south: {a - b:+.3f} ± {np.hypot(sa, sb):.3f} ({(a - b) / np.hypot(sa, sb):+.1f} sigma)')
         ec = [s for s in ECLIPTIC if s in rows]
