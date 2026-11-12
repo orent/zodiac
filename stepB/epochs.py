@@ -97,8 +97,8 @@ def main(datadir, out, cameras='1,2,3,4', sectors='1-63'):
 
 
 def ns_std():
-    return set(range(1, 14)) | set(range(17, 24)) | set(range(27, 40)) | \
-        {47, 48, 49, 50, 51, 54, 55} | set(range(56, 64))
+    from sectors import STANDARD
+    return STANDARD
 
 
 if __name__ == '__main__':

@@ -16,10 +16,11 @@ usage: epochs_analyze.py cam1.csv [cam2.csv ...]
 import csv, sys
 import numpy as np
 
-STD = set(range(1, 14)) | set(range(17, 24)) | set(range(27, 40)) | \
-    {47, 48, 49, 50, 51, 54, 55} | set(range(56, 64))
+sys.path.insert(0, __file__.rsplit('/', 1)[0])
+from sectors import STANDARD as STD
 YEARS = [('Y1 S', range(1, 14)), ('Y2 N', range(17, 24)), ('Y3 S', range(27, 40)),
-         ('Y4 N', (47, 48, 49, 50, 51, 54, 55)), ('Y5 N', range(56, 61)), ('Y5 S', range(61, 64))]
+         ('Y4 N', (47, 48, 49, 50, 51, 54, 55)), ('Y5 N', range(56, 61)), ('Y5 S', range(61, 70)),
+         ('Y6 N', (73, 80, 81, 82, 83, 84, 85, 86)), ('Y7 S', range(87, 91))]
 
 
 def year_of(s):

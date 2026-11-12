@@ -21,8 +21,8 @@ os.environ['GEOM_TILT'] = '1'
 import geometry
 import joint
 
-STD = set(range(1, 14)) | set(range(17, 24)) | set(range(27, 40)) | \
-    {47, 48, 49, 50, 51, 54, 55} | set(range(56, 64))
+sys.path.insert(0, __file__.rsplit('/', 1)[0])
+from sectors import STANDARD as STD
 
 
 ECC, PERI_LON = 0.0167, 102.9          # Earth's orbit: eccentricity, longitude of perihelion [deg]
